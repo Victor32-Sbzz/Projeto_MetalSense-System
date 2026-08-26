@@ -1,0 +1,28 @@
+{
+    "maquinas": [
+        {
+            "id": 1,
+            "nome": "maquina de corte 01",
+            "status": "normal",
+            "historico": []
+        },
+        {
+            "id": 2,
+            "nome": "maquina de corte",
+            "status": "normal",
+            "historico": []
+        },
+        {
+            "id": 3,
+            "nome": "maquina de soldagem",
+            "status": "atenção",
+            "historico": []
+        },
+        {
+            "id": 4,
+            "nome": "maquina de fundição",
+            "status": "normal",
+            "historico": []
+        }
+    ]
+}
