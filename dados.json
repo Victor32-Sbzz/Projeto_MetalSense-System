@@ -23,6 +23,18 @@
             "nome": "maquina de fundição",
             "status": "normal",
             "historico": []
+        },
+        {
+            "id": 5,
+            "nome": "empilhadeira",
+            "status": "normal",
+            "historico": []
+        },
+        {
+            "id": 6,
+            "nome": "empilhadeira 2",
+            "status": "anomalia",
+            "historico": []
         }
     ]
 }
