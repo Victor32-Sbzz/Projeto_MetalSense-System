@@ -4,37 +4,25 @@
             "id": 1,
             "nome": "maquina de corte 01",
             "status": "normal",
-            "historico": []
-        },
-        {
-            "id": 2,
-            "nome": "maquina de corte",
-            "status": "normal",
-            "historico": []
+            "historico": [
+                {
+                    "temperatura": 69.53,
+                    "vibracao": 6.91,
+                    "consumo": 316.78
+                }
+            ]
         },
         {
             "id": 3,
             "nome": "maquina de soldagem",
             "status": "atenção",
-            "historico": []
-        },
-        {
-            "id": 4,
-            "nome": "maquina de fundição",
-            "status": "normal",
-            "historico": []
-        },
-        {
-            "id": 5,
-            "nome": "empilhadeira",
-            "status": "normal",
-            "historico": []
-        },
-        {
-            "id": 6,
-            "nome": "empilhadeira 2",
-            "status": "anomalia",
-            "historico": []
+            "historico": [
+                {
+                    "temperatura": 40.88,
+                    "vibracao": 2.91,
+                    "consumo": 393.74
+                }
+            ]
         }
     ]
 }

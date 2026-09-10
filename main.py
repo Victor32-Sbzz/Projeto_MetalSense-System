@@ -1,12 +1,12 @@
 from dados import carregar_dados
-from maquinas import mostrar_maquinas, deletar_maquinas, cadastrar_maquina
+from maquinas import mostrar_maquinas, deletar_maquinas, cadastrar_maquina, registrar_medicao
 
 def menu():
     print("========================================")
     print("              METALSENSE")
     print("========================================")
     print("\n  Escolha uma das seguintes opções:")
-    print("\n1 -- Cadastrar maquina\n2 -- Consultar maquinas cadastradas\n3 -- Deletar maquina pelo ID\n4 -- Sair...\n")
+    print("\n1 -- Cadastrar maquina\n2 -- Consultar maquinas cadastradas\n3 -- Registrar medição\n4 -- Deletar maquina pelo ID\n5 -- Sair...\n")
 
 dados = carregar_dados()
 
@@ -26,10 +26,14 @@ while True:
         mostrar_maquinas(dados)
 
     elif escolha_do_menu == '3':
-        print("  Entrando no modulo de remoção...")
-        deletar_maquinas(dados)
+        print("  Entrando no modulo de registrar medição...")
+        registrar_medicao(dados)
 
     elif escolha_do_menu == '4':
+        print("  Entrando no modulo de deletar maquinas...")
+        deletar_maquinas(dados)
+
+    elif escolha_do_menu == '5':
         print("\n\n     parando o metalsense...")
         print("     TCHAUU\n\n")
         break

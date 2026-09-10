@@ -1,4 +1,5 @@
 from dados import salvar_dados
+import random
 
 def cadastrar_maquina(dados):
     while True:
@@ -80,4 +81,33 @@ def deletar_maquinas(dados):
             break
         elif escolha_do_menu_deletar != "d":
             print("Informação incorreta!!! Tente novamente...")
-        
+
+def simular_leitura():
+    temperatura = round(random.uniform(40, 80), 2)
+    vibracao = round(random.uniform(1, 10), 2)
+    consumo = round(random.uniform(100, 500), 2)
+
+    historico = {
+        'temperatura' : temperatura,
+        'vibracao' : vibracao,
+        'consumo' : consumo
+    }
+    
+    return historico
+
+def registrar_medicao(dados):
+    id_da_maquina = int(input("    Digite o ID da máquina: "))
+    
+    encontrou = False
+    
+    for maquina in dados["maquinas"]:
+        if maquina['id'] == id_da_maquina:
+            encontrou = True
+            leitura = simular_leitura()
+            maquina['historico'].append(leitura)
+            salvar_dados(dados)
+            print("\n    Historico adicionado com sucesso!!!")
+            break
+    
+    if encontrou == False:
+        print("ID INCORRETO... maquina não encontrada!")
