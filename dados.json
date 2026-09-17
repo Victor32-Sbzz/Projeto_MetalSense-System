@@ -9,18 +9,33 @@
                     "temperatura": 69.53,
                     "vibracao": 6.91,
                     "consumo": 316.78
+                },
+                {
+                    "temperatura": 59.31,
+                    "vibracao": 5.35,
+                    "consumo": 357.75
+                },
+                {
+                    "temperatura": 52.19,
+                    "vibracao": 5.25,
+                    "consumo": 400.0
                 }
             ]
         },
         {
-            "id": 3,
-            "nome": "maquina de soldagem",
-            "status": "atenção",
+            "id": 2,
+            "nome": "maquina de corte ultraT",
+            "status": "normal",
             "historico": [
                 {
-                    "temperatura": 40.88,
-                    "vibracao": 2.91,
-                    "consumo": 393.74
+                    "temperatura": 63.25,
+                    "vibracao": 3.09,
+                    "consumo": 198.95
+                },
+                {
+                    "temperatura": 76.78,
+                    "vibracao": 8.85,
+                    "consumo": 196.34
                 }
             ]
         }

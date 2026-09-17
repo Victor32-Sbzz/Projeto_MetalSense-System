@@ -1,5 +1,5 @@
 from dados import carregar_dados
-from maquinas import mostrar_maquinas, deletar_maquinas, cadastrar_maquina, registrar_medicao
+from maquinas import mostrar_maquinas, deletar_maquinas, cadastrar_maquina, registrar_medicao, analisar_maquina
 
 def menu():
     print("========================================")

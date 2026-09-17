@@ -1,12 +1,14 @@
 from dados import salvar_dados
 import random
+import statistics
+
+
 
 def cadastrar_maquina(dados):
     while True:
         IDs = []
 
         nome_da_maquina = input("    Digite o nome da maquina: ")
-        status_da_maquina = input("    Qual o atual status da maquina (NORMAL/ATENÇÃO/ANOMALIA) : ")
     
         for maquinas in dados["maquinas"]:
             IDs.append(maquinas['id'])
@@ -20,7 +22,7 @@ def cadastrar_maquina(dados):
         nova_maquina = {
             'id' : id_nova_maquina,
             'nome' : nome_da_maquina,
-            'status' : status_da_maquina,
+            'status' : "sem dados",
             'historico' : []
         }
     
@@ -82,6 +84,7 @@ def deletar_maquinas(dados):
         elif escolha_do_menu_deletar != "d":
             print("Informação incorreta!!! Tente novamente...")
 
+
 def simular_leitura():
     temperatura = round(random.uniform(40, 80), 2)
     vibracao = round(random.uniform(1, 10), 2)
@@ -95,6 +98,7 @@ def simular_leitura():
     
     return historico
 
+
 def registrar_medicao(dados):
     id_da_maquina = int(input("    Digite o ID da máquina: "))
     
@@ -105,9 +109,42 @@ def registrar_medicao(dados):
             encontrou = True
             leitura = simular_leitura()
             maquina['historico'].append(leitura)
-            salvar_dados(dados)
+            analisar_maquina(dados, id_da_maquina)
             print("\n    Historico adicionado com sucesso!!!")
             break
     
     if encontrou == False:
         print("ID INCORRETO... maquina não encontrada!")
+
+
+def analisar_maquina(dados, id_da_maquina):
+    
+    for maquina in dados["maquinas"]:
+
+        if maquina['id'] == id_da_maquina:
+
+            temperaturas = []
+            for leitura in maquina['historico']:
+                temperaturas.append(leitura['temperatura'])
+            
+            if len(temperaturas) < 2:
+                print("\n    Histórico insuficiente para análise.")
+
+            else:
+                media = statistics.mean(temperaturas)
+                desvio = statistics.stdev(temperaturas)
+                ultima_leitura = temperaturas[-1]
+                distancia = abs(ultima_leitura - media)
+                limite = 2 * desvio
+
+                if distancia > limite:
+                    print("\n    Possivel anomalia detectada...!")
+                    maquina['status'] = "anomalia"
+                    
+                else:
+                    print("\n    Comportamento dentro do padrão...!")
+                    maquina['status'] = "normal"
+
+                salvar_dados(dados)
+
+            break
