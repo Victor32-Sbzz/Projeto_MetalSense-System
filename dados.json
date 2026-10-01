@@ -19,6 +19,16 @@
                     "temperatura": 52.19,
                     "vibracao": 5.25,
                     "consumo": 400.0
+                },
+                {
+                    "temperatura": 68.81,
+                    "vibracao": 9.55,
+                    "consumo": 141.32
+                },
+                {
+                    "temperatura": 53.89,
+                    "vibracao": 7.62,
+                    "consumo": 447.48
                 }
             ]
         },
