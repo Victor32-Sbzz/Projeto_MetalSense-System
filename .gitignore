@@ -15,3 +15,11 @@ env/
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
+
+# Banco de dados local e caches
+*.db
+*.sqlite3
+*.sqlite
+.pytest_cache/
+.coverage
+htmlcov/
