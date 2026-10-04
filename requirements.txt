@@ -3,6 +3,9 @@ streamlit>=1.30.0
 pandas>=2.0.0
 plotly>=5.18.0
 
+# API REST Industrial (IoT Gateway)
+Flask>=3.0.0
+
 # Testes Automatizados
 pytest>=8.0.0
 

@@ -9,6 +9,9 @@ from maquinas import (
     registrar_leitura,
     analisar_maquina,
 )
+from analytics import calcular_indice_saude
+from relatorios import exportar_historico_csv, gerar_relatorio_html, gerar_ordem_servico_texto
+from simulador_iot import gerar_leitura_cenario, CENARIOS
 
 # -----------------------------------------------------------------------------
 # Configuração da Página
@@ -285,16 +288,27 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     nome_maq = maquina.get("nome")
     historico = maquina.get("historico", [])
 
-    # Executa a análise preditiva pura do MetalSense
+    # Executa a análise preditiva pura do MetalSense e calcula Health Score
     diagnostico_texto = analisar_maquina(dados, id_maq)
+    saude = calcular_indice_saude(historico)
     status_atual = maquina.get("status", "sem dados")
     css_status, css_diag, icone, rotulo_status = obter_rotulo_status(status_atual)
 
-    # Topo do detalhe da máquina
-    col_titulo, col_status = st.columns([3, 2])
+    # Topo do detalhe da máquina com Health Score
+    col_titulo, col_score, col_status = st.columns([3, 2, 2])
     with col_titulo:
         st.markdown(f"## 🏭 {nome_maq} <span style='font-size: 1.1rem; color: #64748b;'>(ID #{id_maq})</span>", unsafe_allow_html=True)
         st.caption(f"Equipamento monitorado continuamente • Total de registros: **{len(historico)} medição(ões)**")
+    
+    with col_score:
+        st.metric(
+            label="Health Score (Saúde do Ativo)",
+            value=f"{saude['score']}%",
+            delta=saude['classificacao'],
+            delta_color="normal" if saude['score'] >= 70 else "inverse",
+            help="Índice preditivo de integridade do equipamento baseado em volatilidade e desvios"
+        )
+
     with col_status:
         st.markdown(
             f"""
@@ -318,6 +332,10 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
         unsafe_allow_html=True,
     )
 
+    # Hipóteses de Falha Mecânica (se houver)
+    if saude.get("hipoteses"):
+        st.error("⚠️ **Alertas de Causa-Raiz Mecânica / Elétrica:**\n- " + "\n- ".join(saude["hipoteses"]))
+
     # Painel de Ações Rápidas (Simulação de Telemetria)
     st.markdown("#### 🎮 Painel de Ações e Simulação de Telemetria")
     col_act1, col_act2, col_act3 = st.columns([1, 1, 1])
@@ -325,13 +343,13 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     with col_act1:
         if st.button("🟢 Simular Leitura Normal", use_container_width=True, help="Injeta uma leitura dentro da faixa operacional padrão"):
             res = registrar_leitura(dados, id_maq, gerar_anomalia=False)
-            st.toast(f"Leitura normal registrada com sucesso!", icon="✅")
+            st.toast("Leitura normal registrada com sucesso!", icon="✅")
             st.rerun()
 
     with col_act2:
         if st.button("⚠️ Simular Anomalia (Teste)", use_container_width=True, type="primary", help="Injeta picos anômalos de temperatura, vibração ou consumo elétrico"):
             res = registrar_leitura(dados, id_maq, gerar_anomalia=True)
-            st.toast(f"Pico anômalo simulado!", icon="🚨")
+            st.toast("Pico anômalo simulado!", icon="🚨")
             st.rerun()
 
     with col_act3:
@@ -339,6 +357,29 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             analisar_maquina(dados, id_maq)
             st.toast("Análise preditiva atualizada!", icon="🔄")
             st.rerun()
+
+    # Expander de Injeção de Falhas Específicas IoT
+    with st.expander("📡 Simulador Avançado de Cenários de Falha IoT", expanded=False):
+        st.caption("Gere simulações de desgaste real para testar os algoritmos de causa-raiz:")
+        sc1, sc2, sc3 = st.columns(3)
+        with sc1:
+            if st.button("🔩 Desgaste de Rolamento", use_container_width=True):
+                leit = gerar_leitura_cenario("rolamento", ciclo=len(historico)+1)
+                registrar_leitura(dados, id_maq, leitura=leit)
+                st.toast("Cenário de Desgaste de Rolamento injetado!", icon="🔩")
+                st.rerun()
+        with sc2:
+            if st.button("🔥 Superaquecimento Térmico", use_container_width=True):
+                leit = gerar_leitura_cenario("aquecimento", ciclo=len(historico)+1)
+                registrar_leitura(dados, id_maq, leitura=leit)
+                st.toast("Cenário de Superaquecimento injetado!", icon="🔥")
+                st.rerun()
+        with sc3:
+            if st.button("⚡ Sobrecarga Elétrica", use_container_width=True):
+                leit = gerar_leitura_cenario("sobrecarga", ciclo=len(historico)+1)
+                registrar_leitura(dados, id_maq, leitura=leit)
+                st.toast("Cenário de Sobrecarga Elétrica injetado!", icon="⚡")
+                st.rerun()
 
     st.markdown("---")
 
@@ -485,6 +526,44 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             st.dataframe(df_hist, use_container_width=True, hide_index=True)
         except Exception:
             st.table(leituras_tabela)
+
+        # Seção de Auditoria e Exportação de Relatórios
+        st.markdown("---")
+        st.markdown("#### 📑 Auditoria Técnica & Exportação de Laudos")
+        with st.expander("Gerar e Baixar Relatórios Técnicos", expanded=False):
+            exp_col1, exp_col2 = st.columns(2)
+            with exp_col1:
+                import io, csv
+                csv_buffer = io.StringIO()
+                writer = csv.DictWriter(csv_buffer, fieldnames=["timestamp", "temperatura", "vibracao", "consumo"])
+                writer.writeheader()
+                for r in historico:
+                    writer.writerow({
+                        "timestamp": r.get("timestamp", ""),
+                        "temperatura": r.get("temperatura", 0.0),
+                        "vibracao": r.get("vibracao", 0.0),
+                        "consumo": r.get("consumo", 0.0)
+                    })
+                st.download_button(
+                    label="📥 Baixar Telemetria (CSV)",
+                    data=csv_buffer.getvalue(),
+                    file_name=f"metalsense_telemetria_maquina_{id_maq}.csv",
+                    mime="text/csv",
+                    use_container_width=True
+                )
+            with exp_col2:
+                caminho_html = gerar_relatorio_html(maquina)
+                with open(caminho_html, "r", encoding="utf-8") as f_html:
+                    html_data = f_html.read()
+                st.download_button(
+                    label="📄 Baixar Laudo de Auditoria (HTML)",
+                    data=html_data,
+                    file_name=f"laudo_metalsense_maquina_{id_maq}.html",
+                    mime="text/html",
+                    use_container_width=True
+                )
+            st.markdown("##### 🛠️ Ordem de Serviço de Manutenção Preditiva")
+            st.code(gerar_ordem_servico_texto(maquina), language="text")
     else:
         st.info("Nenhuma leitura arquivada no histórico desta máquina.")
 

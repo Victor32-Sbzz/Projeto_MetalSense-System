@@ -1,83 +1,114 @@
-# MetalSense
+# MetalSense — Sistema Inteligente de Manutenção Preditiva & Monitoramento IoT
 
-Sistema inteligente para detecção e previsão de anomalias em máquinas industriais.
+[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![Tests](https://img.shields.io/badge/tests-38%2F38%20passing-brightgreen.svg)]()
+[![Team](https://img.shields.io/badge/team-TechForge-orange.svg)]()
 
-## Sobre o projeto
+> Sistema de detecção antecipada de anomalias industriais, análise preditiva multivariada e ingestão de telemetria IoT para prevenção de paradas não planejadas (Indústria 4.0).
 
-O **MetalSense** é um projeto desenvolvido pelo grupo **TechForge** no curso Técnico em Desenvolvimento de Sistemas.
+---
 
-O sistema tem como objetivo auxiliar na identificação de comportamentos anormais em máquinas industriais, utilizando dados de operação para construir um histórico e identificar alterações que possam indicar uma possível falha ou necessidade de manutenção.
+## 📌 Sobre o Projeto
 
-A proposta é utilizar tecnologia para transformar dados das máquinas em informações que possam ajudar na prevenção de paradas inesperadas.
+O **MetalSense** foi concebido pelo grupo **TechForge** no curso Técnico em Desenvolvimento de Sistemas. O sistema transforma dados brutos de sensores de campo (temperatura, vibração mecânica e consumo elétrico) em **informações de saúde do ativo em tempo real** e **ordens de serviço preditivas**, evitando quebras catastróficas e paradas inesperadas na linha de produção.
 
-## Problema
+---
 
-Alterações no funcionamento de máquinas podem passar despercebidas até que provoquem uma falha ou uma parada inesperada na produção.
+## ⚡ Diferenciais Tecnológicos
 
-O MetalSense busca identificar essas alterações com antecedência, analisando o comportamento das máquinas ao longo do tempo.
+1. **Análise Multivariada Real:** Não se limita a limites fixos; avalia correlações físicas (ex: Vibração Alta + Temperatura Alta = Desgaste de Rolamento).
+2. **Health Score (0 a 100%):** Índice contínuo de integridade do ativo por máquina, avaliando volatilidade e velocidade de degradação térmica ($dT/dt$).
+3. **Gateway IoT com API REST:** Rota HTTP de alta performance (`/api/telemetria`) pronta para receber dados de microcontroladores (ESP32, Arduino, Raspberry Pi).
+4. **Simulador de Falhas Físicas:** Injeção programática de desbalanceamento mecânico, falha de arrefecimento e sobrecarga elétrica.
+5. **Auditoria e Laudos Automatizados:** Exportação instantânea de histórico em CSV e emissão de laudos técnicos em HTML e Ordens de Serviço (OS).
+6. **Múltiplas Interfaces:** Dashboard Web reativo em Streamlit e Console CLI com cores ANSI.
 
-## Objetivo
+---
 
-Desenvolver um sistema capaz de:
-
-* Cadastrar e identificar máquinas;
-* Registrar dados de funcionamento;
-* Armazenar um histórico de operação;
-* Analisar o comportamento individual de cada máquina;
-* Detectar possíveis anomalias;
-* Auxiliar na identificação de possíveis falhas antes que ocorram;
-* Apresentar as informações de forma clara para o usuário.
-
-## Tecnologias
-
-* **Python** — desenvolvimento do sistema e processamento dos dados;
-* **JSON / Banco de dados** — armazenamento das informações;
-* **Streamlit** — interface gráfica e visualização dos dados;
-* **Machine Learning** — análise e previsão de possíveis anomalias;
-* **IoT** — coleta de dados diretamente das máquinas.
-
-## Funcionamento previsto
-
-O funcionamento do MetalSense seguirá, de forma geral, o seguinte fluxo:
+## 🏗️ Arquitetura do Sistema
 
 ```text
-Máquina / Sensores
-       ↓
-Coleta de dados
-       ↓
-MetalSense
-       ↓
-Armazenamento do histórico
-       ↓
-Análise dos dados
-       ↓
-Detecção de anomalias
-       ↓
-Identificação de possíveis problemas
-       ↓
-Visualização no sistema
+[Sensores Industriais / ESP32 / Gateway]
+                 │
+                 ▼
+       ┌──────────────────┐
+       │   API REST IoT   │ <── Ingestão via HTTP (POST /api/telemetria)
+       └─────────┬────────┘
+                 ▼
+   ┌──────────────────────────┐
+   │  Persistência Resiliente │ <── Escrita atômica & backup contra corrupção
+   │       (dados.py)         │
+   └─────────────┬────────────┘
+                 ▼
+   ┌──────────────────────────┐
+   │    Motor de Analytics    │ <── Health Score, Tendências (dT/dt)
+   │      (analytics.py)      │     e Diagnóstico de Causa-Raiz
+   └─────────────┬────────────┘
+                 │
+       ┌─────────┴─────────┐
+       ▼                   ▼
+┌──────────────┐   ┌──────────────┐
+│  Streamlit   │   │ Terminal CLI │
+│   (app.py)   │   │  (main.py)   │
+└──────────────┘   └──────────────┘
 ```
 
-## Diferencial
+---
 
-O sistema não pretende utilizar somente limites fixos para determinar se uma máquina está funcionando corretamente.
+## 📁 Estrutura de Módulos
 
-O MetalSense busca analisar o **comportamento individual de cada máquina**, permitindo identificar mudanças em relação ao seu próprio histórico de funcionamento.
+| Módulo | Responsabilidade |
+|---|---|
+| `analytics.py` | Motor preditivo: Health Score (0-100%), tendências temporais e hipóteses de falha mecânica. |
+| `maquinas.py` | Lógica de negócio de máquinas, validações e detecção de anomalias por $2.5\sigma$ e limites críticos. |
+| `dados.py` | Camada de persistência segura, gravação atômica (`.tmp`) e recuperação contra corrupção. |
+| `simulador_iot.py`| Simulador de sensores físicos industriais com cenários de rolamento, aquecimento e sobrecarga. |
+| `relatorios.py` | Emissão de laudos de auditoria técnica (HTML), ordens de serviço (OS) e exportação CSV. |
+| `api.py` | API REST Flask para ingestão de telemetria externa e integração com sistemas SCADA/MES. |
+| `app.py` | Dashboard interativo Web (Streamlit) com KPIs, gráficos em tempo real e controles de simulação. |
+| `main.py` | Interface de terminal profissional com menu interativo, cores ANSI e diagnóstico instantâneo. |
+| `tests/` | Suíte de testes automatizados com 38 testes unitários (100% de cobertura de regras de negócio). |
 
-## Estrutura atual
+---
 
-O projeto encontra-se em desenvolvimento e sua estrutura será organizada conforme novas funcionalidades forem implementadas.
+## 🚀 Como Executar
 
-Atualmente, o sistema possui funcionalidades relacionadas ao cadastro, consulta e remoção de máquinas, além do armazenamento das informações em arquivo JSON.
+### 1. Instalar Dependências
+```bash
+pip install -r requirements.txt
+```
 
-## Equipe
+### 2. Rodar a Suíte de Testes Automatizados (38 Testes)
+```bash
+python -m unittest discover tests -v
+# ou
+pytest
+```
 
-**TechForge**
+### 3. Iniciar o Dashboard Web (Streamlit)
+```bash
+streamlit run app.py
+```
 
-Projeto desenvolvido como parte do curso Técnico em Desenvolvimento de Sistemas.
+### 4. Iniciar a Interface em Terminal (CLI)
+```bash
+python main.py
+```
 
-## Status
+### 5. Iniciar a API REST do Gateway IoT
+```bash
+python api.py
+```
+*Disponível em: `http://127.0.0.1:5000` (Endpoint de telemetria: `POST /api/telemetria`)*
 
-🚧 **Em desenvolvimento**
+### 6. Executar o Simulador de Sensores IoT
+```bash
+python simulador_iot.py --id 1 --cenario rolamento --ciclos 5 --intervalo 1.0
+```
 
-Novas funcionalidades de coleta de dados, histórico, análise de anomalias, Machine Learning, IoT e interface gráfica serão adicionadas durante o desenvolvimento do projeto.
+---
+
+## 👥 Equipe & Desenvolvimento
+
+Projeto desenvolvido pelo grupo **TechForge** no curso Técnico em Desenvolvimento de Sistemas.
