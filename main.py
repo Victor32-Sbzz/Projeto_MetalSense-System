@@ -1,42 +1,57 @@
 from dados import carregar_dados
-from maquinas import mostrar_maquinas, deletar_maquinas, cadastrar_maquina, registrar_medicao, analisar_maquina
+from maquinas import (
+    mostrar_maquinas,
+    deletar_maquinas,
+    cadastrar_maquina,
+    registrar_medicao,
+    consultar_analise,
+)
 
 def menu():
-    print("========================================")
+    print("\n========================================")
     print("              METALSENSE")
     print("========================================")
-    print("\n  Escolha uma das seguintes opções:")
-    print("\n1 -- Cadastrar maquina\n2 -- Consultar maquinas cadastradas\n3 -- Registrar medição\n4 -- Deletar maquina pelo ID\n5 -- Sair...\n")
+    print("  Escolha uma das seguintes opções:")
+    print("  1 -- Cadastrar máquina")
+    print("  2 -- Consultar máquinas cadastradas")
+    print("  3 -- Registrar medição / telemetria")
+    print("  4 -- Diagnosticar / analisar máquina")
+    print("  5 -- Deletar máquina pelo ID")
+    print("  6 -- Sair...")
+    print("========================================")
 
-dados = carregar_dados()
 
-print
-print("MetalSense iniciado com sucesso!")
-print()
-while True:
-    menu()
-    escolha_do_menu = input("Digite sua escolha: ")
+def main():
+    dados = carregar_dados()
+    print("\nMetalSense iniciado com sucesso!")
 
-    if escolha_do_menu == '1':
-        print("  Entrando no modulo de cadastro...")
-        cadastrar_maquina(dados)
+    while True:
+        menu()
+        escolha_do_menu = input("Digite sua escolha: ").strip()
 
-    elif escolha_do_menu == '2':
-        print("  Entrando no modulo de consulta...")
-        mostrar_maquinas(dados)
+        if escolha_do_menu == '1':
+            cadastrar_maquina(dados)
 
-    elif escolha_do_menu == '3':
-        print("  Entrando no modulo de registrar medição...")
-        registrar_medicao(dados)
+        elif escolha_do_menu == '2':
+            mostrar_maquinas(dados)
 
-    elif escolha_do_menu == '4':
-        print("  Entrando no modulo de deletar maquinas...")
-        deletar_maquinas(dados)
+        elif escolha_do_menu == '3':
+            registrar_medicao(dados)
 
-    elif escolha_do_menu == '5':
-        print("\n\n     parando o metalsense...")
-        print("     TCHAUU\n\n")
-        break
+        elif escolha_do_menu == '4':
+            consultar_analise(dados)
 
-    else:
-        print("ESCOLHA INVALIDA!!! Por favor, escolha uma das opções disponiveis.")
+        elif escolha_do_menu == '5':
+            deletar_maquinas(dados)
+
+        elif escolha_do_menu == '6':
+            print("\nEncerrando o MetalSense...")
+            print("Até logo!\n")
+            break
+
+        else:
+            print("\n[ERRO] Escolha inválida! Por favor, selecione uma das opções numéricas do menu.")
+
+
+if __name__ == "__main__":
+    main()

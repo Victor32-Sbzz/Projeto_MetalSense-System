@@ -45,11 +45,14 @@ Essa separação existe porque a lógica precisa ser reaproveitável tanto pelo 
 Exemplo:
 
 ```python
-# lógica pura
+# Lógica pura (processamento, reutilizável no Streamlit e CLI)
 def criar_maquina(dados, nome_da_maquina):
     ...
     return nova_maquina
 
-# interação (CLI)
+# Interação (CLI específico para terminal)
 def cadastrar_maquina(dados):
-    nome_da_maquina =
+    nome_da_maquina = input("Digite o nome da máquina: ")
+    nova = criar_maquina(dados, nome_da_maquina)
+    print(f"Máquina {nova['nome']} cadastrada com sucesso!")
+```

@@ -1,0 +1,11 @@
+# Interface Web (Streamlit)
+streamlit>=1.30.0
+pandas>=2.0.0
+plotly>=5.18.0
+
+# Testes Automatizados
+pytest>=8.0.0
+
+# Interface Desktop (CustomTkinter)
+customtkinter>=5.2.0
+matplotlib>=3.8.0
