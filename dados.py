@@ -10,7 +10,6 @@ import shutil
 import threading
 from typing import Dict, Any
 from logger import logger
-from database import db
 
 ARQUIVO_DADOS = "dados.json"
 
@@ -70,7 +69,7 @@ def salvar_dados(dados: Dict[str, Any], caminho_arquivo: str = ARQUIVO_DADOS) ->
 def _sincronizar_com_banco(dados: Dict[str, Any]) -> None:
     """Sincroniza em background o estado das máquinas com a base relacional."""
     try:
-        from database import transacao_escrita, agora_utc
+        from database import db, transacao_escrita, agora_utc
         from sqlalchemy import text
         agora = agora_utc()
         with transacao_escrita(db.engine) as conn:
