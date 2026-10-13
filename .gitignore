@@ -22,4 +22,10 @@ Thumbs.db
 *.sqlite
 .pytest_cache/
 .coverage
-htmlcov/
+htmlcov/
+
+# Relatórios e exportações temporárias
+relatorio_*.html
+laudo_*.html
+relatorio_*.csv
+telemetria_*.csv
