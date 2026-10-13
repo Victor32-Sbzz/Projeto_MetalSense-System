@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 import io
 import csv
+import textwrap
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -21,75 +22,54 @@ from simulador_iot import gerar_leitura_cenario, CENARIOS
 # Configuração de Página & Identidade Visual
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="MetalSense | Industrial Predictive OS",
+    page_title="MetalSense | Monitoramento Inteligente",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # -----------------------------------------------------------------------------
-# Biblioteca de Ícones SVG Profissionais (Vetorizados, Minimalistas, Sem Emojis)
-# -----------------------------------------------------------------------------
-ICONS = {
-    "cpu": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>',
-    "activity": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
-    "shield": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
-    "alert": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
-    "thermometer": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>',
-    "zap": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
-    "waves": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>',
-    "server": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>',
-    "file": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
-    "refresh": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>',
-    "brain": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"></path></svg>',
-    "sun": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
-    "moon": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
-    "radio": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>',
-}
-
-
-def get_icon(name: str, color: str = "currentColor", size: int = 18) -> str:
-    """Retorna o código SVG do ícone renderizado inline."""
-    template = ICONS.get(name, "")
-    return template.format(s=size, c=color)
-
-
-# -----------------------------------------------------------------------------
-# Gerenciador de Temas (Dark Mode / Light Mode)
+# Gerenciador de Estado de Navegação e Tema
 # -----------------------------------------------------------------------------
 if "theme_mode" not in st.session_state:
     st.session_state["theme_mode"] = "dark"
 
-# Botão de Tema no Topo da Barra Lateral
+if "maquina_ativa_id" not in st.session_state:
+    st.session_state["maquina_ativa_id"] = None
+
+# Alternador de Tema na Barra Lateral
 with st.sidebar:
-    st.markdown("<div style='margin-bottom: 6px;'></div>", unsafe_allow_html=True)
-    c_t1, c_t2 = st.columns([1, 1])
+    st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Aparência do Sistema</p>", unsafe_allow_html=True)
+    c_t1, c_t2 = st.columns(2)
     with c_t1:
-        if st.button("Modo Escuro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "dark" else "secondary"):
+        if st.button("Escuro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "dark" else "secondary"):
             st.session_state["theme_mode"] = "dark"
             st.rerun()
     with c_t2:
-        if st.button("Modo Claro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "light" else "secondary"):
+        if st.button("Claro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "light" else "secondary"):
             st.session_state["theme_mode"] = "light"
             st.rerun()
 
 IS_DARK = st.session_state["theme_mode"] == "dark"
 
-# Definição das Variáveis de Estilo para Cada Tema
+# Paleta de Cores 100% Padronizada para Ambos os Modos
 if IS_DARK:
     T = {
         "app_bg": "radial-gradient(circle at 10% 20%, #0d1527 0%, #060911 85%)",
         "surface": "rgba(15, 23, 42, 0.75)",
-        "surface_card": "rgba(15, 23, 42, 0.65)",
-        "surface_metric": "rgba(15, 23, 42, 0.8)",
+        "surface_card": "#0f172a",
+        "surface_metric": "rgba(30, 41, 59, 0.5)",
         "sidebar_bg": "#080c14",
         "border": "rgba(255, 255, 255, 0.08)",
-        "border_hover": "rgba(56, 189, 248, 0.4)",
+        "border_subtle": "rgba(255, 255, 255, 0.05)",
+        "border_hover": "#38bdf8",
         "input_bg": "#0f172a",
-        "input_border": "rgba(255, 255, 255, 0.12)",
+        "input_border": "rgba(255, 255, 255, 0.15)",
         "text_main": "#f8fafc",
         "text_sub": "#94a3b8",
         "text_muted": "#64748b",
+        "btn_bg": "rgba(15, 23, 42, 0.8)",
+        "btn_border": "rgba(255, 255, 255, 0.12)",
         "accent_cyan": "#00f2fe",
         "accent_blue": "#38bdf8",
         "accent_emerald": "#10b981",
@@ -104,18 +84,21 @@ if IS_DARK:
     }
 else:
     T = {
-        "app_bg": "linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%)",
+        "app_bg": "#f8fafc",
         "surface": "#ffffff",
         "surface_card": "#ffffff",
-        "surface_metric": "#f8fafc",
+        "surface_metric": "#f1f5f9",
         "sidebar_bg": "#ffffff",
         "border": "#e2e8f0",
+        "border_subtle": "#e2e8f0",
         "border_hover": "#0284c7",
         "input_bg": "#ffffff",
         "input_border": "#cbd5e1",
         "text_main": "#0f172a",
         "text_sub": "#475569",
-        "text_muted": "#94a3b8",
+        "text_muted": "#64748b",
+        "btn_bg": "#ffffff",
+        "btn_border": "#cbd5e1",
         "accent_cyan": "#0284c7",
         "accent_blue": "#0284c7",
         "accent_emerald": "#059669",
@@ -124,13 +107,37 @@ else:
         "accent_violet": "#7c3aed",
         "plot_paper": "rgba(0,0,0,0)",
         "plot_bg": "#ffffff",
-        "plot_grid": "rgba(0, 0, 0, 0.06)",
+        "plot_grid": "#e2e8f0",
         "plot_text": "#475569",
-        "gauge_bg": "#f1f5f9",
+        "gauge_bg": "#e2e8f0",
     }
 
 # -----------------------------------------------------------------------------
-# CSS Dinâmico 100% Padronizado (Sem vazamento de partes brancas)
+# Biblioteca de Ícones SVG Profissionais (Vetorizados, Limpos e Sem Emojis)
+# -----------------------------------------------------------------------------
+ICONS = {
+    "cpu": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>',
+    "activity": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
+    "shield": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+    "alert": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+    "thermometer": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>',
+    "zap": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+    "waves": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>',
+    "server": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>',
+    "arrow-right": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>',
+    "info": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+    "check": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+}
+
+
+def get_icon(name: str, color: str = "currentColor", size: int = 18) -> str:
+    """Retorna código SVG inline formatado com tamanho e cor."""
+    template = ICONS.get(name, "")
+    return template.format(s=size, c=color)
+
+
+# -----------------------------------------------------------------------------
+# CSS Global Dinâmico (Modo Escuro e Modo Claro 100% Blindados e Homogêneos)
 # -----------------------------------------------------------------------------
 CSS_GLOBAL = f"""
 <style>
@@ -140,33 +147,36 @@ html, body, [class*="css"] {{
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }}
 
-/* Estilização da Aplicação */
+/* Cor de Fundo Geral */
 .stApp {{
     background: {T["app_bg"]} !important;
     color: {T["text_main"]} !important;
 }}
 
-/* Sidebar Padronizada */
+header[data-testid="stHeader"] {{
+    background-color: transparent !important;
+}}
+
+/* Barra Lateral (Sidebar) */
 section[data-testid="stSidebar"] {{
     background-color: {T["sidebar_bg"]} !important;
     border-right: 1px solid {T["border"]} !important;
 }}
 section[data-testid="stSidebar"] * {{
-    color: {T["text_main"]};
+    color: {T["text_main"]} !important;
 }}
 
-/* Força Cores nos Elementos Streamlit Nativos (Inputs, Selects, Expanders) */
+/* Forçar Campos de Entrada e Selects */
 div[data-baseweb="select"] > div,
 div[data-baseweb="input"] > div,
 input, textarea {{
     background-color: {T["input_bg"]} !important;
     color: {T["text_main"]} !important;
     border-color: {T["input_border"]} !important;
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
     border-radius: 10px !important;
 }}
 
-/* Dropdowns e Menus Flutuantes */
+/* Menus de Dropdown / Popover */
 div[data-baseweb="popover"],
 ul[role="listbox"] {{
     background-color: {T["surface"]} !important;
@@ -176,30 +186,53 @@ ul[role="listbox"] {{
 }}
 ul[role="listbox"] li {{
     color: {T["text_main"]} !important;
-    background-color: transparent !important;
 }}
 ul[role="listbox"] li:hover {{
     background-color: {T["border"]} !important;
 }}
 
-/* Expander Padronizado */
+/* Expander */
 div[data-testid="stExpander"] {{
     background: {T["surface_card"]} !important;
     border: 1px solid {T["border"]} !important;
     border-radius: 14px !important;
-    box-shadow: none !important;
 }}
-div[data-testid="stExpander"] summary {{
+div[data-testid="stExpander"] summary,
+div[data-testid="stExpander"] p {{
     color: {T["text_main"]} !important;
-    font-weight: 600 !important;
 }}
 
-/* Abas (Tabs) Padronizadas */
+/* Formulários */
+div[data-testid="stForm"] {{
+    background: {T["surface_card"]} !important;
+    border: 1px solid {T["border"]} !important;
+    border-radius: 14px !important;
+}}
+
+/* Botões */
+div.stButton > button {{
+    background-color: {T["btn_bg"]} !important;
+    color: {T["text_main"]} !important;
+    border: 1px solid {T["btn_border"]} !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}}
+div.stButton > button:hover {{
+    border-color: {T["border_hover"]} !important;
+    transform: translateY(-1px) !important;
+}}
+div.stButton > button[kind="primary"] {{
+    background: {T["accent_rose"]} !important;
+    color: #ffffff !important;
+    border: none !important;
+}}
+
+/* Abas */
 div[data-testid="stTabs"] button {{
     color: {T["text_sub"]} !important;
     font-weight: 600 !important;
     border-bottom: 2px solid transparent !important;
-    padding: 10px 18px !important;
 }}
 div[data-testid="stTabs"] button[aria-selected="true"] {{
     color: {T["accent_cyan"]} !important;
@@ -207,233 +240,128 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 }}
 
 /* Top Navbar */
-.metalsense-navbar {{
+.top-navbar {{
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: {T["surface"]};
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid {T["border"]};
-    border-radius: 18px;
-    padding: 16px 26px;
+    border-radius: 16px;
+    padding: 16px 24px;
     margin-bottom: 24px;
-    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.2);
-}}
-.brand-group {{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}}
-.brand-icon-wrap {{
-    background: linear-gradient(135deg, {T["accent_cyan"]} 0%, #38bdf8 100%);
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 16px {T["accent_cyan"]}40;
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
 }}
 .brand-title {{
-    margin: 0;
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
     color: {T["text_main"]};
+    margin: 0;
 }}
 .brand-sub {{
-    margin: 0;
-    font-size: 0.76rem;
-    color: {T["text_sub"]};
+    font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.6px;
+    color: {T["text_sub"]};
+    margin: 0;
     text-transform: uppercase;
 }}
-.live-pill {{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: {T["accent_emerald"]}18;
-    border: 1px solid {T["accent_emerald"]}45;
-    color: {T["accent_emerald"]};
-    padding: 6px 14px;
-    border-radius: 9999px;
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-}}
-.live-dot {{
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: {T["accent_emerald"]};
-    box-shadow: 0 0 8px {T["accent_emerald"]};
-    animation: pulse-beacon 2s infinite;
-}}
-@keyframes pulse-beacon {{
-    0% {{ transform: scale(0.95); opacity: 0.8; }}
-    50% {{ transform: scale(1.15); opacity: 1; }}
-    100% {{ transform: scale(0.95); opacity: 0.8; }}
-}}
 
-/* Cards de Métricas / KPI */
-.kpi-deck-card {{
+/* Card de KPI Superior */
+.kpi-card {{
     background: {T["surface_card"]};
     border: 1px solid {T["border"]};
     border-radius: 16px;
-    padding: 20px 22px;
-    transition: all 0.25s ease;
+    padding: 18px 20px;
+    transition: all 0.2s ease;
 }}
-.kpi-deck-card:hover {{
+.kpi-card:hover {{
     border-color: {T["border_hover"]};
-    transform: translateY(-2px);
 }}
-.kpi-top-row {{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}}
-.kpi-label {{
-    font-size: 0.78rem;
+.kpi-title {{
+    font-size: 0.76rem;
     font-weight: 700;
     color: {T["text_sub"]};
     text-transform: uppercase;
-    letter-spacing: 0.7px;
-}}
-.kpi-icon-pill {{
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    letter-spacing: 0.5px;
 }}
 .kpi-number {{
     font-family: 'Space Grotesk', monospace;
-    font-size: 2.3rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: {T["text_main"]};
+    margin: 6px 0 2px 0;
     line-height: 1;
-    letter-spacing: -1px;
     font-feature-settings: 'tnum' 1, 'zero' 1;
 }}
 .kpi-desc {{
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: {T["text_muted"]};
-    margin-top: 6px;
-    font-weight: 500;
 }}
 
-/* Badges de Status Fluorescentes */
+/* Card de Máquina na Página Inicial */
+.machine-home-card {{
+    background: {T["surface_card"]};
+    border: 1px solid {T["border"]};
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}}
+.machine-home-card:hover {{
+    border-color: {T["border_hover"]};
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+}}
+
+/* Badges de Status */
 .status-pill {{
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 14px;
+    gap: 6px;
+    padding: 4px 12px;
     border-radius: 9999px;
-    font-size: 0.76rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
 }}
 .status-pill-normal {{
     background: {T["accent_emerald"]}18;
-    border: 1px solid {T["accent_emerald"]}50;
+    border: 1px solid {T["accent_emerald"]}45;
     color: {T["accent_emerald"]};
 }}
 .status-pill-anomalia {{
     background: {T["accent_rose"]}18;
-    border: 1px solid {T["accent_rose"]}55;
+    border: 1px solid {T["accent_rose"]}50;
     color: {T["accent_rose"]};
-    animation: pulse-danger 1.5s infinite;
-}}
-@keyframes pulse-danger {{
-    0% {{ box-shadow: 0 0 0 0 {T["accent_rose"]}40; }}
-    70% {{ box-shadow: 0 0 0 8px transparent; }}
-    100% {{ box-shadow: 0 0 0 0 transparent; }}
 }}
 .status-pill-sem-dados {{
-    background: {T["text_muted"]}15;
-    border: 1px solid {T["text_muted"]}30;
+    background: {T["text_muted"]}18;
+    border: 1px solid {T["text_muted"]}35;
     color: {T["text_muted"]};
 }}
 
-/* Card de Ativo no Parque */
-.asset-grid-card {{
-    background: {T["surface_card"]};
-    border: 1px solid {T["border"]};
-    border-radius: 18px;
-    padding: 22px;
-    margin-bottom: 18px;
-    transition: all 0.25s ease;
-}}
-.asset-grid-card:hover {{
-    border-color: {T["border_hover"]};
-    transform: translateY(-2px);
-}}
-
 /* Painel de Diagnóstico */
-.diag-panel {{
+.diag-card {{
     background: {T["surface_card"]};
-    border: 1px solid {T["accent_violet"]}45;
-    border-radius: 18px;
-    padding: 22px 26px;
-    margin-bottom: 22px;
-}}
-.diag-panel-title {{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: {T["accent_violet"]};
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    margin-bottom: 8px;
-}}
-.diag-panel-text {{
-    font-size: 1.02rem;
-    line-height: 1.6;
-    color: {T["text_main"]};
+    border: 1px solid {T["accent_violet"]}40;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 20px;
 }}
 
-/* Sensor Metric Boxes */
-.sensor-metric-card {{
+/* Mini Box de Sensores */
+.sensor-box {{
     background: {T["surface_metric"]};
     border: 1px solid {T["border"]};
-    border-radius: 14px;
-    padding: 18px;
+    border-radius: 12px;
+    padding: 16px;
     text-align: center;
 }}
-.sensor-metric-label {{
-    font-size: 0.75rem;
-    color: {T["text_sub"]};
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}}
-.sensor-metric-val {{
+.sensor-val {{
     font-family: 'Space Grotesk', monospace;
-    font-size: 1.9rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    margin: 8px 0;
-    letter-spacing: -0.5px;
+    margin: 6px 0;
     font-feature-settings: 'tnum' 1, 'zero' 1;
-}}
-
-/* Botões Customizados */
-div.stButton > button:first-child {{
-    border-radius: 11px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    transition: all 0.2s ease;
-    border: 1px solid {T["border"]};
 }}
 </style>
 """
@@ -441,43 +369,39 @@ st.markdown(CSS_GLOBAL, unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# Componentes de Cabeçalho e Indicadores
+# Componentes Visuais
 # -----------------------------------------------------------------------------
 def renderizar_topbar():
-    """Barra superior com identidade visual corporativa e sem emojis."""
-    agora = datetime.now().strftime("%d/%m/%Y • %H:%M:%S")
-    icone_cpu = get_icon("cpu", color="#ffffff", size=22)
-    icone_radio = get_icon("radio", color=T["accent_emerald"], size=14)
+    """Barra superior limpa e moderna."""
+    agora = datetime.now().strftime("%d/%m/%Y • %H:%M")
+    ico_cpu = get_icon("cpu", color=T["accent_cyan"], size=20)
 
-    st.markdown(
-        f"""
-        <div class="metalsense-navbar">
-            <div class="brand-group">
-                <div class="brand-icon-wrap">
-                    {icone_cpu}
-                </div>
-                <div>
-                    <h1 class="brand-title">METALSENSE</h1>
-                    <p class="brand-sub">Sistema de Diagnóstico Preditivo e Telemetria</p>
-                </div>
+    html = f"""
+    <div class="top-navbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: {T['accent_cyan']}18; padding: 10px; border-radius: 12px; display: flex;">
+                {ico_cpu}
             </div>
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="font-family: 'Space Grotesk', monospace; color: {T['text_sub']}; font-size: 0.85rem; font-weight: 600;">
-                    {agora}
-                </div>
-                <div class="live-pill">
-                    <span class="live-dot"></span>
-                    <span>{icone_radio} GATEWAY ATIVO</span>
-                </div>
+            <div>
+                <h1 class="brand-title">MetalSense</h1>
+                <p class="brand-sub">Sistema de Monitoramento e Manutenção Preditiva</p>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="color: {T['text_sub']}; font-size: 0.82rem; font-family: 'Space Grotesk', monospace; font-weight: 600;">
+                {agora}
+            </div>
+            <span class="status-pill status-pill-normal">
+                {get_icon('check', color=T['accent_emerald'], size=12)} Sistema Online
+            </span>
+        </div>
+    </div>
+    """
+    st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
 
 def renderizar_kpis_topo(maquinas: list):
-    """Renderiza deck de 4 KPIs com tipografia moderna Space Grotesk e SVGs."""
+    """Métricas superiores com nomes simples e diretos."""
     total_maquinas = len(maquinas)
     total_normais = sum(1 for m in maquinas if m.get("status") == "normal")
     total_anomalias = sum(1 for m in maquinas if m.get("status") == "anomalia")
@@ -494,76 +418,68 @@ def renderizar_kpis_topo(maquinas: list):
 
     with c1:
         ico = get_icon("server", color=T["accent_cyan"], size=18)
-        st.markdown(
-            f"""
-            <div class="kpi-deck-card">
-                <div class="kpi-top-row">
-                    <span class="kpi-label">Parque Fabril</span>
-                    <div class="kpi-icon-pill" style="background: {T['accent_cyan']}18;">{ico}</div>
-                </div>
-                <div class="kpi-number">{total_maquinas:02d}</div>
-                <div class="kpi-desc">Equipamentos em Monitoramento</div>
+        html = f"""
+        <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="kpi-title">Máquinas no Sistema</span>
+                <span style="background: {T['accent_cyan']}18; padding: 6px; border-radius: 8px;">{ico}</span>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-number">{total_maquinas:02d}</div>
+            <div class="kpi-desc">Equipamentos cadastrados</div>
+        </div>
+        """
+        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
     with c2:
         ico = get_icon("shield", color=T["accent_emerald"], size=18)
         cor_score = T["accent_emerald"] if media_saude >= 75 else (T["accent_amber"] if media_saude >= 50 else T["accent_rose"])
-        st.markdown(
-            f"""
-            <div class="kpi-deck-card">
-                <div class="kpi-top-row">
-                    <span class="kpi-label">Health Score Geral</span>
-                    <div class="kpi-icon-pill" style="background: {T['accent_emerald']}18;">{ico}</div>
-                </div>
-                <div class="kpi-number" style="color: {cor_score};">{media_saude}%</div>
-                <div class="kpi-desc">Integridade Média Operacional</div>
+        html = f"""
+        <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="kpi-title">Saúde das Máquinas</span>
+                <span style="background: {T['accent_emerald']}18; padding: 6px; border-radius: 8px;">{ico}</span>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-number" style="color: {cor_score};">{media_saude}%</div>
+            <div class="kpi-desc">Média de bom funcionamento</div>
+        </div>
+        """
+        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
     with c3:
         ico = get_icon("alert", color=T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"], size=18)
-        cor_anomalia = T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"]
-        desc_anomalia = f"{total_anomalias:02d} Ativo(s) em Atenção" if total_anomalias > 0 else "Nenhum Alerta Crítico"
-        st.markdown(
-            f"""
-            <div class="kpi-deck-card">
-                <div class="kpi-top-row">
-                    <span class="kpi-label">Alertas de Anomalia</span>
-                    <div class="kpi-icon-pill" style="background: {cor_anomalia}18;">{ico}</div>
-                </div>
-                <div class="kpi-number" style="color: {cor_anomalia};">{total_anomalias:02d}</div>
-                <div class="kpi-desc" style="color: {cor_anomalia}; font-weight: 600;">{desc_anomalia}</div>
+        cor_alerta = T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"]
+        txt_alerta = f"{total_anomalias} precisam de atenção" if total_anomalias > 0 else "Nenhum problema detectado"
+        html = f"""
+        <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="kpi-title">Alertas de Falha</span>
+                <span style="background: {cor_alerta}18; padding: 6px; border-radius: 8px;">{ico}</span>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-number" style="color: {cor_alerta};">{total_anomalias:02d}</div>
+            <div class="kpi-desc" style="color: {cor_alerta}; font-weight: 600;">{txt_alerta}</div>
+        </div>
+        """
+        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
     with c4:
         ico = get_icon("activity", color=T["accent_violet"], size=18)
-        st.markdown(
-            f"""
-            <div class="kpi-deck-card">
-                <div class="kpi-top-row">
-                    <span class="kpi-label">Amostras Ingeridas</span>
-                    <div class="kpi-icon-pill" style="background: {T['accent_violet']}18;">{ico}</div>
-                </div>
-                <div class="kpi-number">{total_leituras:,}</div>
-                <div class="kpi-desc">Ciclos de Telemetria Processados</div>
+        html = f"""
+        <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="kpi-title">Medições Feitas</span>
+                <span style="background: {T['accent_violet']}18; padding: 6px; border-radius: 8px;">{ico}</span>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-number">{total_leituras:,}</div>
+            <div class="kpi-desc">Total de leituras registradas</div>
+        </div>
+        """
+        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
 
-def criar_gauge_saude(score: float, classificacao: str) -> go.Figure:
-    """Velocímetro/Gauge moderno em Plotly adaptado dinamicamente ao tema Dark/Light."""
+def criar_gauge_saude(score: float) -> go.Figure:
+    """Velocímetro limpo sem textos sobrepostos na agulha."""
     cor_barra = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
 
     fig = go.Figure(
@@ -573,23 +489,18 @@ def criar_gauge_saude(score: float, classificacao: str) -> go.Figure:
             domain={'x': [0, 1], 'y': [0, 1]},
             number={
                 'suffix': "%",
-                'font': {'size': 44, 'color': T["text_main"], 'family': 'Space Grotesk, monospace'},
+                'font': {'size': 42, 'color': T["text_main"], 'family': 'Space Grotesk, monospace'},
             },
             gauge={
-                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': T["text_muted"], 'nticks': 6},
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': T["text_muted"], 'nticks': 5},
                 'bar': {'color': cor_barra, 'thickness': 0.28},
                 'bgcolor': T["gauge_bg"],
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 50], 'color': f"{T['accent_rose']}22"},
-                    {'range': [50, 75], 'color': f"{T['accent_amber']}22"},
-                    {'range': [75, 100], 'color': f"{T['accent_emerald']}22"},
+                    {'range': [0, 50], 'color': f"{T['accent_rose']}20"},
+                    {'range': [50, 75], 'color': f"{T['accent_amber']}20"},
+                    {'range': [75, 100], 'color': f"{T['accent_emerald']}20"},
                 ],
-                'threshold': {
-                    'line': {'color': T["accent_rose"], 'width': 2},
-                    'thickness': 0.75,
-                    'value': 50,
-                },
             },
         )
     )
@@ -597,17 +508,8 @@ def criar_gauge_saude(score: float, classificacao: str) -> go.Figure:
     fig.update_layout(
         paper_bgcolor=T["plot_paper"],
         plot_bgcolor=T["plot_paper"],
-        height=210,
-        margin=dict(l=15, r=15, t=15, b=5),
-        annotations=[
-            dict(
-                text=classificacao.upper(),
-                x=0.5,
-                y=0.15,
-                showarrow=False,
-                font=dict(size=12, color=cor_barra, family="Plus Jakarta Sans", weight=700),
-            )
-        ],
+        height=180,
+        margin=dict(l=15, r=15, t=10, b=10),
     )
     return fig
 
@@ -615,21 +517,19 @@ def criar_gauge_saude(score: float, classificacao: str) -> go.Figure:
 def criar_grafico_telemetria(
     df: pd.DataFrame, metrica: str, titulo: str, unidade: str, limite: float, cor_linha: str
 ) -> go.Figure:
-    """Gráfico de telemetria Plotly com curvas splines, gradientes e threshold."""
+    """Gráfico interativo com curva suave e linha de limite de segurança."""
     fig = go.Figure()
 
-    # Linha tracejada do Limite Crítico
     fig.add_hline(
         y=limite,
         line_dash="dash",
         line_color=T["accent_rose"],
         line_width=1.5,
-        annotation_text=f"Limite Máximo: {limite} {unidade}",
+        annotation_text=f"Limite de Segurança ({limite} {unidade})",
         annotation_position="top right",
         annotation_font=dict(color=T["accent_rose"], size=10, family="Space Grotesk"),
     )
 
-    # Conversão de cor para preenchimento sombreado
     r = int(cor_linha[1:3], 16)
     g = int(cor_linha[3:5], 16)
     b = int(cor_linha[5:7], 16)
@@ -654,43 +554,42 @@ def criar_grafico_telemetria(
         plot_bgcolor=T["plot_bg"],
         hovermode="x unified",
         margin=dict(l=10, r=10, t=30, b=10),
-        height=320,
-        xaxis=dict(
-            showgrid=True,
-            gridcolor=T["plot_grid"],
-            color=T["plot_text"],
-            tickfont=dict(size=10, family="Space Grotesk"),
-        ),
-        yaxis=dict(
-            showgrid=True,
-            gridcolor=T["plot_grid"],
-            color=T["plot_text"],
-            tickfont=dict(size=10, family="Space Grotesk"),
-        ),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1,
-            font=dict(color=T["text_sub"], size=11),
-        ),
+        height=300,
+        xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"], tickfont=dict(size=10)),
+        yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"], tickfont=dict(size=10)),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=T["text_sub"], size=11)),
     )
     return fig
 
 
 # -----------------------------------------------------------------------------
-# Visão 1: Parque Fabril Consolidado
+# Página 1: Início (Limpa, Sem Linhas de Código, Muito Intuitiva)
 # -----------------------------------------------------------------------------
-def renderizar_visao_parque(dados: dict, maquinas: list):
-    """Grid de ativos fabris com visual corporativo."""
-    st.markdown("### Ativos Industriais em Monitoramento")
-    st.caption("Visão consolidada da integridade física e operacional de todas as máquinas conectadas.")
+def renderizar_pagina_inicio(dados: dict, maquinas: list):
+    """Página inicial simples, acolhedora e interativa."""
+    # Guia Rápido Intuitivo
+    info_html = f"""
+    <div style="background: {T['surface_card']}; border: 1px solid {T['border']}; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            {get_icon('info', color=T['accent_cyan'], size=18)}
+            <strong style="font-size: 0.95rem; color: {T['text_main']};">Como o MetalSense ajuda você?</strong>
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; color: {T['text_sub']}; line-height: 1.5;">
+            O sistema analisa os sensores das máquinas para descobrir problemas <strong>antes que elas quebrem</strong>. 
+            Se a temperatura, vibração ou consumo elétrico saírem do padrão da máquina, um alerta é emitido imediatamente.
+        </p>
+    </div>
+    """
+    st.markdown(textwrap.dedent(info_html), unsafe_allow_html=True)
+
+    st.markdown("### Suas Máquinas Cadastradas")
+    st.caption("Clique em qualquer máquina abaixo para ver os gráficos e detalhes completos.")
 
     if not maquinas:
-        st.info("Nenhuma máquina cadastrada no sistema. Utilize o formulário na barra lateral para adicionar um ativo.")
+        st.info("Você ainda não tem nenhuma máquina cadastrada. Digite o nome de uma máquina na barra lateral esquerda para começar!")
         return
 
+    # Grid Limpo com Botão Direto em Cada Máquina
     cols = st.columns(2)
     for i, m in enumerate(maquinas):
         with cols[i % 2]:
@@ -703,13 +602,13 @@ def renderizar_visao_parque(dados: dict, maquinas: list):
 
             if status_m == "normal":
                 pill_class = "status-pill-normal"
-                status_txt = "OPERAÇÃO NORMAL"
+                status_txt = "Normal"
             elif status_m == "anomalia":
                 pill_class = "status-pill-anomalia"
-                status_txt = "ANOMALIA DETECTADA"
+                status_txt = "Atenção (Possível Falha)"
             else:
                 pill_class = "status-pill-sem-dados"
-                status_txt = "AGUARDANDO LEITURA"
+                status_txt = "Aguardando Leituras"
 
             ult_temp = f"{hist[-1]['temperatura']}°C" if hist else "—"
             ult_vib = f"{hist[-1]['vibracao']} mm/s" if hist else "—"
@@ -717,64 +616,62 @@ def renderizar_visao_parque(dados: dict, maquinas: list):
 
             cor_prog = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
 
-            st.markdown(
-                f"""
-                <div class="asset-grid-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                        <div>
-                            <span style="font-size: 0.75rem; font-weight: 700; color: {T['accent_cyan']}; text-transform: uppercase;">ID #{id_m:02d}</span>
-                            <h3 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 700; color: {T['text_main']};">{nome_m}</h3>
-                        </div>
-                        <span class="status-pill {pill_class}">{status_txt}</span>
+            card_html = f"""
+            <div class="machine-home-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <div>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: {T['accent_cyan']};">MÁQUINA #{id_m:02d}</span>
+                        <h3 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 700; color: {T['text_main']};">{nome_m}</h3>
                     </div>
+                    <span class="status-pill {pill_class}">{status_txt}</span>
+                </div>
 
-                    <div style="margin: 14px 0 10px 0;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
-                            <span style="color: {T['text_sub']}; font-weight: 600;">Health Score</span>
-                            <span style="color: {cor_prog}; font-weight: 700; font-family: 'Space Grotesk', monospace;">{score}% ({saude['classificacao']})</span>
-                        </div>
-                        <div style="background: {T['border']}; height: 6px; border-radius: 9999px; overflow: hidden;">
-                            <div style="background: {cor_prog}; width: {score}%; height: 100%; border-radius: 9999px;"></div>
-                        </div>
+                <div style="margin: 14px 0 10px 0;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                        <span style="color: {T['text_sub']};">Saúde da Máquina</span>
+                        <span style="color: {cor_prog}; font-weight: 700; font-family: 'Space Grotesk', monospace;">{score}% ({saude['classificacao']})</span>
                     </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; text-align: center;">
-                        <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                            <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Temperatura</div>
-                            <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_temp}</div>
-                        </div>
-                        <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                            <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Vibração</div>
-                            <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_vib}</div>
-                        </div>
-                        <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                            <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Carga</div>
-                            <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_cons}</div>
-                        </div>
+                    <div style="background: {T['border']}; height: 6px; border-radius: 9999px; overflow: hidden;">
+                        <div style="background: {cor_prog}; width: {score}%; height: 100%; border-radius: 9999px;"></div>
                     </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; text-align: center;">
+                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
+                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Temperatura</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_temp}</div>
+                    </div>
+                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
+                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Vibração</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_vib}</div>
+                    </div>
+                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
+                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Consumo</div>
+                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_cons}</div>
+                    </div>
+                </div>
+            </div>
+            """
+            st.markdown(textwrap.dedent(card_html), unsafe_allow_html=True)
+
+            # Botão Direto para Abrir a Máquina
+            if st.button(f"Inspecionar {nome_m} ➔", key=f"btn_ver_{id_m}", use_container_width=True):
+                st.session_state["maquina_ativa_id"] = id_m
+                st.rerun()
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
-    st.markdown("#### Ações Globais de Telemetria")
-    c_btn, c_txt = st.columns([1, 2])
-    with c_btn:
-        if st.button("Disparar Ciclo Geral de Coleta", use_container_width=True):
-            for m in maquinas:
-                registrar_leitura(dados, m["id"], gerar_anomalia=False)
-            st.toast("Ciclo de medição concluído para todo o parque!", icon="✅")
-            st.rerun()
-    with c_txt:
-        st.caption("Executa um ciclo síncrono de medição e análise para todos os ativos cadastrados no banco.")
+    if st.button("Coletar uma Leitura Normal para Todas as Máquinas", use_container_width=True):
+        for m in maquinas:
+            registrar_leitura(dados, m["id"], gerar_anomalia=False)
+        st.toast("Leituras registradas para todas as máquinas!", icon="✅")
+        st.rerun()
 
 
 # -----------------------------------------------------------------------------
-# Visão 2: Detalhes Aprofundados da Máquina Selecionada
+# Página 2: Detalhes da Máquina (Interativa, Simples e Amigável)
 # -----------------------------------------------------------------------------
 def renderizar_detalhes_maquina(dados: dict, maquina: dict):
-    """Visualização analítica completa de uma máquina específica."""
+    """Tela detalhada de uma máquina com navegação fácil."""
     id_m = maquina["id"]
     nome_m = maquina["nome"]
     historico = maquina.get("historico", [])
@@ -784,25 +681,32 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     saude = calcular_indice_saude(historico)
     score = saude["score"]
 
+    # Botão para voltar à página inicial
+    if st.button("⬅ Voltar para Todas as Máquinas", use_container_width=False):
+        st.session_state["maquina_ativa_id"] = None
+        st.rerun()
+
+    st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
+
     if status_m == "normal":
         pill_class = "status-pill-normal"
-        status_txt = "OPERAÇÃO NORMAL"
+        status_txt = "Operação Normal"
     elif status_m == "anomalia":
         pill_class = "status-pill-anomalia"
-        status_txt = "ANOMALIA DETECTADA"
+        status_txt = "Atenção (Falha Detectada)"
     else:
         pill_class = "status-pill-sem-dados"
-        status_txt = "AGUARDANDO LEITURA"
+        status_txt = "Aguardando Leituras"
 
     # Header da Máquina
     c_h1, c_h2 = st.columns([3, 1])
     with c_h1:
         st.markdown(
             f"""
-            <div style="margin-bottom: 8px;">
-                <span style="font-size: 0.78rem; font-weight: 700; color: {T['accent_cyan']}; text-transform: uppercase;">MONITORAMENTO INDIVIDUAL DE ATIVO</span>
-                <h1 style="margin: 2px 0 0 0; font-size: 2.1rem; font-weight: 800; color: {T['text_main']};">{nome_m} <span style="font-size: 1.2rem; color: {T['text_muted']}; font-family: 'Space Grotesk', monospace;">[ID #{id_m:02d}]</span></h1>
-                <p style="margin: 4px 0 0 0; color: {T['text_sub']}; font-size: 0.88rem;">Série temporal contínua • Volume acumulado: <strong>{len(historico)} registros</strong></p>
+            <div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: {T['accent_cyan']};">MONITORANDO ATIVO #{id_m:02d}</span>
+                <h1 style="margin: 2px 0 0 0; font-size: 2.1rem; font-weight: 800; color: {T['text_main']};">{nome_m}</h1>
+                <p style="margin: 4px 0 0 0; color: {T['text_sub']}; font-size: 0.88rem;">Total de medições salvas: <strong>{len(historico)} registros</strong></p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -810,7 +714,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     with c_h2:
         st.markdown(
             f"""
-            <div style="text-align: right; margin-top: 18px;">
+            <div style="text-align: right; margin-top: 14px;">
                 <span class="status-pill {pill_class}">{status_txt}</span>
             </div>
             """,
@@ -819,63 +723,67 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
     st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
-    # HERO: Velocímetro (Gauge) + Diagnóstico AI Preditivo
+    # Velocímetro (Gauge) + Diagnóstico Simples
     col_gauge, col_ai = st.columns([1, 2])
 
     with col_gauge:
         st.markdown(
             f"""
-            <div style="background: {T['surface_card']}; border: 1px solid {T['border']}; border-radius: 18px; padding: 12px; text-align: center;">
-                <div style="font-size: 0.78rem; font-weight: 700; color: {T['text_sub']}; text-transform: uppercase; letter-spacing: 0.7px; margin-top: 6px;">Integridade do Ativo</div>
+            <div style="background: {T['surface_card']}; border: 1px solid {T['border']}; border-radius: 16px; padding: 14px; text-align: center;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: {T['text_sub']}; text-transform: uppercase;">Saúde do Ativo</span>
             """,
             unsafe_allow_html=True,
         )
-        st.plotly_chart(criar_gauge_saude(score, saude["classificacao"]), use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        # Velocímetro Limpo
+        st.plotly_chart(criar_gauge_saude(score), use_container_width=True)
+
+        # Mensagem de estado colocada ABAIXO do velocímetro (Sem sobreposição!)
+        st.markdown(
+            f"""
+                <div style="margin-top: -15px; margin-bottom: 6px;">
+                    <span class="status-pill {pill_class}">{saude['classificacao'].upper()}</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with col_ai:
-        ico_brain = get_icon("brain", color=T["accent_violet"], size=20)
-        st.markdown(
-            f"""
-            <div class="diag-panel">
-                <div class="diag-panel-title">
-                    <span>{ico_brain}</span>
-                    <span>Diagnóstico Preditivo MetalSense • Análise de Campo</span>
-                </div>
-                <div class="diag-panel-text">{diagnostico_texto}</div>
-            """,
-            unsafe_allow_html=True,
-        )
+        diag_html = f"""
+        <div class="diag-card">
+            <div style="font-size: 0.85rem; font-weight: 700; color: {T['accent_violet']}; text-transform: uppercase; margin-bottom: 8px;">
+                Diagnóstico Automático
+            </div>
+            <div style="font-size: 1.05rem; line-height: 1.5; color: {T['text_main']};">
+                {diagnostico_texto}
+            </div>
+        """
+        st.markdown(textwrap.dedent(diag_html), unsafe_allow_html=True)
 
-        # Hipóteses Fisiomecânicas
+        # Hipóteses em formato simples
         if saude.get("hipoteses"):
-            st.markdown("<div style='margin-top: 12px;'>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 10px;'>", unsafe_allow_html=True)
             for hip in saude["hipoteses"]:
-                st.markdown(
-                    f"""
-                    <span style="display: inline-flex; align-items: center; gap: 6px; background: {T['accent_rose']}18; border: 1px solid {T['accent_rose']}40; color: {T['accent_rose']}; padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; margin-right: 6px; margin-top: 6px;">
-                        {get_icon('alert', color=T['accent_rose'], size=14)} {hip}
-                    </span>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                hip_html = f"""
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: {T['accent_rose']}18; border: 1px solid {T['accent_rose']}40; color: {T['accent_rose']}; padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; margin-right: 6px; margin-top: 6px;">
+                    {get_icon('alert', color=T['accent_rose'], size=14)} {hip}
+                </span>
+                """
+                st.markdown(textwrap.dedent(hip_html), unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
-        # Tendências Discretas
         tend = saude.get("tendencias", {})
-        st.markdown(
-            f"""
+        tend_html = f"""
             <div style="display: flex; gap: 20px; margin-top: 16px; font-size: 0.85rem; color: {T['text_sub']}; border-top: 1px solid {T['border']}; padding-top: 12px;">
                 <div>Temperatura: <strong style="color: {T['text_main']};">{tend.get('temperatura', 'Estável')}</strong></div>
                 <div>Vibração: <strong style="color: {T['text_main']};">{tend.get('vibracao', 'Estável')}</strong></div>
-                <div>Carga: <strong style="color: {T['text_main']};">{tend.get('consumo', 'Estável')}</strong></div>
+                <div>Consumo: <strong style="color: {T['text_main']};">{tend.get('consumo', 'Estável')}</strong></div>
             </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """
+        st.markdown(textwrap.dedent(tend_html), unsafe_allow_html=True)
 
-    # ÚLTIMA MEDIÇÃO EM CARDS
+    # Valores da Última Medição
     if historico:
         ult = historico[-1]
         t_val = ult.get("temperatura", 0.0)
@@ -886,138 +794,123 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
         sc1, sc2, sc3, sc4 = st.columns(4)
         with sc1:
             t_cor = T["accent_rose"] if t_val > 85.0 else T["accent_emerald"]
-            t_txt = "Crítico (>85°C)" if t_val > 85.0 else "Normal (55-68°C)"
-            ico_temp = get_icon("thermometer", color=t_cor, size=16)
-            st.markdown(
-                f"""
-                <div class="sensor-metric-card">
-                    <div class="sensor-metric-label">{ico_temp} Temperatura</div>
-                    <div class="sensor-metric-val" style="color: {t_cor};">{t_val} <span style="font-size: 1.1rem;">°C</span></div>
-                    <span style="font-size: 0.72rem; font-weight: 700; color: {t_cor};">{t_txt}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            t_txt = "Muito Quente (>85°C)" if t_val > 85.0 else "Normal (abaixo de 85°C)"
+            html = f"""
+            <div class="sensor-box">
+                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Temperatura</div>
+                <div class="sensor-val" style="color: {t_cor};">{t_val} <span style="font-size: 1rem;">°C</span></div>
+                <span style="font-size: 0.72rem; font-weight: 700; color: {t_cor};">{t_txt}</span>
+            </div>
+            """
+            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+
         with sc2:
             v_cor = T["accent_rose"] if v_val > 8.0 else T["accent_emerald"]
-            v_txt = "Crítica (>8.0 mm/s)" if v_val > 8.0 else "Normal (2-4.5 mm/s)"
-            ico_vib = get_icon("waves", color=v_cor, size=16)
-            st.markdown(
-                f"""
-                <div class="sensor-metric-card">
-                    <div class="sensor-metric-label">{ico_vib} Vibração Mecânica</div>
-                    <div class="sensor-metric-val" style="color: {v_cor};">{v_val} <span style="font-size: 1.1rem;">mm/s</span></div>
-                    <span style="font-size: 0.72rem; font-weight: 700; color: {v_cor};">{v_txt}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            v_txt = "Trepidação Alta (>8.0)" if v_val > 8.0 else "Normal (abaixo de 8.0)"
+            html = f"""
+            <div class="sensor-box">
+                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Vibração</div>
+                <div class="sensor-val" style="color: {v_cor};">{v_val} <span style="font-size: 1rem;">mm/s</span></div>
+                <span style="font-size: 0.72rem; font-weight: 700; color: {v_cor};">{v_txt}</span>
+            </div>
+            """
+            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+
         with sc3:
             c_cor = T["accent_rose"] if c_val > 500.0 else T["accent_emerald"]
-            c_txt = "Sobrecarga (>500W)" if c_val > 500.0 else "Normal (250-380W)"
-            ico_zap = get_icon("zap", color=c_cor, size=16)
-            st.markdown(
-                f"""
-                <div class="sensor-metric-card">
-                    <div class="sensor-metric-label">{ico_zap} Carga Elétrica</div>
-                    <div class="sensor-metric-val" style="color: {c_cor};">{c_val} <span style="font-size: 1.1rem;">W</span></div>
-                    <span style="font-size: 0.72rem; font-weight: 700; color: {c_cor};">{c_txt}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            c_txt = "Sobrecarga (>500W)" if c_val > 500.0 else "Normal (abaixo de 500W)"
+            html = f"""
+            <div class="sensor-box">
+                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Consumo Elétrico</div>
+                <div class="sensor-val" style="color: {c_cor};">{c_val} <span style="font-size: 1rem;">W</span></div>
+                <span style="font-size: 0.72rem; font-weight: 700; color: {c_cor};">{c_txt}</span>
+            </div>
+            """
+            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+
         with sc4:
-            ico_act = get_icon("activity", color=T["accent_cyan"], size=16)
-            st.markdown(
-                f"""
-                <div class="sensor-metric-card">
-                    <div class="sensor-metric-label">{ico_act} Último Registro</div>
-                    <div class="sensor-metric-val" style="color: {T['accent_cyan']}; font-size: 1.4rem; margin-top: 14px;">{hora.split(' ')[-1] if ' ' in hora else hora}</div>
-                    <span style="font-size: 0.72rem; font-weight: 600; color: {T['text_muted']};">{hora.split(' ')[0] if ' ' in hora else 'Hoje'}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            html = f"""
+            <div class="sensor-box">
+                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Horário da Leitura</div>
+                <div class="sensor-val" style="color: {T['accent_cyan']}; font-size: 1.4rem; margin-top: 10px;">{hora.split(' ')[-1] if ' ' in hora else hora}</div>
+                <span style="font-size: 0.72rem; font-weight: 600; color: {T['text_muted']};">{hora.split(' ')[0] if ' ' in hora else 'Hoje'}</span>
+            </div>
+            """
+            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # PAINEL DE CONTROLE E SIMULAÇÃO
-    st.markdown("#### Console Operacional de Telemetria")
+    # Botões Interativos Fáceis
+    st.markdown("#### Ações com Esta Máquina")
     b1, b2, b3 = st.columns(3)
     with b1:
-        if st.button("Amostragem Operacional Normal", use_container_width=True):
+        if st.button("+ Adicionar Leitura Normal", use_container_width=True):
             registrar_leitura(dados, id_m, gerar_anomalia=False)
-            st.toast("Amostragem normal registrada com sucesso!", icon="✅")
+            st.toast("Leitura normal registrada com sucesso!", icon="✅")
             st.rerun()
     with b2:
-        if st.button("Injetar Disparo Anômalo", type="primary", use_container_width=True):
+        if st.button("Simular Falha de Teste", type="primary", use_container_width=True):
             registrar_leitura(dados, id_m, gerar_anomalia=True)
-            st.toast("Disparo anômalo simulado!", icon="🚨")
+            st.toast("Falha simulada para teste de detecção!", icon="🚨")
             st.rerun()
     with b3:
-        if st.button("Recalcular Matriz Preditiva", use_container_width=True):
+        if st.button("Atualizar Análise", use_container_width=True):
             analisar_maquina(dados, id_m)
-            st.toast("Inferência preditiva atualizada!", icon="🔄")
+            st.toast("Análise atualizada!", icon="🔄")
             st.rerun()
 
-    with st.expander("Estúdio de Injeção de Falhas Físicas", expanded=False):
-        st.caption("Cenários físicos parametrizados para testes de diagnóstico e validação técnica:")
+    with st.expander("Testar Outros Tipos Específicos de Falha", expanded=False):
+        st.caption("Escolha uma falha específica para simular:")
         sb1, sb2, sb3 = st.columns(3)
         with sb1:
-            if st.button("Cenário: Desgaste de Rolamento", use_container_width=True):
+            if st.button("Simular: Desgaste de Rolamento", use_container_width=True):
                 leit = gerar_leitura_cenario("rolamento", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
-                st.toast("Cenário de Desgaste de Rolamento injetado!", icon="⚙️")
+                st.toast("Cenário de Rolamento injetado!", icon="⚙️")
                 st.rerun()
         with sb2:
-            if st.button("Cenário: Falha de Arrefecimento", use_container_width=True):
+            if st.button("Simular: Superaquecimento", use_container_width=True):
                 leit = gerar_leitura_cenario("aquecimento", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
-                st.toast("Cenário de Superaquecimento injetado!", icon="🔥")
+                st.toast("Superaquecimento injetado!", icon="🔥")
                 st.rerun()
         with sb3:
-            if st.button("Cenário: Sobrecarga de Motor", use_container_width=True):
+            if st.button("Simular: Sobrecarga Elétrica", use_container_width=True):
                 leit = gerar_leitura_cenario("sobrecarga", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
-                st.toast("Cenário de Sobrecarga injetado!", icon="⚡")
+                st.toast("Sobrecarga injetada!", icon="⚡")
                 st.rerun()
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # GRÁFICOS INTERATIVOS
-    st.markdown("#### Monitoramento Temporal das Grandezas")
+    # Gráficos Simples e Claros
+    st.markdown("#### Histórico em Gráficos")
 
     if len(historico) < 2:
-        st.info("Série temporal com dados insuficientes (mínimo de 2 leituras). Utilize o console acima para registrar medições.")
+        st.info("Ainda há poucas leituras salvas (mínimo de 2). Clique em '+ Adicionar Leitura Normal' acima para gerar dados.")
     else:
         df_hist = pd.DataFrame(historico)
 
         tab1, tab2, tab3, tab4 = st.tabs([
-            "Temperatura (°C)",
-            "Vibração (mm/s)",
-            "Consumo Elétrico (W)",
-            "Espectro Multivariado",
+            "Temperatura",
+            "Vibração",
+            "Consumo",
+            "Todos Juntos",
         ])
 
         with tab1:
             st.plotly_chart(
-                criar_grafico_telemetria(
-                    df_hist, "temperatura", "Temperatura", "°C", 85.0, T["accent_cyan"]
-                ),
+                criar_grafico_telemetria(df_hist, "temperatura", "Temperatura", "°C", 85.0, T["accent_cyan"]),
                 use_container_width=True,
             )
         with tab2:
             st.plotly_chart(
-                criar_grafico_telemetria(
-                    df_hist, "vibracao", "Vibração Mecânica", "mm/s", 8.0, T["accent_amber"]
-                ),
+                criar_grafico_telemetria(df_hist, "vibracao", "Vibração", "mm/s", 8.0, T["accent_amber"]),
                 use_container_width=True,
             )
         with tab3:
             st.plotly_chart(
-                criar_grafico_telemetria(
-                    df_hist, "consumo", "Carga Elétrica", "W", 500.0, T["accent_violet"]
-                ),
+                criar_grafico_telemetria(df_hist, "consumo", "Consumo", "W", 500.0, T["accent_violet"]),
                 use_container_width=True,
             )
         with tab4:
@@ -1025,23 +918,17 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             for col, cor, nome in [
                 ("temperatura", T["accent_cyan"], "Temp (°C)"),
                 ("vibracao", T["accent_amber"], "Vibração (mm/s)"),
-                ("consumo", T["accent_violet"], "Carga (W)"),
+                ("consumo", T["accent_violet"], "Consumo (W)"),
             ]:
                 fig_multi.add_trace(
-                    go.Scatter(
-                        x=df_hist["timestamp"],
-                        y=df_hist[col],
-                        mode="lines",
-                        name=nome,
-                        line=dict(color=cor, width=2.5),
-                    )
+                    go.Scatter(x=df_hist["timestamp"], y=df_hist[col], mode="lines", name=nome, line=dict(color=cor, width=2.5))
                 )
             fig_multi.update_layout(
                 paper_bgcolor=T["plot_paper"],
                 plot_bgcolor=T["plot_bg"],
                 hovermode="x unified",
                 margin=dict(l=10, r=10, t=30, b=10),
-                height=340,
+                height=320,
                 xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"]),
                 yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"]),
                 legend=dict(font=dict(color=T["text_sub"])),
@@ -1050,10 +937,10 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # AUDITORIA & EXPORTAÇÃO
-    st.markdown("#### Histórico de Telemetria e Emissão de Laudos")
+    # Exportar Arquivos
+    st.markdown("#### Baixar Relatórios")
     if historico:
-        with st.expander("Visualizar Tabela de Registros e Emitir Documentação Técnica", expanded=False):
+        with st.expander("Baixar Histórico em Planilha ou Laudo Técnico", expanded=False):
             t_col1, t_col2 = st.columns(2)
             with t_col1:
                 csv_buf = io.StringIO()
@@ -1067,9 +954,9 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
                         "consumo": r.get("consumo", 0.0),
                     })
                 st.download_button(
-                    label="Baixar Telemetria Completa (CSV)",
+                    label="Baixar Planilha (CSV)",
                     data=csv_buf.getvalue(),
-                    file_name=f"telemetria_metalsense_asset_{id_m}.csv",
+                    file_name=f"historico_maquina_{id_m}.csv",
                     mime="text/csv",
                     use_container_width=True,
                 )
@@ -1078,110 +965,104 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
                 with open(caminho_html, "r", encoding="utf-8") as f_html:
                     html_data = f_html.read()
                 st.download_button(
-                    label="Baixar Laudo Técnico de Perícia (HTML)",
+                    label="Baixar Laudo Técnico (HTML)",
                     data=html_data,
-                    file_name=f"laudo_metalsense_asset_{id_m}.html",
+                    file_name=f"laudo_maquina_{id_m}.html",
                     mime="text/html",
                     use_container_width=True,
                 )
 
-            st.markdown("##### Ordem de Serviço de Engenharia Preditiva")
+            st.markdown("##### Ordem de Serviço:")
             st.code(gerar_ordem_servico_texto(maquina), language="text")
 
 
 # -----------------------------------------------------------------------------
-# Fluxo Principal & Barra Lateral
+# Fluxo Principal & Barra Lateral Sincronizada
 # -----------------------------------------------------------------------------
 def main():
     dados = carregar_dados()
     maquinas = dados.get("maquinas", [])
 
-    # Top Navbar Corporativa
+    # Topo
     renderizar_topbar()
-
-    # Deck de KPIs
     renderizar_kpis_topo(maquinas)
 
-    # SIDEBAR
+    # Barra Lateral
     with st.sidebar:
-        st.markdown(
-            f"""
-            <div style="font-size: 0.72rem; color: {T['text_muted']}; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-top: 14px; margin-bottom: 6px;">
-                NAVEGAÇÃO DE ATIVOS
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-top: 10px; margin-bottom: 6px; letter-spacing: 0.5px;'>Navegação Rápida</p>", unsafe_allow_html=True)
 
-        opcoes = ["Visão Geral de Todo o Parque"]
-        mapa = {}
-        for m in maquinas:
-            tag = f"[#{m['id']:02d}] {m['nome']}"
-            opcoes.append(tag)
-            mapa[tag] = m
+        opcoes = ["Todas as Máquinas (Início)"]
+        mapa_ids = {"Todas as Máquinas (Início)": None}
+        idx_selecionado = 0
+
+        for i, m in enumerate(maquinas):
+            label = f"[#{m['id']:02d}] {m['nome']}"
+            opcoes.append(label)
+            mapa_ids[label] = m["id"]
+            if st.session_state["maquina_ativa_id"] == m["id"]:
+                idx_selecionado = i + 1
 
         escolha = st.selectbox(
-            "Selecione o Ativo:",
+            "Ver máquina:",
             options=opcoes,
-            index=0,
-            help="Alterne entre o panorama consolidado do parque e a telemetria detalhada de uma máquina.",
+            index=idx_selecionado,
+            label_visibility="collapsed",
         )
+
+        # Atualiza a seleção de navegação
+        novo_id = mapa_ids.get(escolha)
+        if novo_id != st.session_state["maquina_ativa_id"]:
+            st.session_state["maquina_ativa_id"] = novo_id
+            st.rerun()
 
         st.markdown("---")
 
-        # Cadastro de Novo Ativo
-        st.markdown(
-            f"""
-            <div style="font-size: 0.72rem; color: {T['text_muted']}; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px;">
-                CADASTRAR NOVO EQUIPAMENTO
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        with st.form("form_novo_ativo", clear_on_submit=True):
-            nome_input = st.text_input("Identificador do Ativo:", placeholder="Ex: Fresadora CNC Haas 02")
-            btn_add = st.form_submit_button("Cadastrar Ativo", use_container_width=True)
+        # Formulário Simples de Nova Máquina
+        st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Cadastrar Nova Máquina</p>", unsafe_allow_html=True)
+        with st.form("form_nova_maquina", clear_on_submit=True):
+            nome_input = st.text_input("Nome da Máquina:", placeholder="Ex: Torno CNC 03", label_visibility="collapsed")
+            btn_add = st.form_submit_button("+ Cadastrar Máquina", use_container_width=True)
 
             if btn_add:
                 nome_limpo = nome_input.strip()
                 if not nome_limpo:
-                    st.error("O identificador não pode ser vazio.")
+                    st.error("Digite um nome para a máquina.")
                 else:
                     try:
                         nova = criar_maquina(dados, nome_limpo)
                         st.toast(f"Máquina '{nova['nome']}' cadastrada com sucesso!", icon="✅")
+                        st.session_state["maquina_ativa_id"] = nova["id"]
                         st.rerun()
                     except ValueError as err:
                         st.error(str(err))
 
-        # Descomissionamento
-        maquina_ativa = mapa.get(escolha)
-        if maquina_ativa:
-            st.markdown("---")
-            st.markdown(
-                f"""
-                <div style="font-size: 0.72rem; color: {T['text_muted']}; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px;">
-                    DESCOMISSIONAMENTO
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            with st.expander("Remover Ativo Selecionado", expanded=False):
-                st.caption(f"Atenção: A remoção de '{maquina_ativa['nome']}' apagará todo o histórico de telemetria.")
-                confirm = st.checkbox("Confirmo o descomissionamento", key=f"del_{maquina_ativa['id']}")
-                if st.button("Remover Definitivamente", type="primary", disabled=not confirm, use_container_width=True):
-                    if remover_maquina(dados, maquina_ativa["id"]):
-                        st.toast("Ativo descomissionado com sucesso!", icon="🗑️")
-                        st.rerun()
+        # Excluir Máquina
+        if st.session_state["maquina_ativa_id"] is not None:
+            maq_atual = next((m for m in maquinas if m["id"] == st.session_state["maquina_ativa_id"]), None)
+            if maq_atual:
+                st.markdown("---")
+                st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Excluir Máquina</p>", unsafe_allow_html=True)
+                with st.expander("Apagar esta máquina", expanded=False):
+                    st.caption(f"Atenção: removerá '{maq_atual['nome']}' e todo o seu histórico.")
+                    confirm = st.checkbox("Sim, quero apagar", key=f"del_{maq_atual['id']}")
+                    if st.button("Confirmar Exclusão", type="primary", disabled=not confirm, use_container_width=True):
+                        if remover_maquina(dados, maq_atual["id"]):
+                            st.toast("Máquina removida!", icon="🗑️")
+                            st.session_state["maquina_ativa_id"] = None
+                            st.rerun()
 
         st.markdown("---")
-        st.caption("MetalSense Pro v2.4 • TechForge Industrial")
+        st.caption("MetalSense • Projeto TechForge")
 
-    # Renderização da Área Principal
-    if escolha == "Visão Geral de Todo o Parque" or not maquina_ativa:
-        renderizar_visao_parque(dados, maquinas)
+    # Renderização da Tela Ativa
+    maquina_selecionada = None
+    if st.session_state["maquina_ativa_id"] is not None:
+        maquina_selecionada = next((m for m in maquinas if m["id"] == st.session_state["maquina_ativa_id"]), None)
+
+    if maquina_selecionada is None:
+        renderizar_pagina_inicio(dados, maquinas)
     else:
-        renderizar_detalhes_maquina(dados, maquina_ativa)
+        renderizar_detalhes_maquina(dados, maquina_selecionada)
 
 
 if __name__ == "__main__":

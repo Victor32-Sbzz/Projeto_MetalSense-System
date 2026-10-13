@@ -18,6 +18,8 @@ Thumbs.db
 
 # Banco de dados local e caches
 *.db
+*.db-shm
+*.db-wal
 *.sqlite3
 *.sqlite
 .pytest_cache/
