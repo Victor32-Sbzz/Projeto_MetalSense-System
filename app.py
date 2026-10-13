@@ -39,82 +39,105 @@ if "maquina_ativa_id" not in st.session_state:
 
 # Alternador de Tema na Barra Lateral
 with st.sidebar:
-    st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Aparência do Sistema</p>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom: 6px;'></div>", unsafe_allow_html=True)
     c_t1, c_t2 = st.columns(2)
     with c_t1:
-        if st.button("Escuro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "dark" else "secondary"):
+        if st.button("🌙 Escuro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "dark" else "secondary"):
             st.session_state["theme_mode"] = "dark"
             st.rerun()
     with c_t2:
-        if st.button("Claro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "light" else "secondary"):
+        if st.button("☀️ Claro", use_container_width=True, type="primary" if st.session_state["theme_mode"] == "light" else "secondary"):
             st.session_state["theme_mode"] = "light"
             st.rerun()
 
 IS_DARK = st.session_state["theme_mode"] == "dark"
 
-# Paleta de Cores 100% Padronizada para Ambos os Modos
+# ---------------------------------------------------------------------------
+# Paleta de Cores — Dribbble Aesthetic (Glassmorphism + Neon Glow)
+# ---------------------------------------------------------------------------
 if IS_DARK:
     T = {
-        "app_bg": "radial-gradient(circle at 10% 20%, #0d1527 0%, #060911 85%)",
-        "surface": "rgba(15, 23, 42, 0.75)",
-        "surface_card": "#0f172a",
-        "surface_metric": "rgba(30, 41, 59, 0.5)",
-        "sidebar_bg": "#080c14",
-        "border": "rgba(255, 255, 255, 0.08)",
-        "border_subtle": "rgba(255, 255, 255, 0.05)",
-        "border_hover": "#38bdf8",
-        "input_bg": "#0f172a",
-        "input_border": "rgba(255, 255, 255, 0.15)",
-        "text_main": "#f8fafc",
-        "text_sub": "#94a3b8",
-        "text_muted": "#64748b",
-        "btn_bg": "rgba(15, 23, 42, 0.8)",
-        "btn_border": "rgba(255, 255, 255, 0.12)",
-        "accent_cyan": "#00f2fe",
-        "accent_blue": "#38bdf8",
-        "accent_emerald": "#10b981",
-        "accent_amber": "#f59e0b",
-        "accent_rose": "#ef4444",
-        "accent_violet": "#a855f7",
-        "plot_paper": "rgba(0,0,0,0)",
-        "plot_bg": "rgba(15, 23, 42, 0.45)",
-        "plot_grid": "rgba(255, 255, 255, 0.05)",
-        "plot_text": "#94a3b8",
-        "gauge_bg": "rgba(30, 41, 59, 0.5)",
+        # Backgrounds
+        "app_bg":          "radial-gradient(ellipse at 10% 20%, #0d1527 0%, #060911 70%)",
+        "surface":         "rgba(15, 23, 42, 0.72)",
+        "surface_card":    "rgba(15, 23, 42, 0.65)",
+        "surface_metric":  "rgba(30, 41, 59, 0.55)",
+        "sidebar_bg":      "rgba(8, 12, 20, 0.95)",
+        # Borders
+        "border":          "rgba(255, 255, 255, 0.07)",
+        "border_hover":    "rgba(56, 189, 248, 0.45)",
+        # Inputs
+        "input_bg":        "rgba(15, 23, 42, 0.85)",
+        "input_border":    "rgba(255, 255, 255, 0.12)",
+        # Text
+        "text_main":       "#f1f5f9",
+        "text_sub":        "#94a3b8",
+        "text_muted":      "#64748b",
+        # Buttons
+        "btn_bg":          "rgba(15, 23, 42, 0.8)",
+        "btn_border":      "rgba(255, 255, 255, 0.10)",
+        "btn_hover_bg":    "rgba(56, 189, 248, 0.12)",
+        # Accent palette (neon)
+        "accent_cyan":     "#00e5ff",
+        "accent_blue":     "#38bdf8",
+        "accent_emerald":  "#34d399",
+        "accent_amber":    "#fbbf24",
+        "accent_rose":     "#fb7185",
+        "accent_violet":   "#c084fc",
+        # Plotly
+        "plot_paper":      "rgba(0,0,0,0)",
+        "plot_bg":         "rgba(15, 23, 42, 0.45)",
+        "plot_grid":       "rgba(255, 255, 255, 0.04)",
+        "plot_text":       "#94a3b8",
+        "gauge_bg":        "rgba(30, 41, 59, 0.55)",
+        # Glow helpers
+        "card_shadow":     "0 8px 32px -8px rgba(0, 229, 255, 0.08)",
+        "card_hover_shadow": "0 12px 40px -8px rgba(0, 229, 255, 0.18)",
     }
 else:
     T = {
-        "app_bg": "#f8fafc",
-        "surface": "#ffffff",
-        "surface_card": "#ffffff",
-        "surface_metric": "#f1f5f9",
-        "sidebar_bg": "#ffffff",
-        "border": "#e2e8f0",
-        "border_subtle": "#e2e8f0",
-        "border_hover": "#0284c7",
-        "input_bg": "#ffffff",
-        "input_border": "#cbd5e1",
-        "text_main": "#0f172a",
-        "text_sub": "#475569",
-        "text_muted": "#64748b",
-        "btn_bg": "#ffffff",
-        "btn_border": "#cbd5e1",
-        "accent_cyan": "#0284c7",
-        "accent_blue": "#0284c7",
-        "accent_emerald": "#059669",
-        "accent_amber": "#d97706",
-        "accent_rose": "#dc2626",
-        "accent_violet": "#7c3aed",
-        "plot_paper": "rgba(0,0,0,0)",
-        "plot_bg": "#ffffff",
-        "plot_grid": "#e2e8f0",
-        "plot_text": "#475569",
-        "gauge_bg": "#e2e8f0",
+        # Backgrounds
+        "app_bg":          "linear-gradient(160deg, #f8fafc 0%, #eef2f7 50%, #e2e8f0 100%)",
+        "surface":         "rgba(255, 255, 255, 0.85)",
+        "surface_card":    "rgba(255, 255, 255, 0.90)",
+        "surface_metric":  "#f1f5f9",
+        "sidebar_bg":      "rgba(255, 255, 255, 0.92)",
+        # Borders
+        "border":          "rgba(0, 0, 0, 0.08)",
+        "border_hover":    "#0284c7",
+        # Inputs
+        "input_bg":        "#ffffff",
+        "input_border":    "#cbd5e1",
+        # Text
+        "text_main":       "#0f172a",
+        "text_sub":        "#475569",
+        "text_muted":      "#94a3b8",
+        # Buttons
+        "btn_bg":          "rgba(255, 255, 255, 0.9)",
+        "btn_border":      "#cbd5e1",
+        "btn_hover_bg":    "rgba(2, 132, 199, 0.08)",
+        # Accent palette (vivid but not neon)
+        "accent_cyan":     "#0284c7",
+        "accent_blue":     "#0284c7",
+        "accent_emerald":  "#059669",
+        "accent_amber":    "#d97706",
+        "accent_rose":     "#e11d48",
+        "accent_violet":   "#7c3aed",
+        # Plotly
+        "plot_paper":      "rgba(0,0,0,0)",
+        "plot_bg":         "rgba(255, 255, 255, 0.6)",
+        "plot_grid":       "rgba(0, 0, 0, 0.06)",
+        "plot_text":       "#475569",
+        "gauge_bg":        "#e2e8f0",
+        # Shadow helpers
+        "card_shadow":     "0 4px 24px -6px rgba(0, 0, 0, 0.06)",
+        "card_hover_shadow": "0 8px 32px -6px rgba(0, 0, 0, 0.12)",
     }
 
-# -----------------------------------------------------------------------------
-# Biblioteca de Ícones SVG Profissionais (Vetorizados, Limpos e Sem Emojis)
-# -----------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Biblioteca de Ícones SVG (Feather Icons — vetorizados, profissionais)
+# ---------------------------------------------------------------------------
 ICONS = {
     "cpu": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>',
     "activity": '<svg xmlns="http://www.w3.org/2000/svg" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
@@ -131,279 +154,561 @@ ICONS = {
 
 
 def get_icon(name: str, color: str = "currentColor", size: int = 18) -> str:
-    """Retorna código SVG inline formatado com tamanho e cor."""
+    """Retorna o código SVG do ícone renderizado inline."""
     template = ICONS.get(name, "")
     return template.format(s=size, c=color)
 
 
-# -----------------------------------------------------------------------------
-# CSS Global Dinâmico (Modo Escuro e Modo Claro 100% Blindados e Homogêneos)
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# CSS Global — Cobertura TOTAL de Todos os Widgets Streamlit
+# ---------------------------------------------------------------------------
 CSS_GLOBAL = f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
+/* ============== BASE RESET ============== */
 html, body, [class*="css"] {{
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }}
 
-/* Cor de Fundo Geral */
+/* ============== APP BACKGROUND ============== */
 .stApp {{
     background: {T["app_bg"]} !important;
     color: {T["text_main"]} !important;
 }}
 
+/* Header transparente */
 header[data-testid="stHeader"] {{
-    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
 }}
 
-/* Barra Lateral (Sidebar) */
+/* ============== MAIN CONTENT AREA — previne fundo branco ============== */
+section.main > div.block-container {{
+    background: transparent !important;
+    color: {T["text_main"]} !important;
+}}
+section.main {{
+    background: transparent !important;
+}}
+
+/* ============== SIDEBAR ============== */
 section[data-testid="stSidebar"] {{
-    background-color: {T["sidebar_bg"]} !important;
+    background: {T["sidebar_bg"]} !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
     border-right: 1px solid {T["border"]} !important;
 }}
 section[data-testid="stSidebar"] * {{
     color: {T["text_main"]} !important;
 }}
+section[data-testid="stSidebar"] .stMarkdown p,
+section[data-testid="stSidebar"] .stMarkdown span,
+section[data-testid="stSidebar"] .stMarkdown label {{
+    color: {T["text_main"]} !important;
+}}
 
-/* Forçar Campos de Entrada e Selects */
+/* ============== INPUTS / SELECTS / TEXTAREAS ============== */
 div[data-baseweb="select"] > div,
 div[data-baseweb="input"] > div,
+div[data-baseweb="base-input"] > div,
+div[data-baseweb="textarea"] > div,
 input, textarea {{
     background-color: {T["input_bg"]} !important;
     color: {T["text_main"]} !important;
     border-color: {T["input_border"]} !important;
     border-radius: 10px !important;
+    caret-color: {T["accent_cyan"]} !important;
+}}
+/* Select value text */
+div[data-baseweb="select"] span {{
+    color: {T["text_main"]} !important;
 }}
 
-/* Menus de Dropdown / Popover */
-div[data-baseweb="popover"],
+/* ============== DROPDOWNS / POPOVERS ============== */
+div[data-baseweb="popover"] {{
+    background-color: {T["surface_card"]} !important;
+    border: 1px solid {T["border"]} !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(20px) !important;
+}}
 ul[role="listbox"] {{
-    background-color: {T["surface"]} !important;
-    color: {T["text_main"]} !important;
+    background-color: {T["surface_card"]} !important;
     border: 1px solid {T["border"]} !important;
     border-radius: 12px !important;
 }}
 ul[role="listbox"] li {{
     color: {T["text_main"]} !important;
+    background-color: transparent !important;
 }}
 ul[role="listbox"] li:hover {{
-    background-color: {T["border"]} !important;
+    background-color: {T["btn_hover_bg"]} !important;
 }}
 
-/* Expander */
+/* ============== EXPANDERS ============== */
 div[data-testid="stExpander"] {{
     background: {T["surface_card"]} !important;
     border: 1px solid {T["border"]} !important;
     border-radius: 14px !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: none !important;
 }}
-div[data-testid="stExpander"] summary,
-div[data-testid="stExpander"] p {{
+div[data-testid="stExpander"] summary {{
+    color: {T["text_main"]} !important;
+    font-weight: 600 !important;
+}}
+div[data-testid="stExpander"] summary:hover {{
+    color: {T["accent_cyan"]} !important;
+}}
+div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {{
+    background: transparent !important;
+}}
+div[data-testid="stExpander"] p,
+div[data-testid="stExpander"] span,
+div[data-testid="stExpander"] label {{
     color: {T["text_main"]} !important;
 }}
 
-/* Formulários */
+/* ============== FORMS ============== */
 div[data-testid="stForm"] {{
     background: {T["surface_card"]} !important;
     border: 1px solid {T["border"]} !important;
     border-radius: 14px !important;
+    backdrop-filter: blur(12px) !important;
 }}
 
-/* Botões */
+/* ============== BUTTONS ============== */
 div.stButton > button {{
-    background-color: {T["btn_bg"]} !important;
+    background: {T["btn_bg"]} !important;
     color: {T["text_main"]} !important;
     border: 1px solid {T["btn_border"]} !important;
     border-radius: 10px !important;
     font-weight: 600 !important;
-    transition: all 0.2s ease !important;
+    font-family: 'Inter', sans-serif !important;
+    backdrop-filter: blur(8px) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }}
 div.stButton > button:hover {{
     border-color: {T["border_hover"]} !important;
+    background: {T["btn_hover_bg"]} !important;
     transform: translateY(-1px) !important;
+    box-shadow: {T["card_shadow"]} !important;
 }}
-div.stButton > button[kind="primary"] {{
-    background: {T["accent_rose"]} !important;
+div.stButton > button:active {{
+    transform: translateY(0px) !important;
+}}
+/* Primary button */
+div.stButton > button[kind="primary"],
+button[kind="primary"] {{
+    background: linear-gradient(135deg, {T["accent_cyan"]}, {T["accent_blue"]}) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 700 !important;
+}}
+div.stButton > button[kind="primary"]:hover,
+button[kind="primary"]:hover {{
+    opacity: 0.9 !important;
+    box-shadow: 0 4px 20px {T["accent_cyan"]}40 !important;
+}}
+
+/* Form submit buttons */
+div[data-testid="stForm"] button[kind="secondaryFormSubmit"],
+div[data-testid="stForm"] button[kind="primaryFormSubmit"] {{
+    background: {T["btn_bg"]} !important;
+    color: {T["text_main"]} !important;
+    border: 1px solid {T["btn_border"]} !important;
+    border-radius: 10px !important;
+}}
+div[data-testid="stForm"] button[kind="primaryFormSubmit"] {{
+    background: linear-gradient(135deg, {T["accent_cyan"]}, {T["accent_blue"]}) !important;
     color: #ffffff !important;
     border: none !important;
 }}
 
-/* Abas */
+/* Download button */
+div.stDownloadButton > button {{
+    background: {T["btn_bg"]} !important;
+    color: {T["text_main"]} !important;
+    border: 1px solid {T["btn_border"]} !important;
+    border-radius: 10px !important;
+}}
+div.stDownloadButton > button:hover {{
+    border-color: {T["border_hover"]} !important;
+    background: {T["btn_hover_bg"]} !important;
+}}
+
+/* ============== TABS ============== */
+div[data-testid="stTabs"] {{
+    background: transparent !important;
+}}
 div[data-testid="stTabs"] button {{
-    color: {T["text_sub"]} !important;
+    color: {T["text_muted"]} !important;
     font-weight: 600 !important;
     border-bottom: 2px solid transparent !important;
+    background: transparent !important;
+    padding: 10px 18px !important;
+    transition: all 0.2s ease !important;
+}}
+div[data-testid="stTabs"] button:hover {{
+    color: {T["text_sub"]} !important;
 }}
 div[data-testid="stTabs"] button[aria-selected="true"] {{
     color: {T["accent_cyan"]} !important;
     border-bottom: 2px solid {T["accent_cyan"]} !important;
 }}
 
-/* Top Navbar */
-.top-navbar {{
+/* ============== ALERTS (st.info, st.success, st.warning, st.error) ============== */
+div[data-testid="stAlert"] {{
+    background: {T["surface_card"]} !important;
+    border: 1px solid {T["border"]} !important;
+    border-radius: 12px !important;
+    color: {T["text_main"]} !important;
+    backdrop-filter: blur(8px) !important;
+}}
+div[data-testid="stAlert"] p,
+div[data-testid="stAlert"] span {{
+    color: {T["text_main"]} !important;
+}}
+
+/* ============== CODE BLOCKS ============== */
+div[data-testid="stCode"],
+code, pre {{
+    background-color: {T["input_bg"]} !important;
+    color: {T["text_main"]} !important;
+    border: 1px solid {T["border"]} !important;
+    border-radius: 10px !important;
+}}
+
+/* ============== CAPTION / MUTED TEXT ============== */
+div[data-testid="stCaptionContainer"] p {{
+    color: {T["text_muted"]} !important;
+}}
+
+/* ============== MARKDOWN TEXT ============== */
+.stMarkdown p, .stMarkdown span, .stMarkdown li {{
+    color: {T["text_main"]} !important;
+}}
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+.stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {{
+    color: {T["text_main"]} !important;
+}}
+
+/* ============== CHECKBOX ============== */
+div[data-testid="stCheckbox"] label span {{
+    color: {T["text_main"]} !important;
+}}
+
+/* ============== METRIC (native) ============== */
+div[data-testid="stMetric"] {{
+    background: transparent !important;
+}}
+div[data-testid="stMetric"] label {{
+    color: {T["text_sub"]} !important;
+}}
+div[data-testid="stMetric"] div[data-testid="stMetricValue"] {{
+    color: {T["text_main"]} !important;
+}}
+
+/* ============== TOAST ============== */
+div[data-testid="stToast"] {{
+    background: {T["surface_card"]} !important;
+    border: 1px solid {T["border"]} !important;
+    color: {T["text_main"]} !important;
+    backdrop-filter: blur(16px) !important;
+    border-radius: 12px !important;
+}}
+
+/* ============== DIVIDERS ============== */
+hr {{
+    border-color: {T["border"]} !important;
+}}
+
+/* ============== PLOTLY CONTAINER (prevent white wrapper) ============== */
+div.stPlotlyChart {{
+    background: transparent !important;
+}}
+div.stPlotlyChart > div {{
+    background: transparent !important;
+}}
+iframe {{
+    background: transparent !important;
+}}
+
+/* ============== SCROLLBARS (Dark theme polish) ============== */
+::-webkit-scrollbar {{
+    width: 6px;
+    height: 6px;
+}}
+::-webkit-scrollbar-track {{
+    background: transparent;
+}}
+::-webkit-scrollbar-thumb {{
+    background: {T["text_muted"]}40;
+    border-radius: 3px;
+}}
+::-webkit-scrollbar-thumb:hover {{
+    background: {T["text_muted"]}80;
+}}
+
+/* ============== BOTTOM DECORATION / FOOTER ============== */
+footer {{
+    background: transparent !important;
+    color: {T["text_muted"]} !important;
+}}
+footer a {{
+    color: {T["text_muted"]} !important;
+}}
+
+/* ============== ANIMATIONS ============== */
+@keyframes pulse-glow {{
+    0%   {{ transform: scale(0.95); opacity: 0.7; }}
+    50%  {{ transform: scale(1.2);  opacity: 1; }}
+    100% {{ transform: scale(0.95); opacity: 0.7; }}
+}}
+@keyframes shimmer {{
+    0%   {{ background-position: -200% 0; }}
+    100% {{ background-position: 200% 0; }}
+}}
+
+/* ============== CUSTOM COMPONENT CLASSES ============== */
+
+/* --- Navbar Glassmorphism --- */
+.ms-navbar {{
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: {T["surface"]};
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid {T["border"]};
-    border-radius: 16px;
-    padding: 16px 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    padding: 16px 28px;
+    margin-bottom: 28px;
+    box-shadow: {T["card_shadow"]};
 }}
-.brand-title {{
-    font-size: 1.3rem;
+.ms-brand {{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}}
+.ms-brand-icon {{
+    background: linear-gradient(135deg, {T["accent_cyan"]}, {T["accent_blue"]});
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px {T["accent_cyan"]}35;
+}}
+.ms-brand-title {{
+    margin: 0;
+    font-size: 1.35rem;
     font-weight: 800;
+    letter-spacing: -0.5px;
     color: {T["text_main"]};
-    margin: 0;
 }}
-.brand-sub {{
-    font-size: 0.78rem;
+.ms-brand-sub {{
+    margin: 0;
+    font-size: 0.72rem;
+    color: {T["text_sub"]};
     font-weight: 600;
-    color: {T["text_sub"]};
-    margin: 0;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
 }}
-
-/* Card de KPI Superior */
-.kpi-card {{
-    background: {T["surface_card"]};
-    border: 1px solid {T["border"]};
-    border-radius: 16px;
-    padding: 18px 20px;
-    transition: all 0.2s ease;
-}}
-.kpi-card:hover {{
-    border-color: {T["border_hover"]};
-}}
-.kpi-title {{
-    font-size: 0.76rem;
+.ms-live {{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: {T["accent_emerald"]}15;
+    border: 1px solid {T["accent_emerald"]}40;
+    color: {T["accent_emerald"]};
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 0.74rem;
     font-weight: 700;
-    color: {T["text_sub"]};
-    text-transform: uppercase;
     letter-spacing: 0.5px;
 }}
-.kpi-number {{
-    font-family: 'Space Grotesk', monospace;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: {T["text_main"]};
-    margin: 6px 0 2px 0;
-    line-height: 1;
-    font-feature-settings: 'tnum' 1, 'zero' 1;
-}}
-.kpi-desc {{
-    font-size: 0.75rem;
-    color: {T["text_muted"]};
+.ms-live-dot {{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: {T["accent_emerald"]};
+    box-shadow: 0 0 10px {T["accent_emerald"]};
+    animation: pulse-glow 2s ease-in-out infinite;
 }}
 
-/* Card de Máquina na Página Inicial */
-.machine-home-card {{
+/* --- KPI Cards --- */
+.ms-kpi {{
     background: {T["surface_card"]};
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid {T["border"]};
     border-radius: 16px;
     padding: 20px;
-    margin-bottom: 16px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: {T["card_shadow"]};
+    position: relative;
+    overflow: hidden;
 }}
-.machine-home-card:hover {{
+.ms-kpi::before {{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}}
+.ms-kpi:hover {{
     border-color: {T["border_hover"]};
-    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+    box-shadow: {T["card_hover_shadow"]};
+    transform: translateY(-2px);
+}}
+.ms-kpi:hover::before {{
+    opacity: 1;
+}}
+.ms-kpi-label {{
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: {T["text_sub"]};
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}}
+.ms-kpi-value {{
+    font-family: 'Space Grotesk', monospace;
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: {T["text_main"]};
+    margin: 8px 0 4px 0;
+    line-height: 1;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+}}
+.ms-kpi-desc {{
+    font-size: 0.74rem;
+    color: {T["text_muted"]};
+    font-weight: 500;
 }}
 
-/* Badges de Status */
-.status-pill {{
+/* --- Machine Cards --- */
+.ms-machine {{
+    background: {T["surface_card"]};
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid {T["border"]};
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: {T["card_shadow"]};
+}}
+.ms-machine:hover {{
+    border-color: {T["border_hover"]};
+    box-shadow: {T["card_hover_shadow"]};
+    transform: translateY(-2px);
+}}
+
+/* --- Status Pills --- */
+.ms-pill {{
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
 }}
-.status-pill-normal {{
-    background: {T["accent_emerald"]}18;
-    border: 1px solid {T["accent_emerald"]}45;
+.ms-pill-ok {{
+    background: {T["accent_emerald"]}15;
+    border: 1px solid {T["accent_emerald"]}40;
     color: {T["accent_emerald"]};
 }}
-.status-pill-anomalia {{
-    background: {T["accent_rose"]}18;
-    border: 1px solid {T["accent_rose"]}50;
+.ms-pill-warn {{
+    background: {T["accent_rose"]}15;
+    border: 1px solid {T["accent_rose"]}40;
     color: {T["accent_rose"]};
 }}
-.status-pill-sem-dados {{
-    background: {T["text_muted"]}18;
+.ms-pill-idle {{
+    background: {T["text_muted"]}15;
     border: 1px solid {T["text_muted"]}35;
     color: {T["text_muted"]};
 }}
 
-/* Painel de Diagnóstico */
-.diag-card {{
-    background: {T["surface_card"]};
-    border: 1px solid {T["accent_violet"]}40;
-    border-radius: 16px;
-    padding: 22px;
-    margin-bottom: 20px;
-}}
-
-/* Mini Box de Sensores */
-.sensor-box {{
+/* --- Sensor Mini-cards --- */
+.ms-sensor {{
     background: {T["surface_metric"]};
+    backdrop-filter: blur(8px);
     border: 1px solid {T["border"]};
     border-radius: 12px;
     padding: 16px;
     text-align: center;
 }}
-.sensor-val {{
+.ms-sensor-val {{
     font-family: 'Space Grotesk', monospace;
     font-size: 1.8rem;
     font-weight: 700;
     margin: 6px 0;
     font-feature-settings: 'tnum' 1, 'zero' 1;
 }}
+
+/* --- Diagnostic Card --- */
+.ms-diag {{
+    background: {T["surface_card"]};
+    backdrop-filter: blur(16px);
+    border: 1px solid {T["accent_violet"]}30;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 0 24px {T["accent_violet"]}08;
+}}
+
+/* --- Info Banner --- */
+.ms-info {{
+    background: {T["surface_card"]};
+    backdrop-filter: blur(12px);
+    border: 1px solid {T["accent_cyan"]}25;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    border-left: 3px solid {T["accent_cyan"]};
+}}
+
 </style>
 """
 st.markdown(CSS_GLOBAL, unsafe_allow_html=True)
 
 
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 # Componentes Visuais
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 def renderizar_topbar():
-    """Barra superior limpa e moderna."""
+    """Barra superior glassmorphism com glow animado."""
     agora = datetime.now().strftime("%d/%m/%Y • %H:%M")
-    ico_cpu = get_icon("cpu", color=T["accent_cyan"], size=20)
+    ico = get_icon("cpu", color="#ffffff", size=22)
 
-    html = f"""
-    <div class="top-navbar">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="background: {T['accent_cyan']}18; padding: 10px; border-radius: 12px; display: flex;">
-                {ico_cpu}
-            </div>
-            <div>
-                <h1 class="brand-title">MetalSense</h1>
-                <p class="brand-sub">Sistema de Monitoramento e Manutenção Preditiva</p>
-            </div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="color: {T['text_sub']}; font-size: 0.82rem; font-family: 'Space Grotesk', monospace; font-weight: 600;">
-                {agora}
-            </div>
-            <span class="status-pill status-pill-normal">
-                {get_icon('check', color=T['accent_emerald'], size=12)} Sistema Online
-            </span>
-        </div>
-    </div>
-    """
-    st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+    html = f"""\
+<div class="ms-navbar">
+<div class="ms-brand">
+<div class="ms-brand-icon">{ico}</div>
+<div>
+<h1 class="ms-brand-title">MetalSense</h1>
+<p class="ms-brand-sub">Monitoramento Inteligente de Máquinas</p>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 18px;">
+<span style="color: {T['text_sub']}; font-size: 0.82rem; font-family: 'Space Grotesk', monospace; font-weight: 600;">{agora}</span>
+<span class="ms-live"><span class="ms-live-dot"></span> Online</span>
+</div>
+</div>"""
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def renderizar_kpis_topo(maquinas: list):
-    """Métricas superiores com nomes simples e diretos."""
+    """Métricas superiores com glassmorphism e glow."""
     total_maquinas = len(maquinas)
-    total_normais = sum(1 for m in maquinas if m.get("status") == "normal")
     total_anomalias = sum(1 for m in maquinas if m.get("status") == "anomalia")
     total_leituras = sum(len(m.get("historico", [])) for m in maquinas)
 
@@ -416,71 +721,41 @@ def renderizar_kpis_topo(maquinas: list):
 
     c1, c2, c3, c4 = st.columns(4)
 
-    with c1:
-        ico = get_icon("server", color=T["accent_cyan"], size=18)
-        html = f"""
-        <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="kpi-title">Máquinas no Sistema</span>
-                <span style="background: {T['accent_cyan']}18; padding: 6px; border-radius: 8px;">{ico}</span>
-            </div>
-            <div class="kpi-number">{total_maquinas:02d}</div>
-            <div class="kpi-desc">Equipamentos cadastrados</div>
-        </div>
-        """
-        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+    kpi_data = [
+        (c1, "server",   T["accent_cyan"],    "Máquinas",         f"{total_maquinas:02d}",  "Equipamentos cadastrados"),
+        (c2, "shield",   T["accent_emerald"],  "Saúde Geral",     f"{media_saude}%",        "Média de funcionamento"),
+        (c3, "alert",    T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"],
+                                              "Alertas",           f"{total_anomalias:02d}", f"{total_anomalias} precisam de atenção" if total_anomalias > 0 else "Tudo funcionando bem"),
+        (c4, "activity", T["accent_violet"],  "Medições",          f"{total_leituras:,}",    "Leituras registradas"),
+    ]
 
-    with c2:
-        ico = get_icon("shield", color=T["accent_emerald"], size=18)
-        cor_score = T["accent_emerald"] if media_saude >= 75 else (T["accent_amber"] if media_saude >= 50 else T["accent_rose"])
-        html = f"""
-        <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="kpi-title">Saúde das Máquinas</span>
-                <span style="background: {T['accent_emerald']}18; padding: 6px; border-radius: 8px;">{ico}</span>
-            </div>
-            <div class="kpi-number" style="color: {cor_score};">{media_saude}%</div>
-            <div class="kpi-desc">Média de bom funcionamento</div>
-        </div>
-        """
-        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+    for col, icon_name, accent, label, value, desc in kpi_data:
+        with col:
+            ico = get_icon(icon_name, color=accent, size=18)
+            # Color the value specially for health and alerts
+            val_color = T["text_main"]
+            if label == "Saúde Geral":
+                val_color = T["accent_emerald"] if media_saude >= 75 else (T["accent_amber"] if media_saude >= 50 else T["accent_rose"])
+            elif label == "Alertas":
+                val_color = accent
 
-    with c3:
-        ico = get_icon("alert", color=T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"], size=18)
-        cor_alerta = T["accent_rose"] if total_anomalias > 0 else T["accent_emerald"]
-        txt_alerta = f"{total_anomalias} precisam de atenção" if total_anomalias > 0 else "Nenhum problema detectado"
-        html = f"""
-        <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="kpi-title">Alertas de Falha</span>
-                <span style="background: {cor_alerta}18; padding: 6px; border-radius: 8px;">{ico}</span>
-            </div>
-            <div class="kpi-number" style="color: {cor_alerta};">{total_anomalias:02d}</div>
-            <div class="kpi-desc" style="color: {cor_alerta}; font-weight: 600;">{txt_alerta}</div>
-        </div>
-        """
-        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+            html = f"""\
+<div class="ms-kpi" style="border-top: 2px solid {accent}30;">
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<span class="ms-kpi-label">{label}</span>
+<span style="background: {accent}12; padding: 7px; border-radius: 10px; display: flex;">{ico}</span>
+</div>
+<div class="ms-kpi-value" style="color: {val_color};">{value}</div>
+<div class="ms-kpi-desc">{desc}</div>
+</div>"""
+            st.markdown(html, unsafe_allow_html=True)
 
-    with c4:
-        ico = get_icon("activity", color=T["accent_violet"], size=18)
-        html = f"""
-        <div class="kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="kpi-title">Medições Feitas</span>
-                <span style="background: {T['accent_violet']}18; padding: 6px; border-radius: 8px;">{ico}</span>
-            </div>
-            <div class="kpi-number">{total_leituras:,}</div>
-            <div class="kpi-desc">Total de leituras registradas</div>
-        </div>
-        """
-        st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
-
-    st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom: 28px;'></div>", unsafe_allow_html=True)
 
 
 def criar_gauge_saude(score: float) -> go.Figure:
-    """Velocímetro limpo sem textos sobrepostos na agulha."""
-    cor_barra = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
+    """Velocímetro limpo com cores consistentes ao tema."""
+    cor = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
 
     fig = go.Figure(
         go.Indicator(
@@ -492,24 +767,25 @@ def criar_gauge_saude(score: float) -> go.Figure:
                 'font': {'size': 42, 'color': T["text_main"], 'family': 'Space Grotesk, monospace'},
             },
             gauge={
-                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': T["text_muted"], 'nticks': 5},
-                'bar': {'color': cor_barra, 'thickness': 0.28},
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': T["text_muted"], 'nticks': 5,
+                         'tickfont': {'color': T["text_muted"], 'size': 10}},
+                'bar': {'color': cor, 'thickness': 0.28},
                 'bgcolor': T["gauge_bg"],
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 50], 'color': f"{T['accent_rose']}20"},
-                    {'range': [50, 75], 'color': f"{T['accent_amber']}20"},
-                    {'range': [75, 100], 'color': f"{T['accent_emerald']}20"},
+                    {'range': [0, 50],  'color': f"{T['accent_rose']}18"},
+                    {'range': [50, 75], 'color': f"{T['accent_amber']}18"},
+                    {'range': [75, 100],'color': f"{T['accent_emerald']}18"},
                 ],
             },
         )
     )
-
     fig.update_layout(
-        paper_bgcolor=T["plot_paper"],
-        plot_bgcolor=T["plot_paper"],
-        height=180,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        height=185,
         margin=dict(l=15, r=15, t=10, b=10),
+        font={'color': T["text_main"]},
     )
     return fig
 
@@ -517,7 +793,7 @@ def criar_gauge_saude(score: float) -> go.Figure:
 def criar_grafico_telemetria(
     df: pd.DataFrame, metrica: str, titulo: str, unidade: str, limite: float, cor_linha: str
 ) -> go.Figure:
-    """Gráfico interativo com curva suave e linha de limite de segurança."""
+    """Gráfico interativo com curva suave e linha de limite."""
     fig = go.Figure()
 
     fig.add_hline(
@@ -525,15 +801,19 @@ def criar_grafico_telemetria(
         line_dash="dash",
         line_color=T["accent_rose"],
         line_width=1.5,
-        annotation_text=f"Limite de Segurança ({limite} {unidade})",
+        annotation_text=f"Limite ({limite} {unidade})",
         annotation_position="top right",
         annotation_font=dict(color=T["accent_rose"], size=10, family="Space Grotesk"),
     )
 
-    r = int(cor_linha[1:3], 16)
-    g = int(cor_linha[3:5], 16)
-    b = int(cor_linha[5:7], 16)
-    fill_rgba = f"rgba({r}, {g}, {b}, 0.12)"
+    # Parse color for fill
+    try:
+        r = int(cor_linha[1:3], 16)
+        g = int(cor_linha[3:5], 16)
+        b = int(cor_linha[5:7], 16)
+        fill_rgba = f"rgba({r}, {g}, {b}, 0.10)"
+    except (ValueError, IndexError):
+        fill_rgba = "rgba(0, 229, 255, 0.10)"
 
     fig.add_trace(
         go.Scatter(
@@ -541,8 +821,8 @@ def criar_grafico_telemetria(
             y=df[metrica],
             mode="lines+markers",
             name=f"{titulo} ({unidade})",
-            line=dict(color=cor_linha, width=3, shape="spline"),
-            marker=dict(size=6, color=cor_linha, symbol="circle"),
+            line=dict(color=cor_linha, width=2.5, shape="spline"),
+            marker=dict(size=5, color=cor_linha, symbol="circle"),
             fill="tozeroy",
             fillcolor=fill_rgba,
             hovertemplate="<b>%{y:.2f} " + unidade + "</b><br>%{x}<extra></extra>",
@@ -550,46 +830,47 @@ def criar_grafico_telemetria(
     )
 
     fig.update_layout(
-        paper_bgcolor=T["plot_paper"],
+        paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=T["plot_bg"],
         hovermode="x unified",
         margin=dict(l=10, r=10, t=30, b=10),
         height=300,
-        xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"], tickfont=dict(size=10)),
-        yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"], tickfont=dict(size=10)),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=T["text_sub"], size=11)),
+        xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
+                   tickfont=dict(size=10, color=T["plot_text"])),
+        yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
+                   tickfont=dict(size=10, color=T["plot_text"])),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                    font=dict(color=T["text_sub"], size=11)),
+        font={'color': T["text_main"]},
     )
     return fig
 
 
-# -----------------------------------------------------------------------------
-# Página 1: Início (Limpa, Sem Linhas de Código, Muito Intuitiva)
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Página 1 — Início
+# ---------------------------------------------------------------------------
 def renderizar_pagina_inicio(dados: dict, maquinas: list):
-    """Página inicial simples, acolhedora e interativa."""
-    # Guia Rápido Intuitivo
-    info_html = f"""
-    <div style="background: {T['surface_card']}; border: 1px solid {T['border']}; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            {get_icon('info', color=T['accent_cyan'], size=18)}
-            <strong style="font-size: 0.95rem; color: {T['text_main']};">Como o MetalSense ajuda você?</strong>
-        </div>
-        <p style="margin: 0; font-size: 0.88rem; color: {T['text_sub']}; line-height: 1.5;">
-            O sistema analisa os sensores das máquinas para descobrir problemas <strong>antes que elas quebrem</strong>. 
-            Se a temperatura, vibração ou consumo elétrico saírem do padrão da máquina, um alerta é emitido imediatamente.
-        </p>
-    </div>
-    """
-    st.markdown(textwrap.dedent(info_html), unsafe_allow_html=True)
+    """Página inicial limpa e interativa."""
+    info_html = f"""\
+<div class="ms-info">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+{get_icon('info', color=T['accent_cyan'], size=18)}
+<strong style="font-size: 0.95rem; color: {T['text_main']};">Como o MetalSense funciona?</strong>
+</div>
+<p style="margin: 0; font-size: 0.88rem; color: {T['text_sub']}; line-height: 1.6;">
+O sistema monitora sensores das máquinas e detecta problemas <strong style="color: {T['text_main']};">antes que elas quebrem</strong>.
+Se a temperatura, vibração ou consumo saírem do padrão, um alerta é emitido imediatamente.
+</p>
+</div>"""
+    st.markdown(info_html, unsafe_allow_html=True)
 
-    st.markdown("### Suas Máquinas Cadastradas")
-    st.caption("Clique em qualquer máquina abaixo para ver os gráficos e detalhes completos.")
+    st.markdown(f"### Suas Máquinas")
+    st.caption("Clique em qualquer máquina para ver gráficos e detalhes completos.")
 
     if not maquinas:
-        st.info("Você ainda não tem nenhuma máquina cadastrada. Digite o nome de uma máquina na barra lateral esquerda para começar!")
+        st.info("Nenhuma máquina cadastrada ainda. Use a barra lateral para adicionar a primeira!")
         return
 
-    # Grid Limpo com Botão Direto em Cada Máquina
     cols = st.columns(2)
     for i, m in enumerate(maquinas):
         with cols[i % 2]:
@@ -601,77 +882,73 @@ def renderizar_pagina_inicio(dados: dict, maquinas: list):
             score = saude["score"]
 
             if status_m == "normal":
-                pill_class = "status-pill-normal"
+                pill_cls = "ms-pill-ok"
                 status_txt = "Normal"
             elif status_m == "anomalia":
-                pill_class = "status-pill-anomalia"
-                status_txt = "Atenção (Possível Falha)"
+                pill_cls = "ms-pill-warn"
+                status_txt = "Atenção"
             else:
-                pill_class = "status-pill-sem-dados"
-                status_txt = "Aguardando Leituras"
+                pill_cls = "ms-pill-idle"
+                status_txt = "Aguardando Dados"
 
             ult_temp = f"{hist[-1]['temperatura']}°C" if hist else "—"
-            ult_vib = f"{hist[-1]['vibracao']} mm/s" if hist else "—"
+            ult_vib  = f"{hist[-1]['vibracao']} mm/s" if hist else "—"
             ult_cons = f"{hist[-1]['consumo']} W" if hist else "—"
 
-            cor_prog = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
+            cor_hp = T["accent_emerald"] if score >= 75 else (T["accent_amber"] if score >= 50 else T["accent_rose"])
 
-            card_html = f"""
-            <div class="machine-home-card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                    <div>
-                        <span style="font-size: 0.75rem; font-weight: 700; color: {T['accent_cyan']};">MÁQUINA #{id_m:02d}</span>
-                        <h3 style="margin: 2px 0 0 0; font-size: 1.25rem; font-weight: 700; color: {T['text_main']};">{nome_m}</h3>
-                    </div>
-                    <span class="status-pill {pill_class}">{status_txt}</span>
-                </div>
+            card_html = f"""\
+<div class="ms-machine">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+<div>
+<span style="font-size: 0.72rem; font-weight: 700; color: {T['accent_cyan']}; letter-spacing: 0.5px;">MÁQUINA #{id_m:02d}</span>
+<h3 style="margin: 3px 0 0 0; font-size: 1.2rem; font-weight: 700; color: {T['text_main']};">{nome_m}</h3>
+</div>
+<span class="ms-pill {pill_cls}">{status_txt}</span>
+</div>
+<div style="margin: 12px 0 10px 0;">
+<div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 5px;">
+<span style="color: {T['text_sub']};">Saúde</span>
+<span style="color: {cor_hp}; font-weight: 700; font-family: 'Space Grotesk', monospace;">{score}%</span>
+</div>
+<div style="background: {T['border']}; height: 5px; border-radius: 9999px; overflow: hidden;">
+<div style="background: linear-gradient(90deg, {cor_hp}, {cor_hp}cc); width: {score}%; height: 100%; border-radius: 9999px; box-shadow: 0 0 8px {cor_hp}50;"></div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px;">
+<div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 10px; text-align: center;">
+<div style="font-size: 0.68rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Temp</div>
+<div style="font-size: 0.92rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_temp}</div>
+</div>
+<div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 10px; text-align: center;">
+<div style="font-size: 0.68rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Vibração</div>
+<div style="font-size: 0.92rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_vib}</div>
+</div>
+<div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 10px; text-align: center;">
+<div style="font-size: 0.68rem; color: {T['text_muted']}; text-transform: uppercase; font-weight: 600;">Consumo</div>
+<div style="font-size: 0.92rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_cons}</div>
+</div>
+</div>
+</div>"""
+            st.markdown(card_html, unsafe_allow_html=True)
 
-                <div style="margin: 14px 0 10px 0;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
-                        <span style="color: {T['text_sub']};">Saúde da Máquina</span>
-                        <span style="color: {cor_prog}; font-weight: 700; font-family: 'Space Grotesk', monospace;">{score}% ({saude['classificacao']})</span>
-                    </div>
-                    <div style="background: {T['border']}; height: 6px; border-radius: 9999px; overflow: hidden;">
-                        <div style="background: {cor_prog}; width: {score}%; height: 100%; border-radius: 9999px;"></div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; text-align: center;">
-                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Temperatura</div>
-                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_temp}</div>
-                    </div>
-                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Vibração</div>
-                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_vib}</div>
-                    </div>
-                    <div style="background: {T['surface_metric']}; border: 1px solid {T['border']}; padding: 8px; border-radius: 8px;">
-                        <div style="font-size: 0.7rem; color: {T['text_muted']}; text-transform: uppercase;">Consumo</div>
-                        <div style="font-size: 0.95rem; font-weight: 700; color: {T['text_main']}; font-family: 'Space Grotesk', monospace;">{ult_cons}</div>
-                    </div>
-                </div>
-            </div>
-            """
-            st.markdown(textwrap.dedent(card_html), unsafe_allow_html=True)
-
-            # Botão Direto para Abrir a Máquina
             if st.button(f"Inspecionar {nome_m} ➔", key=f"btn_ver_{id_m}", use_container_width=True):
                 st.session_state["maquina_ativa_id"] = id_m
                 st.rerun()
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
-    if st.button("Coletar uma Leitura Normal para Todas as Máquinas", use_container_width=True):
+    if st.button("Coletar Leitura Normal para Todas as Máquinas", use_container_width=True):
         for m in maquinas:
             registrar_leitura(dados, m["id"], gerar_anomalia=False)
         st.toast("Leituras registradas para todas as máquinas!", icon="✅")
         st.rerun()
 
 
-# -----------------------------------------------------------------------------
-# Página 2: Detalhes da Máquina (Interativa, Simples e Amigável)
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Página 2 — Detalhes da Máquina
+# ---------------------------------------------------------------------------
 def renderizar_detalhes_maquina(dados: dict, maquina: dict):
-    """Tela detalhada de uma máquina com navegação fácil."""
+    """Tela detalhada de uma máquina."""
     id_m = maquina["id"]
     nome_m = maquina["nome"]
     historico = maquina.get("historico", [])
@@ -681,7 +958,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     saude = calcular_indice_saude(historico)
     score = saude["score"]
 
-    # Botão para voltar à página inicial
+    # Voltar
     if st.button("⬅ Voltar para Todas as Máquinas", use_container_width=False):
         st.session_state["maquina_ativa_id"] = None
         st.rerun()
@@ -689,101 +966,80 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
 
     if status_m == "normal":
-        pill_class = "status-pill-normal"
+        pill_cls = "ms-pill-ok"
         status_txt = "Operação Normal"
     elif status_m == "anomalia":
-        pill_class = "status-pill-anomalia"
-        status_txt = "Atenção (Falha Detectada)"
+        pill_cls = "ms-pill-warn"
+        status_txt = "Falha Detectada"
     else:
-        pill_class = "status-pill-sem-dados"
-        status_txt = "Aguardando Leituras"
+        pill_cls = "ms-pill-idle"
+        status_txt = "Aguardando Dados"
 
-    # Header da Máquina
+    # Header
     c_h1, c_h2 = st.columns([3, 1])
     with c_h1:
-        st.markdown(
-            f"""
-            <div>
-                <span style="font-size: 0.78rem; font-weight: 700; color: {T['accent_cyan']};">MONITORANDO ATIVO #{id_m:02d}</span>
-                <h1 style="margin: 2px 0 0 0; font-size: 2.1rem; font-weight: 800; color: {T['text_main']};">{nome_m}</h1>
-                <p style="margin: 4px 0 0 0; color: {T['text_sub']}; font-size: 0.88rem;">Total de medições salvas: <strong>{len(historico)} registros</strong></p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        hdr = f"""\
+<div>
+<span style="font-size: 0.76rem; font-weight: 700; color: {T['accent_cyan']}; letter-spacing: 0.5px;">ATIVO #{id_m:02d}</span>
+<h1 style="margin: 3px 0 0 0; font-size: 2rem; font-weight: 800; color: {T['text_main']};">{nome_m}</h1>
+<p style="margin: 5px 0 0 0; color: {T['text_sub']}; font-size: 0.88rem;">{len(historico)} medições registradas</p>
+</div>"""
+        st.markdown(hdr, unsafe_allow_html=True)
     with c_h2:
         st.markdown(
-            f"""
-            <div style="text-align: right; margin-top: 14px;">
-                <span class="status-pill {pill_class}">{status_txt}</span>
-            </div>
-            """,
+            f'<div style="text-align: right; margin-top: 16px;"><span class="ms-pill {pill_cls}">{status_txt}</span></div>',
             unsafe_allow_html=True,
         )
 
     st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
-    # Velocímetro (Gauge) + Diagnóstico Simples
+    # Gauge + Diagnóstico
     col_gauge, col_ai = st.columns([1, 2])
 
     with col_gauge:
-        st.markdown(
-            f"""
-            <div style="background: {T['surface_card']}; border: 1px solid {T['border']}; border-radius: 16px; padding: 14px; text-align: center;">
-                <span style="font-size: 0.75rem; font-weight: 700; color: {T['text_sub']}; text-transform: uppercase;">Saúde do Ativo</span>
-            """,
-            unsafe_allow_html=True,
-        )
-        # Velocímetro Limpo
+        gauge_wrap = f"""\
+<div style="background: {T['surface_card']}; backdrop-filter: blur(16px); border: 1px solid {T['border']}; border-radius: 16px; padding: 16px; text-align: center; box-shadow: {T['card_shadow']};">
+<span style="font-size: 0.72rem; font-weight: 700; color: {T['text_sub']}; text-transform: uppercase; letter-spacing: 0.5px;">Saúde do Ativo</span>"""
+        st.markdown(gauge_wrap, unsafe_allow_html=True)
         st.plotly_chart(criar_gauge_saude(score), use_container_width=True)
-
-        # Mensagem de estado colocada ABAIXO do velocímetro (Sem sobreposição!)
+        # Status abaixo do gauge
         st.markdown(
-            f"""
-                <div style="margin-top: -15px; margin-bottom: 6px;">
-                    <span class="status-pill {pill_class}">{saude['classificacao'].upper()}</span>
-                </div>
-            </div>
-            """,
+            f'<div style="margin-top: -15px; margin-bottom: 8px;"><span class="ms-pill {pill_cls}">{saude["classificacao"].upper()}</span></div></div>',
             unsafe_allow_html=True,
         )
 
     with col_ai:
-        diag_html = f"""
-        <div class="diag-card">
-            <div style="font-size: 0.85rem; font-weight: 700; color: {T['accent_violet']}; text-transform: uppercase; margin-bottom: 8px;">
-                Diagnóstico Automático
-            </div>
-            <div style="font-size: 1.05rem; line-height: 1.5; color: {T['text_main']};">
-                {diagnostico_texto}
-            </div>
-        """
-        st.markdown(textwrap.dedent(diag_html), unsafe_allow_html=True)
+        diag_html = f"""\
+<div class="ms-diag">
+<div style="font-size: 0.82rem; font-weight: 700; color: {T['accent_violet']}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+Diagnóstico Automático
+</div>
+<div style="font-size: 1.02rem; line-height: 1.6; color: {T['text_main']};">
+{diagnostico_texto}
+</div>"""
+        st.markdown(diag_html, unsafe_allow_html=True)
 
-        # Hipóteses em formato simples
         if saude.get("hipoteses"):
-            st.markdown("<div style='margin-top: 10px;'>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 12px;'>", unsafe_allow_html=True)
             for hip in saude["hipoteses"]:
-                hip_html = f"""
-                <span style="display: inline-flex; align-items: center; gap: 6px; background: {T['accent_rose']}18; border: 1px solid {T['accent_rose']}40; color: {T['accent_rose']}; padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; margin-right: 6px; margin-top: 6px;">
-                    {get_icon('alert', color=T['accent_rose'], size=14)} {hip}
-                </span>
-                """
-                st.markdown(textwrap.dedent(hip_html), unsafe_allow_html=True)
+                hip_html = f"""\
+<span style="display: inline-flex; align-items: center; gap: 6px; background: {T['accent_rose']}12; border: 1px solid {T['accent_rose']}35; color: {T['accent_rose']}; padding: 5px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; margin-right: 6px; margin-top: 6px;">
+{get_icon('alert', color=T['accent_rose'], size=13)} {hip}
+</span>"""
+                st.markdown(hip_html, unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
         tend = saude.get("tendencias", {})
-        tend_html = f"""
-            <div style="display: flex; gap: 20px; margin-top: 16px; font-size: 0.85rem; color: {T['text_sub']}; border-top: 1px solid {T['border']}; padding-top: 12px;">
-                <div>Temperatura: <strong style="color: {T['text_main']};">{tend.get('temperatura', 'Estável')}</strong></div>
-                <div>Vibração: <strong style="color: {T['text_main']};">{tend.get('vibracao', 'Estável')}</strong></div>
-                <div>Consumo: <strong style="color: {T['text_main']};">{tend.get('consumo', 'Estável')}</strong></div>
-            </div>
-        </div>
-        """
-        st.markdown(textwrap.dedent(tend_html), unsafe_allow_html=True)
+        tend_html = f"""\
+<div style="display: flex; gap: 20px; margin-top: 18px; font-size: 0.84rem; color: {T['text_sub']}; border-top: 1px solid {T['border']}; padding-top: 14px;">
+<div>Temperatura: <strong style="color: {T['text_main']};">{tend.get('temperatura', 'Estável')}</strong></div>
+<div>Vibração: <strong style="color: {T['text_main']};">{tend.get('vibracao', 'Estável')}</strong></div>
+<div>Consumo: <strong style="color: {T['text_main']};">{tend.get('consumo', 'Estável')}</strong></div>
+</div>
+</div>"""
+        st.markdown(tend_html, unsafe_allow_html=True)
 
-    # Valores da Última Medição
+    # Sensores da última leitura
     if historico:
         ult = historico[-1]
         t_val = ult.get("temperatura", 0.0)
@@ -792,66 +1048,44 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
         hora = ult.get("timestamp", "—")
 
         sc1, sc2, sc3, sc4 = st.columns(4)
-        with sc1:
-            t_cor = T["accent_rose"] if t_val > 85.0 else T["accent_emerald"]
-            t_txt = "Muito Quente (>85°C)" if t_val > 85.0 else "Normal (abaixo de 85°C)"
-            html = f"""
-            <div class="sensor-box">
-                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Temperatura</div>
-                <div class="sensor-val" style="color: {t_cor};">{t_val} <span style="font-size: 1rem;">°C</span></div>
-                <span style="font-size: 0.72rem; font-weight: 700; color: {t_cor};">{t_txt}</span>
-            </div>
-            """
-            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
-
-        with sc2:
-            v_cor = T["accent_rose"] if v_val > 8.0 else T["accent_emerald"]
-            v_txt = "Trepidação Alta (>8.0)" if v_val > 8.0 else "Normal (abaixo de 8.0)"
-            html = f"""
-            <div class="sensor-box">
-                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Vibração</div>
-                <div class="sensor-val" style="color: {v_cor};">{v_val} <span style="font-size: 1rem;">mm/s</span></div>
-                <span style="font-size: 0.72rem; font-weight: 700; color: {v_cor};">{v_txt}</span>
-            </div>
-            """
-            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
-
-        with sc3:
-            c_cor = T["accent_rose"] if c_val > 500.0 else T["accent_emerald"]
-            c_txt = "Sobrecarga (>500W)" if c_val > 500.0 else "Normal (abaixo de 500W)"
-            html = f"""
-            <div class="sensor-box">
-                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Consumo Elétrico</div>
-                <div class="sensor-val" style="color: {c_cor};">{c_val} <span style="font-size: 1rem;">W</span></div>
-                <span style="font-size: 0.72rem; font-weight: 700; color: {c_cor};">{c_txt}</span>
-            </div>
-            """
-            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
-
+        sensor_data = [
+            (sc1, "Temperatura", t_val, "°C", t_val > 85.0, "Muito quente" if t_val > 85.0 else "Normal"),
+            (sc2, "Vibração",    v_val, "mm/s", v_val > 8.0, "Alta" if v_val > 8.0 else "Normal"),
+            (sc3, "Consumo",     c_val, "W",   c_val > 500.0, "Sobrecarga" if c_val > 500.0 else "Normal"),
+        ]
+        for col, nome, val, unit, is_alert, txt in sensor_data:
+            with col:
+                cor = T["accent_rose"] if is_alert else T["accent_emerald"]
+                html = f"""\
+<div class="ms-sensor">
+<div style="font-size: 0.72rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">{nome}</div>
+<div class="ms-sensor-val" style="color: {cor};">{val} <span style="font-size: 1rem;">{unit}</span></div>
+<span style="font-size: 0.7rem; font-weight: 700; color: {cor};">{txt}</span>
+</div>"""
+                st.markdown(html, unsafe_allow_html=True)
         with sc4:
-            html = f"""
-            <div class="sensor-box">
-                <div style="font-size: 0.75rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Horário da Leitura</div>
-                <div class="sensor-val" style="color: {T['accent_cyan']}; font-size: 1.4rem; margin-top: 10px;">{hora.split(' ')[-1] if ' ' in hora else hora}</div>
-                <span style="font-size: 0.72rem; font-weight: 600; color: {T['text_muted']};">{hora.split(' ')[0] if ' ' in hora else 'Hoje'}</span>
-            </div>
-            """
-            st.markdown(textwrap.dedent(html), unsafe_allow_html=True)
+            html = f"""\
+<div class="ms-sensor">
+<div style="font-size: 0.72rem; color: {T['text_sub']}; font-weight: 700; text-transform: uppercase;">Última Leitura</div>
+<div class="ms-sensor-val" style="color: {T['accent_cyan']}; font-size: 1.3rem; margin-top: 10px;">{hora.split(' ')[-1] if ' ' in hora else hora}</div>
+<span style="font-size: 0.7rem; font-weight: 600; color: {T['text_muted']};">{hora.split(' ')[0] if ' ' in hora else 'Hoje'}</span>
+</div>"""
+            st.markdown(html, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # Botões Interativos Fáceis
-    st.markdown("#### Ações com Esta Máquina")
+    # Ações
+    st.markdown("#### Ações")
     b1, b2, b3 = st.columns(3)
     with b1:
-        if st.button("+ Adicionar Leitura Normal", use_container_width=True):
+        if st.button("+ Leitura Normal", use_container_width=True):
             registrar_leitura(dados, id_m, gerar_anomalia=False)
-            st.toast("Leitura normal registrada com sucesso!", icon="✅")
+            st.toast("Leitura normal registrada!", icon="✅")
             st.rerun()
     with b2:
-        if st.button("Simular Falha de Teste", type="primary", use_container_width=True):
+        if st.button("Simular Falha", type="primary", use_container_width=True):
             registrar_leitura(dados, id_m, gerar_anomalia=True)
-            st.toast("Falha simulada para teste de detecção!", icon="🚨")
+            st.toast("Falha simulada!", icon="🚨")
             st.rerun()
     with b3:
         if st.button("Atualizar Análise", use_container_width=True):
@@ -859,23 +1093,23 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             st.toast("Análise atualizada!", icon="🔄")
             st.rerun()
 
-    with st.expander("Testar Outros Tipos Específicos de Falha", expanded=False):
-        st.caption("Escolha uma falha específica para simular:")
+    with st.expander("Simular Falhas Específicas", expanded=False):
+        st.caption("Escolha um cenário:")
         sb1, sb2, sb3 = st.columns(3)
         with sb1:
-            if st.button("Simular: Desgaste de Rolamento", use_container_width=True):
+            if st.button("Desgaste de Rolamento", use_container_width=True):
                 leit = gerar_leitura_cenario("rolamento", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
                 st.toast("Cenário de Rolamento injetado!", icon="⚙️")
                 st.rerun()
         with sb2:
-            if st.button("Simular: Superaquecimento", use_container_width=True):
+            if st.button("Superaquecimento", use_container_width=True):
                 leit = gerar_leitura_cenario("aquecimento", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
                 st.toast("Superaquecimento injetado!", icon="🔥")
                 st.rerun()
         with sb3:
-            if st.button("Simular: Sobrecarga Elétrica", use_container_width=True):
+            if st.button("Sobrecarga Elétrica", use_container_width=True):
                 leit = gerar_leitura_cenario("sobrecarga", ciclo=len(historico) + 1)
                 registrar_leitura(dados, id_m, leitura=leit)
                 st.toast("Sobrecarga injetada!", icon="⚡")
@@ -883,20 +1117,15 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # Gráficos Simples e Claros
+    # Gráficos
     st.markdown("#### Histórico em Gráficos")
 
     if len(historico) < 2:
-        st.info("Ainda há poucas leituras salvas (mínimo de 2). Clique em '+ Adicionar Leitura Normal' acima para gerar dados.")
+        st.info("Poucas leituras (mínimo 2). Clique em '+ Leitura Normal' para gerar dados.")
     else:
         df_hist = pd.DataFrame(historico)
 
-        tab1, tab2, tab3, tab4 = st.tabs([
-            "Temperatura",
-            "Vibração",
-            "Consumo",
-            "Todos Juntos",
-        ])
+        tab1, tab2, tab3, tab4 = st.tabs(["Temperatura", "Vibração", "Consumo", "Todos Juntos"])
 
         with tab1:
             st.plotly_chart(
@@ -915,29 +1144,33 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             )
         with tab4:
             fig_multi = go.Figure()
-            for col, cor, nome in [
-                ("temperatura", T["accent_cyan"], "Temp (°C)"),
-                ("vibracao", T["accent_amber"], "Vibração (mm/s)"),
-                ("consumo", T["accent_violet"], "Consumo (W)"),
+            for col_name, cor, nome in [
+                ("temperatura", T["accent_cyan"],   "Temp (°C)"),
+                ("vibracao",    T["accent_amber"],  "Vibração (mm/s)"),
+                ("consumo",     T["accent_violet"], "Consumo (W)"),
             ]:
                 fig_multi.add_trace(
-                    go.Scatter(x=df_hist["timestamp"], y=df_hist[col], mode="lines", name=nome, line=dict(color=cor, width=2.5))
+                    go.Scatter(x=df_hist["timestamp"], y=df_hist[col_name], mode="lines",
+                               name=nome, line=dict(color=cor, width=2.5))
                 )
             fig_multi.update_layout(
-                paper_bgcolor=T["plot_paper"],
+                paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor=T["plot_bg"],
                 hovermode="x unified",
                 margin=dict(l=10, r=10, t=30, b=10),
                 height=320,
-                xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"]),
-                yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"]),
+                xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
+                           tickfont=dict(color=T["plot_text"])),
+                yaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
+                           tickfont=dict(color=T["plot_text"])),
                 legend=dict(font=dict(color=T["text_sub"])),
+                font={'color': T["text_main"]},
             )
             st.plotly_chart(fig_multi, use_container_width=True)
 
     st.markdown("<div style='margin-bottom: 24px;'></div>", unsafe_allow_html=True)
 
-    # Exportar Arquivos
+    # Exportar
     st.markdown("#### Baixar Relatórios")
     if historico:
         with st.expander("Baixar Histórico em Planilha ou Laudo Técnico", expanded=False):
@@ -976,40 +1209,36 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             st.code(gerar_ordem_servico_texto(maquina), language="text")
 
 
-# -----------------------------------------------------------------------------
-# Fluxo Principal & Barra Lateral Sincronizada
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Fluxo Principal & Barra Lateral
+# ---------------------------------------------------------------------------
 def main():
     dados = carregar_dados()
     maquinas = dados.get("maquinas", [])
 
-    # Topo
     renderizar_topbar()
     renderizar_kpis_topo(maquinas)
 
-    # Barra Lateral
+    # Sidebar
     with st.sidebar:
-        st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-top: 10px; margin-bottom: 6px; letter-spacing: 0.5px;'>Navegação Rápida</p>", unsafe_allow_html=True)
+        st.markdown(
+            f"<p style='font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin-top: 10px; margin-bottom: 6px; letter-spacing: 0.6px; color: {T['text_sub']};'>Navegação</p>",
+            unsafe_allow_html=True,
+        )
 
-        opcoes = ["Todas as Máquinas (Início)"]
-        mapa_ids = {"Todas as Máquinas (Início)": None}
-        idx_selecionado = 0
+        opcoes = ["Todas as Máquinas"]
+        mapa_ids = {"Todas as Máquinas": None}
+        idx_sel = 0
 
         for i, m in enumerate(maquinas):
             label = f"[#{m['id']:02d}] {m['nome']}"
             opcoes.append(label)
             mapa_ids[label] = m["id"]
             if st.session_state["maquina_ativa_id"] == m["id"]:
-                idx_selecionado = i + 1
+                idx_sel = i + 1
 
-        escolha = st.selectbox(
-            "Ver máquina:",
-            options=opcoes,
-            index=idx_selecionado,
-            label_visibility="collapsed",
-        )
+        escolha = st.selectbox("Ver máquina:", options=opcoes, index=idx_sel, label_visibility="collapsed")
 
-        # Atualiza a seleção de navegação
         novo_id = mapa_ids.get(escolha)
         if novo_id != st.session_state["maquina_ativa_id"]:
             st.session_state["maquina_ativa_id"] = novo_id
@@ -1017,11 +1246,13 @@ def main():
 
         st.markdown("---")
 
-        # Formulário Simples de Nova Máquina
-        st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Cadastrar Nova Máquina</p>", unsafe_allow_html=True)
+        st.markdown(
+            f"<p style='font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.6px; color: {T['text_sub']};'>Nova Máquina</p>",
+            unsafe_allow_html=True,
+        )
         with st.form("form_nova_maquina", clear_on_submit=True):
             nome_input = st.text_input("Nome da Máquina:", placeholder="Ex: Torno CNC 03", label_visibility="collapsed")
-            btn_add = st.form_submit_button("+ Cadastrar Máquina", use_container_width=True)
+            btn_add = st.form_submit_button("+ Cadastrar", use_container_width=True)
 
             if btn_add:
                 nome_limpo = nome_input.strip()
@@ -1030,20 +1261,23 @@ def main():
                 else:
                     try:
                         nova = criar_maquina(dados, nome_limpo)
-                        st.toast(f"Máquina '{nova['nome']}' cadastrada com sucesso!", icon="✅")
+                        st.toast(f"Máquina '{nova['nome']}' cadastrada!", icon="✅")
                         st.session_state["maquina_ativa_id"] = nova["id"]
                         st.rerun()
                     except ValueError as err:
                         st.error(str(err))
 
-        # Excluir Máquina
+        # Excluir
         if st.session_state["maquina_ativa_id"] is not None:
             maq_atual = next((m for m in maquinas if m["id"] == st.session_state["maquina_ativa_id"]), None)
             if maq_atual:
                 st.markdown("---")
-                st.markdown("<p style='font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;'>Excluir Máquina</p>", unsafe_allow_html=True)
+                st.markdown(
+                    f"<p style='font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.6px; color: {T['text_sub']};'>Excluir Máquina</p>",
+                    unsafe_allow_html=True,
+                )
                 with st.expander("Apagar esta máquina", expanded=False):
-                    st.caption(f"Atenção: removerá '{maq_atual['nome']}' e todo o seu histórico.")
+                    st.caption(f"Remove '{maq_atual['nome']}' e todo o histórico.")
                     confirm = st.checkbox("Sim, quero apagar", key=f"del_{maq_atual['id']}")
                     if st.button("Confirmar Exclusão", type="primary", disabled=not confirm, use_container_width=True):
                         if remover_maquina(dados, maq_atual["id"]):
@@ -1054,7 +1288,7 @@ def main():
         st.markdown("---")
         st.caption("MetalSense • Projeto TechForge")
 
-    # Renderização da Tela Ativa
+    # Render
     maquina_selecionada = None
     if st.session_state["maquina_ativa_id"] is not None:
         maquina_selecionada = next((m for m in maquinas if m["id"] == st.session_state["maquina_ativa_id"]), None)
