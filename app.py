@@ -249,8 +249,7 @@ section[data-testid="stSidebar"] div[data-testid="stCaptionContainer"] p {{
     color: {T["text_muted"]} !important;
 }}
 
-/* ============== INPUTS / SELECTS / TEXTAREAS ============== */
-div[data-baseweb="select"] > div,
+/* ============== INPUTS / TEXTAREAS NATIVOS ============== */
 div[data-baseweb="input"] > div,
 div[data-baseweb="base-input"] > div,
 div[data-baseweb="textarea"] > div,
@@ -269,48 +268,184 @@ input:focus, textarea:focus, div[data-baseweb="input"]:focus-within {{
     border-color: {T["accent_cyan"]} !important;
     box-shadow: 0 0 0 2px {T["accent_cyan"]}30 !important;
 }}
-div[data-baseweb="select"] span {{
+
+/* ============== SELECTBOX MODERNO (Streamlit 1.30+ / 1.65+) ============== */
+div[data-testid="stSelectbox"] {{
     color: {T["text_main"]} !important;
 }}
+
+/* Container do campo do Selectbox */
+div[data-testid="stSelectbox"] > div > div,
+div[data-testid="stSelectbox"] [class*="e1fp86qc0"],
+div[data-baseweb="select"] > div {{
+    background-color: {T["input_bg"]} !important;
+    background: {T["input_bg"]} !important;
+    border: 1px solid {T["input_border"]} !important;
+    border-radius: 10px !important;
+    color: {T["text_main"]} !important;
+    transition: all 0.2s ease !important;
+}}
+
+div[data-testid="stSelectbox"] [data-focus-within],
+div[data-baseweb="select"] [data-focus-within] {{
+    border-color: {T["accent_cyan"]} !important;
+    box-shadow: 0 0 0 2px {T["accent_cyan"]}30 !important;
+}}
+
+/* Input de texto dentro do Selectbox */
+div[data-testid="stSelectbox"] input,
+div[data-testid="stSelectbox"] [class*="e1fp86qc1"],
+div[data-baseweb="select"] span {{
+    color: {T["text_main"]} !important;
+    background: transparent !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.92rem !important;
+    font-weight: 500 !important;
+    caret-color: {T["accent_cyan"]} !important;
+}}
+
+div[data-testid="stSelectbox"] input::placeholder,
+div[data-testid="stSelectbox"] [class*="e1fp86qc1"]::placeholder {{
+    color: {T["placeholder_color"]} !important;
+    opacity: 1 !important;
+}}
+
+/* Ícones de chevron (setinha) e limpar do Selectbox */
+div[data-testid="stSelectbox"] button,
+div[data-testid="stSelectbox"] [class*="e1fp86qc2"],
+div[data-testid="stSelectbox"] [class*="e1fp86qc3"],
 div[data-baseweb="select"] svg {{
+    color: {T["text_sub"]} !important;
+    fill: {T["text_sub"]} !important;
+    background: transparent !important;
+}}
+
+div[data-testid="stSelectbox"] button svg,
+div[data-testid="stSelectbox"] [class*="e1fp86qc2"] svg,
+div[data-testid="stSelectbox"] [class*="e1fp86qc3"] svg {{
     fill: {T["text_sub"]} !important;
     color: {T["text_sub"]} !important;
 }}
 
-/* ============== DROPDOWNS / POPOVERS / LISTBOX ============== */
+/* ============== MODAL / DROPDOWN FLUTUANTE DE SELEÇÃO DE MÁQUINAS ============== */
+div[data-testid="stSelectboxVirtualDropdown"],
+div[class*="e1fp86qc4"],
 div[data-baseweb="popover"],
 div[data-baseweb="menu"] {{
     background-color: {T["surface_card_solid"]} !important;
+    background: {T["surface_card_solid"]} !important;
     border: 1px solid {T["border_solid"]} !important;
-    border-radius: 12px !important;
+    border-radius: 14px !important;
     box-shadow: {T["card_shadow"]} !important;
-}}
-ul[role="listbox"] {{
-    background-color: {T["surface_card_solid"]} !important;
-    border: 1px solid {T["border_solid"]} !important;
-    border-radius: 12px !important;
-    padding: 6px !important;
-}}
-ul[role="listbox"] li,
-div[role="option"],
-li[role="option"] {{
     color: {T["text_main"]} !important;
-    background-color: transparent !important;
-    border-radius: 8px !important;
-    font-size: 0.9rem !important;
-    padding: 8px 12px !important;
+    padding: 6px !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
 }}
+
+div[data-testid="stSelectboxVirtualDropdown"] ul,
+div[class*="e1fp86qc5"],
+ul[role="listbox"] {{
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}}
+
+div[data-testid="stSelectboxVirtualDropdown"] li,
+div[class*="e1fp86qc7"],
+ul[role="listbox"] li,
+li[role="option"],
+div[role="option"] {{
+    background-color: transparent !important;
+    background: transparent !important;
+    color: {T["text_main"]} !important;
+    cursor: pointer !important;
+    border-radius: 8px !important;
+    margin: 3px 0 !important;
+    transition: all 0.15s ease !important;
+}}
+
+/* Texto e destaque de cada item da lista */
+div[data-testid="stSelectboxVirtualDropdown"] [data-item-hl],
+div[class*="e1fp86qc8"],
+ul[role="listbox"] li span,
+div[role="option"] span {{
+    color: {T["text_main"]} !important;
+    background: transparent !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.90rem !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 9px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+}}
+
+/* Estado Hover e Focus nas opções de máquina */
+div[data-testid="stSelectboxVirtualDropdown"] li:hover,
+div[data-testid="stSelectboxVirtualDropdown"] li[data-hovered],
+div[data-testid="stSelectboxVirtualDropdown"] li[data-focused],
+div[data-testid="stSelectboxVirtualDropdown"] li:hover [data-item-hl],
+div[data-testid="stSelectboxVirtualDropdown"] li[data-hovered] [data-item-hl],
+div[data-testid="stSelectboxVirtualDropdown"] li[data-focused] [data-item-hl],
+div[class*="e1fp86qc7"]:hover,
+div[class*="e1fp86qc7"][data-hovered],
+div[class*="e1fp86qc7"][data-focused],
 ul[role="listbox"] li:hover,
 li[role="option"]:hover,
 div[role="option"]:hover {{
     background-color: {T["btn_hover_bg"]} !important;
     color: {T["accent_cyan"]} !important;
 }}
+
+div[data-testid="stSelectboxVirtualDropdown"] li:hover [data-item-hl] *,
+div[data-testid="stSelectboxVirtualDropdown"] li[data-hovered] [data-item-hl] *,
+div[data-testid="stSelectboxVirtualDropdown"] li[data-focused] [data-item-hl] *,
 ul[role="listbox"] li[aria-selected="true"],
 li[role="option"][aria-selected="true"] {{
     background-color: {T["btn_hover_bg"]} !important;
     color: {T["accent_cyan"]} !important;
     font-weight: 700 !important;
+}}
+
+/* Estado vazio / sem resultados */
+div[data-testid="stSelectboxVirtualDropdown"] [class*="e1fp86qc6"] {{
+    color: {T["text_muted"]} !important;
+}}
+
+/* ============== MODAIS & DIALOGS GERAIS DO STREAMLIT ============== */
+div[data-testid="stDialog"],
+div[role="dialog"],
+div[aria-modal="true"],
+div[data-modal="true"],
+div[data-baseweb="modal"] {{
+    background-color: {T["surface_card_solid"]} !important;
+    background: {T["surface_card_solid"]} !important;
+    border: 1px solid {T["border_solid"]} !important;
+    border-radius: 16px !important;
+    color: {T["text_main"]} !important;
+    box-shadow: {T["card_hover_shadow"]} !important;
+}}
+
+div[data-testid="stDialog"] p,
+div[data-testid="stDialog"] span,
+div[data-testid="stDialog"] h1,
+div[data-testid="stDialog"] h2,
+div[data-testid="stDialog"] h3 {{
+    color: {T["text_main"]} !important;
+}}
+
+div[data-testid="stPopover"],
+div[data-testid="stPopoverBody"] {{
+    background-color: {T["surface_card_solid"]} !important;
+    background: {T["surface_card_solid"]} !important;
+    border: 1px solid {T["border_solid"]} !important;
+    border-radius: 14px !important;
+    color: {T["text_main"]} !important;
+    box-shadow: {T["card_shadow"]} !important;
 }}
 
 /* ============== EXPANDERS ============== */
