@@ -59,24 +59,30 @@ if IS_DARK:
     T = {
         # Backgrounds
         "app_bg":          "radial-gradient(ellipse at 10% 20%, #0d1527 0%, #060911 70%)",
-        "surface":         "rgba(15, 23, 42, 0.72)",
-        "surface_card":    "rgba(15, 23, 42, 0.65)",
+        "raw_bg":          "#060911",
+        "raw_sec_bg":      "#0f172a",
+        "surface":         "rgba(15, 23, 42, 0.75)",
+        "surface_card":    "rgba(15, 23, 42, 0.70)",
+        "surface_card_solid": "#0f172a",
         "surface_metric":  "rgba(30, 41, 59, 0.55)",
         "sidebar_bg":      "rgba(8, 12, 20, 0.95)",
+        "track_bg":        "rgba(255, 255, 255, 0.08)",
         # Borders
-        "border":          "rgba(255, 255, 255, 0.07)",
-        "border_hover":    "rgba(56, 189, 248, 0.45)",
+        "border":          "rgba(255, 255, 255, 0.08)",
+        "border_solid":    "#1e293b",
+        "border_hover":    "rgba(56, 189, 248, 0.50)",
         # Inputs
         "input_bg":        "rgba(15, 23, 42, 0.85)",
-        "input_border":    "rgba(255, 255, 255, 0.12)",
+        "input_border":    "rgba(255, 255, 255, 0.14)",
+        "placeholder_color": "#64748b",
         # Text
         "text_main":       "#f1f5f9",
         "text_sub":        "#94a3b8",
         "text_muted":      "#64748b",
         # Buttons
-        "btn_bg":          "rgba(15, 23, 42, 0.8)",
-        "btn_border":      "rgba(255, 255, 255, 0.10)",
-        "btn_hover_bg":    "rgba(56, 189, 248, 0.12)",
+        "btn_bg":          "rgba(15, 23, 42, 0.80)",
+        "btn_border":      "rgba(255, 255, 255, 0.12)",
+        "btn_hover_bg":    "rgba(56, 189, 248, 0.14)",
         # Accent palette (neon)
         "accent_cyan":     "#00e5ff",
         "accent_blue":     "#38bdf8",
@@ -86,10 +92,14 @@ if IS_DARK:
         "accent_violet":   "#c084fc",
         # Plotly
         "plot_paper":      "rgba(0,0,0,0)",
-        "plot_bg":         "rgba(15, 23, 42, 0.45)",
-        "plot_grid":       "rgba(255, 255, 255, 0.04)",
+        "plot_bg":         "rgba(15, 23, 42, 0.50)",
+        "plot_grid":       "rgba(255, 255, 255, 0.05)",
         "plot_text":       "#94a3b8",
+        "hover_bg":        "#0f172a",
         "gauge_bg":        "rgba(30, 41, 59, 0.55)",
+        "gauge_step_rose": "rgba(251, 113, 133, 0.18)",
+        "gauge_step_amber": "rgba(251, 191, 36, 0.18)",
+        "gauge_step_emerald": "rgba(52, 211, 153, 0.18)",
         # Glow helpers
         "card_shadow":     "0 8px 32px -8px rgba(0, 229, 255, 0.08)",
         "card_hover_shadow": "0 12px 40px -8px rgba(0, 229, 255, 0.18)",
@@ -97,41 +107,51 @@ if IS_DARK:
 else:
     T = {
         # Backgrounds
-        "app_bg":          "linear-gradient(160deg, #f8fafc 0%, #eef2f7 50%, #e2e8f0 100%)",
-        "surface":         "rgba(255, 255, 255, 0.85)",
-        "surface_card":    "rgba(255, 255, 255, 0.90)",
-        "surface_metric":  "#f1f5f9",
-        "sidebar_bg":      "rgba(255, 255, 255, 0.92)",
+        "app_bg":          "linear-gradient(160deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)",
+        "raw_bg":          "#f8fafc",
+        "raw_sec_bg":      "#ffffff",
+        "surface":         "rgba(255, 255, 255, 0.90)",
+        "surface_card":    "#ffffff",
+        "surface_card_solid": "#ffffff",
+        "surface_metric":  "#f8fafc",
+        "sidebar_bg":      "rgba(255, 255, 255, 0.96)",
+        "track_bg":        "#e2e8f0",
         # Borders
         "border":          "rgba(0, 0, 0, 0.08)",
+        "border_solid":    "#e2e8f0",
         "border_hover":    "#0284c7",
         # Inputs
         "input_bg":        "#ffffff",
         "input_border":    "#cbd5e1",
+        "placeholder_color": "#64748b",
         # Text
         "text_main":       "#0f172a",
-        "text_sub":        "#475569",
-        "text_muted":      "#94a3b8",
+        "text_sub":        "#334155",
+        "text_muted":      "#64748b",
         # Buttons
-        "btn_bg":          "rgba(255, 255, 255, 0.9)",
+        "btn_bg":          "#ffffff",
         "btn_border":      "#cbd5e1",
         "btn_hover_bg":    "rgba(2, 132, 199, 0.08)",
-        # Accent palette (vivid but not neon)
+        # Accent palette (vivid, industrial, accessible)
         "accent_cyan":     "#0284c7",
-        "accent_blue":     "#0284c7",
+        "accent_blue":     "#2563eb",
         "accent_emerald":  "#059669",
         "accent_amber":    "#d97706",
         "accent_rose":     "#e11d48",
         "accent_violet":   "#7c3aed",
         # Plotly
         "plot_paper":      "rgba(0,0,0,0)",
-        "plot_bg":         "rgba(255, 255, 255, 0.6)",
+        "plot_bg":         "rgba(255, 255, 255, 0.85)",
         "plot_grid":       "rgba(0, 0, 0, 0.06)",
         "plot_text":       "#475569",
+        "hover_bg":        "#ffffff",
         "gauge_bg":        "#e2e8f0",
+        "gauge_step_rose": "rgba(225, 29, 72, 0.14)",
+        "gauge_step_amber": "rgba(217, 119, 6, 0.14)",
+        "gauge_step_emerald": "rgba(5, 150, 105, 0.14)",
         # Shadow helpers
-        "card_shadow":     "0 4px 24px -6px rgba(0, 0, 0, 0.06)",
-        "card_hover_shadow": "0 8px 32px -6px rgba(0, 0, 0, 0.12)",
+        "card_shadow":     "0 4px 20px -4px rgba(0, 0, 0, 0.06)",
+        "card_hover_shadow": "0 10px 30px -4px rgba(0, 0, 0, 0.12)",
     }
 
 
@@ -166,9 +186,20 @@ CSS_GLOBAL = f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
+/* ============== ROOT THEME INJECTION (Sincroniza Streamlit BaseWeb) ============== */
+:root {{
+    --primary-color: {T["accent_cyan"]};
+    --background-color: {T["raw_bg"]};
+    --secondary-background-color: {T["raw_sec_bg"]};
+    --text-color: {T["text_main"]};
+    --font: 'Inter', sans-serif;
+    color-scheme: {"dark" if IS_DARK else "light"};
+}}
+
 /* ============== BASE RESET ============== */
 html, body, [class*="css"] {{
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    color-scheme: {"dark" if IS_DARK else "light"};
 }}
 
 /* ============== APP BACKGROUND ============== */
@@ -177,13 +208,17 @@ html, body, [class*="css"] {{
     color: {T["text_main"]} !important;
 }}
 
-/* Header transparente */
+/* Header transparente com controles integrados */
 header[data-testid="stHeader"] {{
     background: transparent !important;
     backdrop-filter: none !important;
 }}
+header[data-testid="stHeader"] svg {{
+    fill: {T["text_sub"]} !important;
+    color: {T["text_sub"]} !important;
+}}
 
-/* ============== MAIN CONTENT AREA — previne fundo branco ============== */
+/* ============== MAIN CONTENT AREA ============== */
 section.main > div.block-container {{
     background: transparent !important;
     color: {T["text_main"]} !important;
@@ -192,20 +227,26 @@ section.main {{
     background: transparent !important;
 }}
 
-/* ============== SIDEBAR ============== */
+/* ============== SIDEBAR (Sem sobrescrita destrutiva) ============== */
 section[data-testid="stSidebar"] {{
     background: {T["sidebar_bg"]} !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
     border-right: 1px solid {T["border"]} !important;
 }}
-section[data-testid="stSidebar"] * {{
-    color: {T["text_main"]} !important;
-}}
 section[data-testid="stSidebar"] .stMarkdown p,
 section[data-testid="stSidebar"] .stMarkdown span,
-section[data-testid="stSidebar"] .stMarkdown label {{
-    color: {T["text_main"]} !important;
+section[data-testid="stSidebar"] .stMarkdown label,
+section[data-testid="stSidebar"] div[data-testid="stText"] {{
+    color: {T["text_main"]};
+}}
+section[data-testid="stSidebar"] hr {{
+    border-color: {T["border"]} !important;
+}}
+section[data-testid="stSidebar"] small,
+section[data-testid="stSidebar"] .stCaption,
+section[data-testid="stSidebar"] div[data-testid="stCaptionContainer"] p {{
+    color: {T["text_muted"]} !important;
 }}
 
 /* ============== INPUTS / SELECTS / TEXTAREAS ============== */
@@ -220,29 +261,56 @@ input, textarea {{
     border-radius: 10px !important;
     caret-color: {T["accent_cyan"]} !important;
 }}
-/* Select value text */
+input::placeholder, textarea::placeholder {{
+    color: {T["placeholder_color"]} !important;
+    opacity: 1 !important;
+}}
+input:focus, textarea:focus, div[data-baseweb="input"]:focus-within {{
+    border-color: {T["accent_cyan"]} !important;
+    box-shadow: 0 0 0 2px {T["accent_cyan"]}30 !important;
+}}
 div[data-baseweb="select"] span {{
     color: {T["text_main"]} !important;
 }}
+div[data-baseweb="select"] svg {{
+    fill: {T["text_sub"]} !important;
+    color: {T["text_sub"]} !important;
+}}
 
-/* ============== DROPDOWNS / POPOVERS ============== */
-div[data-baseweb="popover"] {{
-    background-color: {T["surface_card"]} !important;
-    border: 1px solid {T["border"]} !important;
+/* ============== DROPDOWNS / POPOVERS / LISTBOX ============== */
+div[data-baseweb="popover"],
+div[data-baseweb="menu"] {{
+    background-color: {T["surface_card_solid"]} !important;
+    border: 1px solid {T["border_solid"]} !important;
     border-radius: 12px !important;
-    backdrop-filter: blur(20px) !important;
+    box-shadow: {T["card_shadow"]} !important;
 }}
 ul[role="listbox"] {{
-    background-color: {T["surface_card"]} !important;
-    border: 1px solid {T["border"]} !important;
+    background-color: {T["surface_card_solid"]} !important;
+    border: 1px solid {T["border_solid"]} !important;
     border-radius: 12px !important;
+    padding: 6px !important;
 }}
-ul[role="listbox"] li {{
+ul[role="listbox"] li,
+div[role="option"],
+li[role="option"] {{
     color: {T["text_main"]} !important;
     background-color: transparent !important;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    padding: 8px 12px !important;
 }}
-ul[role="listbox"] li:hover {{
+ul[role="listbox"] li:hover,
+li[role="option"]:hover,
+div[role="option"]:hover {{
     background-color: {T["btn_hover_bg"]} !important;
+    color: {T["accent_cyan"]} !important;
+}}
+ul[role="listbox"] li[aria-selected="true"],
+li[role="option"][aria-selected="true"] {{
+    background-color: {T["btn_hover_bg"]} !important;
+    color: {T["accent_cyan"]} !important;
+    font-weight: 700 !important;
 }}
 
 /* ============== EXPANDERS ============== */
@@ -259,6 +327,10 @@ div[data-testid="stExpander"] summary {{
 }}
 div[data-testid="stExpander"] summary:hover {{
     color: {T["accent_cyan"]} !important;
+}}
+div[data-testid="stExpander"] summary svg {{
+    fill: {T["text_sub"]} !important;
+    color: {T["text_sub"]} !important;
 }}
 div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {{
     background: transparent !important;
@@ -291,50 +363,68 @@ div.stButton > button {{
 div.stButton > button:hover {{
     border-color: {T["border_hover"]} !important;
     background: {T["btn_hover_bg"]} !important;
+    color: {T["accent_cyan"]} !important;
     transform: translateY(-1px) !important;
     box-shadow: {T["card_shadow"]} !important;
 }}
 div.stButton > button:active {{
     transform: translateY(0px) !important;
 }}
-/* Primary button */
+
+/* Botões Primários — Texto Branco 100% Protegido em Ambos os Modos */
 div.stButton > button[kind="primary"],
-button[kind="primary"] {{
+button[kind="primary"],
+div[data-testid="stForm"] button[kind="primaryFormSubmit"] {{
     background: linear-gradient(135deg, {T["accent_cyan"]}, {T["accent_blue"]}) !important;
     color: #ffffff !important;
     border: none !important;
     font-weight: 700 !important;
+    box-shadow: 0 4px 14px {T["accent_cyan"]}30 !important;
+}}
+div.stButton > button[kind="primary"] *,
+button[kind="primary"] *,
+div[data-testid="stForm"] button[kind="primaryFormSubmit"] * {{
+    color: #ffffff !important;
 }}
 div.stButton > button[kind="primary"]:hover,
-button[kind="primary"]:hover {{
-    opacity: 0.9 !important;
-    box-shadow: 0 4px 20px {T["accent_cyan"]}40 !important;
+button[kind="primary"]:hover,
+div[data-testid="stForm"] button[kind="primaryFormSubmit"]:hover {{
+    opacity: 0.92 !important;
+    box-shadow: 0 6px 20px {T["accent_cyan"]}45 !important;
+    transform: translateY(-1px) !important;
+    color: #ffffff !important;
 }}
 
-/* Form submit buttons */
-div[data-testid="stForm"] button[kind="secondaryFormSubmit"],
-div[data-testid="stForm"] button[kind="primaryFormSubmit"] {{
+/* Botões Desabilitados */
+div.stButton > button:disabled,
+button:disabled,
+div[data-testid="stForm"] button:disabled {{
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}}
+
+/* Secondary Form Submit */
+div[data-testid="stForm"] button[kind="secondaryFormSubmit"] {{
     background: {T["btn_bg"]} !important;
     color: {T["text_main"]} !important;
     border: 1px solid {T["btn_border"]} !important;
     border-radius: 10px !important;
 }}
-div[data-testid="stForm"] button[kind="primaryFormSubmit"] {{
-    background: linear-gradient(135deg, {T["accent_cyan"]}, {T["accent_blue"]}) !important;
-    color: #ffffff !important;
-    border: none !important;
-}}
 
-/* Download button */
+/* Download Button */
 div.stDownloadButton > button {{
     background: {T["btn_bg"]} !important;
     color: {T["text_main"]} !important;
     border: 1px solid {T["btn_border"]} !important;
     border-radius: 10px !important;
+    font-weight: 600 !important;
 }}
 div.stDownloadButton > button:hover {{
     border-color: {T["border_hover"]} !important;
     background: {T["btn_hover_bg"]} !important;
+    color: {T["accent_cyan"]} !important;
 }}
 
 /* ============== TABS ============== */
@@ -369,14 +459,22 @@ div[data-testid="stAlert"] p,
 div[data-testid="stAlert"] span {{
     color: {T["text_main"]} !important;
 }}
+div[data-testid="stAlert"] svg {{
+    color: {T["accent_cyan"]} !important;
+}}
 
 /* ============== CODE BLOCKS ============== */
 div[data-testid="stCode"],
 code, pre {{
-    background-color: {T["input_bg"]} !important;
+    background-color: {T["surface_metric"]} !important;
     color: {T["text_main"]} !important;
     border: 1px solid {T["border"]} !important;
     border-radius: 10px !important;
+}}
+div[data-testid="stCode"] code,
+div[data-testid="stCode"] pre {{
+    background-color: transparent !important;
+    color: {T["text_main"]} !important;
 }}
 
 /* ============== CAPTION / MUTED TEXT ============== */
@@ -392,10 +490,24 @@ div[data-testid="stCaptionContainer"] p {{
 .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {{
     color: {T["text_main"]} !important;
 }}
+div[data-testid="stHeadingWithActionElements"] a {{
+    color: {T["text_sub"]} !important;
+}}
 
 /* ============== CHECKBOX ============== */
 div[data-testid="stCheckbox"] label span {{
     color: {T["text_main"]} !important;
+}}
+div[data-testid="stCheckbox"] div[role="checkbox"],
+div[data-testid="stCheckbox"] span[role="checkbox"] {{
+    background-color: {T["input_bg"]} !important;
+    border: 1px solid {T["input_border"]} !important;
+    border-radius: 6px !important;
+}}
+div[data-testid="stCheckbox"] div[role="checkbox"][aria-checked="true"],
+div[data-testid="stCheckbox"] span[role="checkbox"][aria-checked="true"] {{
+    background-color: {T["accent_cyan"]} !important;
+    border-color: {T["accent_cyan"]} !important;
 }}
 
 /* ============== METRIC (native) ============== */
@@ -416,6 +528,32 @@ div[data-testid="stToast"] {{
     color: {T["text_main"]} !important;
     backdrop-filter: blur(16px) !important;
     border-radius: 12px !important;
+    box-shadow: {T["card_shadow"]} !important;
+}}
+div[data-testid="stToast"] p,
+div[data-testid="stToast"] span {{
+    color: {T["text_main"]} !important;
+}}
+
+/* ============== DATAFRAMES & TABLES ============== */
+div[data-testid="stDataFrame"],
+div[data-testid="stTable"] {{
+    background: {T["surface_card"]} !important;
+    border: 1px solid {T["border"]} !important;
+    border-radius: 12px !important;
+    color: {T["text_main"]} !important;
+}}
+table {{
+    color: {T["text_main"]} !important;
+}}
+th {{
+    background-color: {T["surface_metric"]} !important;
+    color: {T["text_sub"]} !important;
+    font-weight: 700 !important;
+}}
+td {{
+    color: {T["text_main"]} !important;
+    border-color: {T["border"]} !important;
 }}
 
 /* ============== DIVIDERS ============== */
@@ -434,7 +572,7 @@ iframe {{
     background: transparent !important;
 }}
 
-/* ============== SCROLLBARS (Dark theme polish) ============== */
+/* ============== SCROLLBARS ============== */
 ::-webkit-scrollbar {{
     width: 6px;
     height: 6px;
@@ -623,18 +761,18 @@ footer a {{
     text-transform: uppercase;
 }}
 .ms-pill-ok {{
-    background: {T["accent_emerald"]}15;
-    border: 1px solid {T["accent_emerald"]}40;
+    background: {T["accent_emerald"]}18;
+    border: 1px solid {T["accent_emerald"]}45;
     color: {T["accent_emerald"]};
 }}
 .ms-pill-warn {{
-    background: {T["accent_rose"]}15;
-    border: 1px solid {T["accent_rose"]}40;
+    background: {T["accent_rose"]}18;
+    border: 1px solid {T["accent_rose"]}45;
     color: {T["accent_rose"]};
 }}
 .ms-pill-idle {{
-    background: {T["text_muted"]}15;
-    border: 1px solid {T["text_muted"]}35;
+    background: {T["text_muted"]}18;
+    border: 1px solid {T["text_muted"]}40;
     color: {T["text_muted"]};
 }}
 
@@ -659,7 +797,7 @@ footer a {{
 .ms-diag {{
     background: {T["surface_card"]};
     backdrop-filter: blur(16px);
-    border: 1px solid {T["accent_violet"]}30;
+    border: 1px solid {T["accent_violet"]}35;
     border-radius: 16px;
     padding: 24px;
     box-shadow: 0 0 24px {T["accent_violet"]}08;
@@ -669,11 +807,38 @@ footer a {{
 .ms-info {{
     background: {T["surface_card"]};
     backdrop-filter: blur(12px);
-    border: 1px solid {T["accent_cyan"]}25;
+    border: 1px solid {T["accent_cyan"]}30;
     border-radius: 16px;
     padding: 20px 24px;
     margin-bottom: 24px;
     border-left: 3px solid {T["accent_cyan"]};
+}}
+
+/* --- Compatibilidade com Elementos Legados --- */
+.techforge-header {{
+    background: {T["surface"]};
+    border: 1px solid {T["border"]};
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}}
+.techforge-header h1,
+.techforge-header [data-heading-text] {{
+    color: {T["text_main"]} !important;
+}}
+.techforge-header p {{
+    color: {T["text_sub"]} !important;
+}}
+.techforge-badge-techforge {{
+    display: inline-block;
+    background: {T["accent_cyan"]}18;
+    color: {T["accent_cyan"]};
+    border: 1px solid {T["accent_cyan"]}40;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 10px;
 }}
 
 </style>
@@ -773,9 +938,9 @@ def criar_gauge_saude(score: float) -> go.Figure:
                 'bgcolor': T["gauge_bg"],
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 50],  'color': f"{T['accent_rose']}18"},
-                    {'range': [50, 75], 'color': f"{T['accent_amber']}18"},
-                    {'range': [75, 100],'color': f"{T['accent_emerald']}18"},
+                    {'range': [0, 50],  'color': T["gauge_step_rose"]},
+                    {'range': [50, 75], 'color': T["gauge_step_amber"]},
+                    {'range': [75, 100],'color': T["gauge_step_emerald"]},
                 ],
             },
         )
@@ -833,6 +998,13 @@ def criar_grafico_telemetria(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor=T["plot_bg"],
         hovermode="x unified",
+        hoverlabel=dict(
+            bgcolor=T["hover_bg"],
+            font_size=12,
+            font_color=T["text_main"],
+            font_family="Inter, sans-serif",
+            bordercolor=T["border_solid"],
+        ),
         margin=dict(l=10, r=10, t=30, b=10),
         height=300,
         xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
@@ -911,7 +1083,7 @@ Se a temperatura, vibração ou consumo saírem do padrão, um alerta é emitido
 <span style="color: {T['text_sub']};">Saúde</span>
 <span style="color: {cor_hp}; font-weight: 700; font-family: 'Space Grotesk', monospace;">{score}%</span>
 </div>
-<div style="background: {T['border']}; height: 5px; border-radius: 9999px; overflow: hidden;">
+<div style="background: {T['track_bg']}; height: 6px; border-radius: 9999px; overflow: hidden;">
 <div style="background: linear-gradient(90deg, {cor_hp}, {cor_hp}cc); width: {score}%; height: 100%; border-radius: 9999px; box-shadow: 0 0 8px {cor_hp}50;"></div>
 </div>
 </div>
@@ -1157,6 +1329,13 @@ Diagnóstico Automático
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor=T["plot_bg"],
                 hovermode="x unified",
+                hoverlabel=dict(
+                    bgcolor=T["hover_bg"],
+                    font_size=12,
+                    font_color=T["text_main"],
+                    font_family="Inter, sans-serif",
+                    bordercolor=T["border_solid"],
+                ),
                 margin=dict(l=10, r=10, t=30, b=10),
                 height=320,
                 xaxis=dict(showgrid=True, gridcolor=T["plot_grid"], color=T["plot_text"],
