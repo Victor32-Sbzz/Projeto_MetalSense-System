@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from flask import Flask, request, jsonify, Response, current_app
+from flask import Flask, request, jsonify, Response, current_app, send_from_directory
 from pydantic import ValidationError
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -376,6 +376,20 @@ def create_app(cfg: Optional[Configuracao] = None) -> Flask:
             "codigo": 404,
             "mensagem": f"Máquina ID {id_maquina} não encontrada"
         }), 404
+
+    # ── Servir frontend React (Vite build em ./web/dist) ─────────────
+    WEB_DIST = os.path.join(os.path.dirname(__file__), "web", "dist")
+    if os.path.isdir(WEB_DIST):
+        @app.route("/", defaults={"path": ""})
+        @app.route("/<path:path>")
+        def serve_frontend(path: str):
+            # Não interceptar rotas de API / health / ready
+            if path.startswith("api/") or path in ("health", "ready"):
+                return jsonify({"status": "erro", "codigo": 404, "mensagem": "Rota não encontrada"}), 404
+            full = os.path.join(WEB_DIST, path)
+            if path and os.path.isfile(full):
+                return send_from_directory(WEB_DIST, path)
+            return send_from_directory(WEB_DIST, "index.html")
 
     return app
 

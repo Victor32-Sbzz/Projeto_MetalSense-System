@@ -1,32 +1,25 @@
 # ==============================================================================
-# Dependências do Ecossistema MetalSense (TechForge)
+# MetalSense — TechForge | Dependências (Stack Moderna)
+# Frontend: Vite + React + TypeScript + Tailwind (em ./web)
+# Backend: Flask API + SQLAlchemy + Pydantic
 # ==============================================================================
-
-# Interface Web & Analytics (Streamlit)
-streamlit>=1.30.0
-pandas>=2.0.0
-plotly>=5.18.0
 
 # API REST Industrial & Servidor WSGI (IoT Gateway)
 Flask>=3.0.0
 gunicorn>=21.2.0
 Werkzeug>=3.0.0
 
-# Validação Fisiomecânica & Esquemas Estritos
+# Validação & Esquemas Estritos
 pydantic>=2.7.0
 
 # Segurança, Rate Limiting & Tokens
 Flask-Limiter>=3.5.0
 redis>=5.0.0
 
-# Persistência Robusta & Banco de Dados Time-Series
+# Persistência & Time-Series
 SQLAlchemy>=2.0.0
 alembic>=1.13.0
 psycopg[binary]>=3.1.0
 
-# Testes Automatizados & Qualidade de Software
+# Testes & Qualidade
 pytest>=8.0.0
-
-# Interface Desktop Legada / Visualização (Opcional)
-customtkinter>=5.2.0
-matplotlib>=3.8.0

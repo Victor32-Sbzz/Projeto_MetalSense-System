@@ -89,38 +89,7 @@ services:
           cpus: '2.0'
           memory: 1024M
 
-  # ============================================================================
-  # 4. DASHBOARD INDUSTRIAL (Streamlit)
-  # ============================================================================
-  dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: metalsense_dashboard
-    restart: always
-    depends_on:
-      api:
-        condition: service_healthy
-    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
-    environment:
-      METALSENSE_ENV: production
-      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-metalsense_admin}:${POSTGRES_PASSWORD:-techforge_super_secure_db_pass_2026}@timescaledb:5432/${POSTGRES_DB:-metalsense}
-      METALSENSE_API_KEY: ${METALSENSE_API_KEYS_ADMIN:-techforge-master-admin-key-2026}
-    ports:
-      - "8501:8501"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8501/_stcore/health || exit 1"]
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    networks:
-      - metalsense_net
-    deploy:
-      resources:
-        limits:
-          cpus: '1.5'
-          memory: 1024M
+  # Frontend React servido pelo próprio serviço `api` em / (web/dist)
 
 volumes:
   timescale_data:

@@ -1,4 +1,4 @@
-__pycache__/
+﻿__pycache__/
 *.pyc
 
 # Ambiente virtual
@@ -35,4 +35,9 @@ telemetria_*.csv
 # Git Worktrees isolados
 .worktrees/
 worktrees/
-
+
+
+# Legacy Streamlit removido — frontend agora em web/
+web/dist/
+web/node_modules/
+
