@@ -112,6 +112,7 @@ const MOCK_INICIAL: Maquina[] = [
 const I = {
   panelClose: (c="currentColor",s=15)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>`,
   panelOpen: (c="currentColor",s=15)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>`,
+  plus: (c="currentColor",s=14)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
   chevronDown: (c="rgba(255,255,255,0.4)",s=14)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`,
   chevronRight:(c="rgba(255,255,255,0.35)",s=12)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`,
   search:(c="rgba(255,255,255,0.35)",s=13)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
@@ -176,15 +177,17 @@ export default function App() {
   const [busca, setBusca] = useState("")
   const [novaNome, setNovaNome] = useState("")
   const [buscaFocada, setBuscaFocada] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(() => (typeof window !== "undefined" ? window.innerWidth >= 1024 : true))
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
+  const novaNomeInputRef = useRef<HTMLInputElement>(null)
 
   // fecha sidebar mobile ao teclar Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && typeof window !== "undefined" && window.innerWidth < 1024) {
-        setSidebarOpen(false)
+        setMobileOpen(false)
       }
     }
     window.addEventListener("keydown", handleKeyDown)
@@ -193,11 +196,18 @@ export default function App() {
 
   const selecionarVisaoGeral = () => {
     setAtivaId(null)
-    if (typeof window !== "undefined" && window.innerWidth < 1024) setSidebarOpen(false)
+    if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileOpen(false)
   }
   const selecionarMaquina = (id: number) => {
     setAtivaId(id)
-    if (typeof window !== "undefined" && window.innerWidth < 1024) setSidebarOpen(false)
+    if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileOpen(false)
+  }
+  const alternarSidebar = () => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      setIsCollapsed((v) => !v)
+    } else {
+      setMobileOpen((v) => !v)
+    }
   }
 
   // persist
@@ -273,124 +283,250 @@ export default function App() {
 
   // ───────── Render ─────────
   return (
-    <div className="min-h-screen bg-black p-2 sm:p-3 lg:p-4">
+    <div className="h-[100dvh] w-full bg-black p-2 sm:p-3 lg:p-4 overflow-hidden flex flex-col font-sans select-none">
       {/* Janela flutuante */}
-      <div className="mx-auto flex min-h-[calc(100vh-16px)] max-w-[1440px] overflow-hidden rounded-[18px] border border-white/[0.07] bg-[#0E0E10] shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:min-h-[calc(100vh-24px)] lg:min-h-[calc(100vh-32px)]">
-        {/* Sidebar 25-30% */}
+      <div className="relative mx-auto flex h-full w-full max-w-[1536px] overflow-hidden rounded-[18px] border border-white/[0.07] bg-[#0E0E10] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+        {/* Sidebar dinâmica com modo minimizado em ícones navegáveis */}
         <aside
-          className={`fixed inset-y-0 left-0 z-40 flex w-[300px] max-w-[85vw] flex-col border-r border-white/[0.04] bg-[#121214] shadow-2xl transition-transform duration-200 ease-out lg:static lg:max-w-none lg:w-[300px] xl:w-[320px] lg:shadow-none lg:transition-none ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:hidden"
+          className={`fixed inset-y-0 left-0 z-40 flex h-full flex-col border-r border-white/[0.04] bg-[#121214] shadow-2xl transition-all duration-200 ease-out lg:static lg:shadow-none ${
+            isCollapsed
+              ? "w-[68px] min-w-[68px]"
+              : "w-[300px] xl:w-[320px] min-w-[300px] xl:min-w-[320px]"
+          } ${
+            mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {/* Cabeçalho */}
-            <div className="flex items-center gap-3 px-4 pb-3 pt-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[15px] font-extrabold tracking-[-0.5px] text-black">M</div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 text-[13px] font-semibold tracking-[-0.2px] text-white">MetalSense <span dangerouslySetInnerHTML={{__html: I.chevronDown()}} className="flex" /></div>
-                <div className="truncate text-[11px] leading-none text-white/45">TechForge • Indústria 4.0</div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSidebarOpen(false)}
-                className="flex items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] p-1.5 text-white/50 transition hover:bg-white/[0.06] hover:text-white cursor-pointer"
-                aria-label="Recolher barra lateral"
-                title="Recolher barra lateral"
-              >
-                <span dangerouslySetInnerHTML={{__html: I.panelClose("rgba(255,255,255,0.6)",14)}} />
-              </button>
-            </div>
+          {isCollapsed ? (
+            /* Rail de ícones navegáveis quando minimizado */
+            <div className="flex h-full w-full flex-col items-center justify-between py-3.5 px-2 select-none">
+              {/* Top Section */}
+              <div className="flex flex-col items-center w-full">
+                {/* Logo M */}
+                <button
+                  type="button"
+                  onClick={() => setIsCollapsed(false)}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[15px] font-extrabold tracking-[-0.5px] text-black hover:bg-white/90 transition cursor-pointer"
+                  title="MetalSense • Clique para expandir"
+                >
+                  M
+                </button>
 
-            <div className="flex-1 overflow-y-auto px-3 pb-4">
-              {/* NAVEGAÇÃO */}
-              <div className="px-2 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Navegação</div>
-              <button
-                onClick={selecionarVisaoGeral}
-                className={`flex w-full items-center justify-between rounded-[12px] border px-3 py-[9px] text-left text-[13px] font-[450] transition ${ativaId===null ? "border-white/15 bg-white/[0.08] font-semibold text-white" : "border-transparent text-white/55 hover:bg-white/[0.04] hover:text-white"}`}
-              >
-                <span className="flex items-center gap-2.5"><span dangerouslySetInnerHTML={{__html: I.grid(ativaId===null?"#fff":"rgba(255,255,255,0.55)")}} /> Visão Geral da Planta</span>
-              </button>
+                {/* Botão + Cadastrar rápido */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCollapsed(false)
+                    setTimeout(() => novaNomeInputRef.current?.focus(), 150)
+                  }}
+                  className="mt-3 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-white/10 bg-white/[0.06] text-white/80 hover:bg-white hover:text-black transition cursor-pointer"
+                  title="Cadastrar Novo Ativo (+)"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: I.plus() }} />
+                </button>
 
-              {/* ATIVOS EM OPERAÇÃO */}
-              <div className="px-2 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Ativos em Operação</div>
+                <div className="w-8 h-px bg-white/[0.06] my-2.5" />
 
-              {/* Busca dentro da sidebar (filtra lista) */}
-              <div className="relative mb-2">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 opacity-40" dangerouslySetInnerHTML={{__html: I.search()}} />
-                <input value={busca} onChange={e=>setBusca(e.target.value)} placeholder="Filtrar ativos..." className="h-8 w-full rounded-[10px] border border-white/[0.06] bg-[#1A1A1E] py-1 pl-8 pr-3 text-[13px] text-[#F2F2F3] placeholder:text-white/30 outline-none focus:border-white/15" />
-              </div>
+                {/* Visão Geral */}
+                <button
+                  type="button"
+                  onClick={selecionarVisaoGeral}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition cursor-pointer ${
+                    ativaId === null
+                      ? "border border-white/15 bg-white/[0.12] text-white font-semibold shadow-sm"
+                      : "border border-transparent text-white/50 hover:bg-white/[0.05] hover:text-white"
+                  }`}
+                  title="Visão Geral da Planta"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: I.grid(ativaId === null ? "#fff" : "rgba(255,255,255,0.6)") }} />
+                </button>
 
-              <div className="space-y-0.5">
-                {filtradas.length===0 && <div className="px-3 py-2 text-[12px] text-white/30">Nenhum ativo encontrado.</div>}
-                {filtradas.map(m=>{
-                  const active=ativaId===m.id, alert=m.status==="anomalia"
-                  return (
-                    <button key={m.id} onClick={()=>selecionarMaquina(m.id)}
-                      className={`flex w-full items-center justify-between rounded-[12px] border px-3 py-[9px] text-left text-[13px] transition ${active ? "border-white/15 bg-white/[0.08] font-semibold text-white" : "border-transparent text-white/55 hover:bg-white/[0.04] hover:text-white"}`}>
-                      <span className="flex min-w-0 items-center gap-2.5">
-                        <span dangerouslySetInnerHTML={{__html: I.cpu(active?"#fff":"rgba(255,255,255,0.5)")}} className="shrink-0" />
-                        <span className="truncate">#{String(m.id).padStart(2,"0")} {m.nome}</span>
-                      </span>
-                      <span className="flex shrink-0 items-center gap-1.5">
-                        {alert && <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-white/10 bg-[#1E1E20] px-1.5 text-[10px] font-bold text-white/70">!</span>}
-                        <span dangerouslySetInnerHTML={{__html: I.chevronRight(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.30)")}} />
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
+                <div className="w-8 h-px bg-white/[0.06] my-2" />
 
-              {/* GESTÃO DE ATIVOS */}
-              <div className="px-2 pb-1.5 pt-5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Gestão de Ativos</div>
-              <div className="space-y-2">
-                <input value={novaNome} onChange={e=>setNovaNome(e.target.value)} onKeyDown={e=> e.key==="Enter" && criarMaquina()} placeholder="Nome do novo ativo..." className="h-9 w-full rounded-[10px] border border-white/[0.06] bg-[#1A1A1E] px-3 text-[13px] text-white placeholder:text-white/30 outline-none focus:border-white/15" />
-                <button onClick={criarMaquina} className="flex h-9 w-full items-center justify-center rounded-[12px] bg-white text-[13px] font-semibold text-black hover:bg-white/90">+ Cadastrar Ativo</button>
-              </div>
-
-              {ativa && (
-                <div className="mt-3 rounded-[12px] border border-white/[0.06] bg-white/[0.02] p-3">
-                  <div className="text-[11px] font-semibold uppercase tracking-wide text-white/50">Ativo selecionado</div>
-                  <div className="mt-1 truncate text-[13px] font-semibold text-white">#{String(ativa.id).padStart(2,"0")} {ativa.nome}</div>
-                  <button onClick={removerAtiva} className="mt-2 w-full rounded-[10px] border border-red-500/20 bg-red-500/10 py-1.5 text-[12px] font-medium text-red-400 hover:bg-red-500/15">Remover máquina</button>
+                {/* Lista vertical de máquinas (scrollável) */}
+                <div className="flex flex-col items-center gap-1.5 w-full max-h-[42vh] overflow-y-auto py-0.5">
+                  {maquinas.map((m) => {
+                    const active = ativaId === m.id
+                    const warn = m.status === "anomalia"
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => selecionarMaquina(m.id)}
+                        className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] transition cursor-pointer ${
+                          active
+                            ? "border border-white/15 bg-white/[0.12] text-white font-semibold shadow-sm"
+                            : "border border-transparent text-white/50 hover:bg-white/[0.05] hover:text-white"
+                        }`}
+                        title={`#${String(m.id).padStart(2, "0")} ${m.nome} • ${m.status === "anomalia" ? "Alerta" : "Normal"}`}
+                      >
+                        <span dangerouslySetInnerHTML={{ __html: I.cpu(active ? "#fff" : "rgba(255,255,255,0.6)") }} />
+                        {warn ? (
+                          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-[#EF4444] ring-2 ring-[#121214]" />
+                        ) : (
+                          <span className="absolute bottom-0.5 right-1 text-[8px] font-mono text-white/40">{m.id}</span>
+                        )}
+                      </button>
+                    )
+                  })}
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* Rodapé */}
-            <div className="border-t border-white/[0.04] px-3 py-3">
-              <div className="space-y-0.5">
-                <button className="flex w-full items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-left text-[13px] text-white/55 hover:bg-white/[0.04] hover:text-white">
-                  <span dangerouslySetInnerHTML={{__html: I.settings()}} /> Configurações do Sistema
+              {/* Bottom Section */}
+              <div className="flex flex-col items-center gap-2 shrink-0 pt-2 border-t border-white/[0.04] w-full">
+                <button
+                  type="button"
+                  onClick={() => showToast("Configurações do Sistema")}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white/50 hover:bg-white/[0.05] hover:text-white transition cursor-pointer"
+                  title="Configurações do Sistema"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: I.settings("rgba(255,255,255,0.6)", 14) }} />
                 </button>
-                <button className="flex w-full items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-left text-[13px] text-white/55 hover:bg-white/[0.04] hover:text-white">
-                  <span dangerouslySetInnerHTML={{__html: I.book()}} /> Documentação & API
+
+                <button
+                  type="button"
+                  onClick={() => showToast("Documentação & API")}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white/50 hover:bg-white/[0.05] hover:text-white transition cursor-pointer"
+                  title="Documentação & API"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: I.book("rgba(255,255,255,0.6)", 14) }} />
+                </button>
+
+                <div
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black mt-0.5 relative cursor-pointer"
+                  title="Operador Confiabilidade • TechForge"
+                >
+                  TF
+                  <span className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-[#10B981] ring-1 ring-[#121214]" />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsCollapsed(false)}
+                  className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-white/[0.06] bg-white/[0.03] text-white/60 hover:bg-white/[0.08] hover:text-white transition cursor-pointer"
+                  title="Expandir barra lateral"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: I.panelOpen("rgba(255,255,255,0.7)", 14) }} />
                 </button>
               </div>
-              <div className="mt-3 flex items-center gap-2.5 rounded-[12px] border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-[11px] font-bold text-black">TF</div>
+            </div>
+          ) : (
+            /* Sidebar completa expandida */
+            <div className="flex flex-1 flex-col overflow-hidden h-full">
+              {/* Cabeçalho */}
+              <div className="flex items-center gap-3 px-4 pb-3 pt-4 shrink-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[15px] font-extrabold tracking-[-0.5px] text-black">M</div>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-[12px] font-medium leading-none text-[#F2F2F3]">Operador Confiabilidade</div>
-                  <div className="text-[10px] text-[#6B7280]">TechForge Industrial</div>
+                  <div className="flex items-center gap-1.5 text-[13px] font-semibold tracking-[-0.2px] text-white">MetalSense <span dangerouslySetInnerHTML={{__html: I.chevronDown()}} className="flex" /></div>
+                  <div className="truncate text-[11px] leading-none text-white/45">TechForge • Indústria 4.0</div>
                 </div>
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#10B981]" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+                      setIsCollapsed(true)
+                    } else {
+                      setMobileOpen(false)
+                    }
+                  }}
+                  className="flex items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] p-1.5 text-white/50 transition hover:bg-white/[0.06] hover:text-white cursor-pointer"
+                  aria-label="Minimizar barra lateral"
+                  title="Minimizar barra lateral"
+                >
+                  <span dangerouslySetInnerHTML={{__html: I.panelClose("rgba(255,255,255,0.6)",14)}} />
+                </button>
+              </div>
+
+              <div className="flex-1 min-h-0 overflow-y-auto px-3 pb-4">
+                {/* NAVEGAÇÃO */}
+                <div className="px-2 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Navegação</div>
+                <button
+                  onClick={selecionarVisaoGeral}
+                  className={`flex w-full items-center justify-between rounded-[12px] border px-3 py-[9px] text-left text-[13px] font-[450] transition ${ativaId===null ? "border-white/15 bg-white/[0.08] font-semibold text-white" : "border-transparent text-white/55 hover:bg-white/[0.04] hover:text-white"}`}
+                >
+                  <span className="flex items-center gap-2.5"><span dangerouslySetInnerHTML={{__html: I.grid(ativaId===null?"#fff":"rgba(255,255,255,0.55)")}} /> Visão Geral da Planta</span>
+                </button>
+
+                {/* ATIVOS EM OPERAÇÃO */}
+                <div className="px-2 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Ativos em Operação</div>
+
+                {/* Busca dentro da sidebar (filtra lista) */}
+                <div className="relative mb-2">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 opacity-40" dangerouslySetInnerHTML={{__html: I.search()}} />
+                  <input value={busca} onChange={e=>setBusca(e.target.value)} placeholder="Filtrar ativos..." className="h-8 w-full rounded-[10px] border border-white/[0.06] bg-[#1A1A1E] py-1 pl-8 pr-3 text-[13px] text-[#F2F2F3] placeholder:text-white/30 outline-none focus:border-white/15" />
+                </div>
+
+                <div className="space-y-0.5">
+                  {filtradas.length===0 && <div className="px-3 py-2 text-[12px] text-white/30">Nenhum ativo encontrado.</div>}
+                  {filtradas.map(m=>{
+                    const active=ativaId===m.id, alert=m.status==="anomalia"
+                    return (
+                      <button key={m.id} onClick={()=>selecionarMaquina(m.id)}
+                        className={`flex w-full items-center justify-between rounded-[12px] border px-3 py-[9px] text-left text-[13px] transition ${active ? "border-white/15 bg-white/[0.08] font-semibold text-white" : "border-transparent text-white/55 hover:bg-white/[0.04] hover:text-white"}`}>
+                        <span className="flex min-w-0 items-center gap-2.5">
+                          <span dangerouslySetInnerHTML={{__html: I.cpu(active?"#fff":"rgba(255,255,255,0.5)")}} className="shrink-0" />
+                          <span className="truncate">#{String(m.id).padStart(2,"0")} {m.nome}</span>
+                        </span>
+                        <span className="flex shrink-0 items-center gap-1.5">
+                          {alert && <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-white/10 bg-[#1E1E20] px-1.5 text-[10px] font-bold text-white/70">!</span>}
+                          <span dangerouslySetInnerHTML={{__html: I.chevronRight(active?"rgba(255,255,255,0.6)":"rgba(255,255,255,0.30)")}} />
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* GESTÃO DE ATIVOS */}
+                <div className="px-2 pb-1.5 pt-5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">Gestão de Ativos</div>
+                <div className="space-y-2">
+                  <input ref={novaNomeInputRef} value={novaNome} onChange={e=>setNovaNome(e.target.value)} onKeyDown={e=> e.key==="Enter" && criarMaquina()} placeholder="Nome do novo ativo..." className="h-9 w-full rounded-[10px] border border-white/[0.06] bg-[#1A1A1E] px-3 text-[13px] text-white placeholder:text-white/30 outline-none focus:border-white/15" />
+                  <button onClick={criarMaquina} className="flex h-9 w-full items-center justify-center rounded-[12px] bg-white text-[13px] font-semibold text-black hover:bg-white/90">+ Cadastrar Ativo</button>
+                </div>
+
+                {ativa && (
+                  <div className="mt-3 rounded-[12px] border border-white/[0.06] bg-white/[0.02] p-3">
+                    <div className="text-[11px] font-semibold uppercase tracking-wide text-white/50">Ativo selecionado</div>
+                    <div className="mt-1 truncate text-[13px] font-semibold text-white">#{String(ativa.id).padStart(2,"0")} {ativa.nome}</div>
+                    <button onClick={removerAtiva} className="mt-2 w-full rounded-[10px] border border-red-500/20 bg-red-500/10 py-1.5 text-[12px] font-medium text-red-400 hover:bg-red-500/15">Remover máquina</button>
+                  </div>
+                )}
+              </div>
+
+              {/* Rodapé */}
+              <div className="border-t border-white/[0.04] px-3 py-3 shrink-0">
+                <div className="space-y-0.5">
+                  <button onClick={()=>showToast("Configurações do Sistema")} className="flex w-full items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-left text-[13px] text-white/55 hover:bg-white/[0.04] hover:text-white">
+                    <span dangerouslySetInnerHTML={{__html: I.settings()}} /> Configurações do Sistema
+                  </button>
+                  <button onClick={()=>showToast("Documentação & API")} className="flex w-full items-center gap-2.5 rounded-[12px] border border-transparent px-3 py-2 text-left text-[13px] text-white/55 hover:bg-white/[0.04] hover:text-white">
+                    <span dangerouslySetInnerHTML={{__html: I.book()}} /> Documentação & API
+                  </button>
+                </div>
+                <div className="mt-3 flex items-center gap-2.5 rounded-[12px] border border-white/[0.04] bg-white/[0.02] px-3 py-2">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-[11px] font-bold text-black">TF</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[12px] font-medium leading-none text-[#F2F2F3]">Operador Confiabilidade</div>
+                    <div className="text-[10px] text-[#6B7280]">TechForge Industrial</div>
+                  </div>
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#10B981]" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </aside>
 
         {/* Main 70-75% */}
-        <main className="flex min-w-0 flex-1 flex-col bg-[#161618] lg:rounded-r-[18px]">
+        <main className="flex h-full min-w-0 flex-1 flex-col bg-[#161618] overflow-hidden lg:rounded-r-[18px]">
           {/* Header */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.07] px-4 py-3 sm:px-6">
+          <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.07] px-4 py-3 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
                 type="button"
-                onClick={() => setSidebarOpen((v) => !v)}
+                onClick={alternarSidebar}
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-white/[0.07] bg-white/[0.03] text-white/60 transition hover:bg-white/[0.06] hover:text-white cursor-pointer"
-                aria-label="Alternar menu"
-                title={sidebarOpen ? "Recolher barra lateral" : "Expandir barra lateral"}
+                aria-label="Alternar barra lateral"
+                title={isCollapsed ? "Expandir barra lateral" : "Minimizar barra lateral"}
               >
-                <span dangerouslySetInnerHTML={{ __html: sidebarOpen ? I.panelClose("rgba(255,255,255,0.6)", 14) : I.panelOpen("rgba(255,255,255,0.6)", 14) }} />
+                <span dangerouslySetInnerHTML={{ __html: isCollapsed ? I.panelOpen("rgba(255,255,255,0.7)", 14) : I.panelClose("rgba(255,255,255,0.7)", 14) }} />
               </button>
               <nav className="flex flex-wrap items-center gap-1.5 text-[13px]">
                 <span className="text-white/35">Workspace</span><span className="text-white/20">/</span>
@@ -642,9 +778,9 @@ export default function App() {
       {toast && <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-full border border-white/10 bg-[#1E1E20] px-4 py-2 text-[13px] font-medium text-white shadow-xl">{toast}</div>}
 
       {/* Overlay mobile quando sidebar aberta */}
-      {sidebarOpen && (
+      {mobileOpen && (
         <div
-          onClick={() => setSidebarOpen(false)}
+          onClick={() => setMobileOpen(false)}
           className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden cursor-pointer"
           aria-hidden="true"
         />
