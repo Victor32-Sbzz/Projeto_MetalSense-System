@@ -199,7 +199,7 @@ def renderizar_cabecalho():
         """
         <div class="techforge-header">
             <span class="techforge-badge-techforge">Grupo TechForge • Indústria 4.0</span>
-            <h1>⚙️ MetalSense — Sistema de Monitoramento Preditivo</h1>
+            <h1>MetalSense: Sistema de Monitoramento Preditivo</h1>
             <p>Plataforma inteligente de telemetria industrial para detecção antecipada de falhas em máquinas operacionais.</p>
         </div>
         """,
@@ -248,7 +248,7 @@ def renderizar_kpis_gerais(maquinas: list):
 
 def renderizar_visao_geral(dados: dict, maquinas: list):
     """Exibe o painel consolidado com a lista de todas as máquinas cadastradas."""
-    st.markdown("### 📋 Parque Fabril — Visão Consolidada")
+    st.markdown("### Parque Fabril: Visão Consolidada")
 
     if not maquinas:
         st.info("Nenhuma máquina cadastrada no sistema. Utilize o menu lateral para adicionar a primeira máquina.")
@@ -293,7 +293,7 @@ def renderizar_visao_geral(dados: dict, maquinas: list):
         st.table(resumo_lista)
 
     st.markdown("---")
-    st.markdown("#### ⚡ Ações Rápidas em Lote")
+    st.markdown("#### Ações Rápidas em Lote")
     col_sim_todos, col_info = st.columns([1, 2])
     with col_sim_todos:
         if st.button("📡 Coletar Leitura Normal em Todas as Máquinas", use_container_width=True):
@@ -320,7 +320,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     # Topo do detalhe da máquina com Health Score
     col_titulo, col_score, col_status = st.columns([3, 2, 2])
     with col_titulo:
-        st.markdown(f"## 🏭 {nome_maq} <span style='font-size: 1.1rem; color: #64748b;'>(ID #{id_maq})</span>", unsafe_allow_html=True)
+        st.markdown(f"## {nome_maq} <span style='font-size: 1.1rem; color: #64748b;'>(ID #{id_maq})</span>", unsafe_allow_html=True)
         st.caption(f"Equipamento monitorado continuamente • Total de registros: **{len(historico)} medição(ões)**")
     
     with col_score:
@@ -348,7 +348,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     st.markdown(
         f"""
         <div class="diag-box {css_diag}">
-            <strong>🧠 Diagnóstico Preditivo MetalSense:</strong><br>
+            <strong>Diagnóstico Preditivo MetalSense:</strong><br>
             {diagnostico_texto}
         </div>
         """,
@@ -357,10 +357,10 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
     # Hipóteses de Falha Mecânica (se houver)
     if saude.get("hipoteses"):
-        st.error("⚠️ **Alertas de Causa-Raiz Mecânica / Elétrica:**\n- " + "\n- ".join(saude["hipoteses"]))
+        st.error("**Alertas de Causa-Raiz Mecânica / Elétrica:**\n- " + "\n- ".join(saude["hipoteses"]))
 
     # Painel de Ações Rápidas (Simulação de Telemetria)
-    st.markdown("#### 🎮 Painel de Ações e Simulação de Telemetria")
+    st.markdown("#### Painel de Ações e Simulação de Telemetria")
     col_act1, col_act2, col_act3 = st.columns([1, 1, 1])
 
     with col_act1:
@@ -382,7 +382,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             st.rerun()
 
     # Expander de Injeção de Falhas Específicas IoT
-    with st.expander("📡 Simulador Avançado de Cenários de Falha IoT", expanded=False):
+    with st.expander("Simulador Avançado de Cenários de Falha IoT", expanded=False):
         st.caption("Gere simulações de desgaste real para testar os algoritmos de causa-raiz:")
         sc1, sc2, sc3 = st.columns(3)
         with sc1:
@@ -450,10 +450,10 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     st.markdown("---")
 
     # Gráficos Temporais de Telemetria
-    st.markdown("#### 📈 Histórico Temporal de Telemetria")
+    st.markdown("#### Histórico Temporal de Telemetria")
 
     if len(historico) < 2:
-        st.info("📊 Histórico insuficiente para renderizar gráficos temporais (necessário no mínimo 2 medições). Utilize os botões de simulação acima para registrar leituras consecutivas.")
+        st.info("Histórico insuficiente para renderizar gráficos temporais (necessário no mínimo 2 medições). Utilize os botões de simulação acima para registrar leituras consecutivas.")
     else:
         # Prepara dados para os gráficos com suporte elegante a pandas e fallback nativo
         usou_pandas = False
@@ -472,10 +472,10 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
             usou_pandas = False
 
         tab1, tab2, tab3, tab4 = st.tabs([
-            "🌡️ Temperatura (°C)",
-            "〰️ Vibração (mm/s)",
-            "⚡ Consumo Elétrico (W)",
-            "📊 Visão Integrada",
+            "Temperatura (°C)",
+            "Vibração (mm/s)",
+            "Consumo Elétrico (W)",
+            "Visão Integrada",
         ])
 
         with tab1:
@@ -513,7 +513,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
     st.markdown("---")
 
     # Tabela Detalhada com as Últimas Leituras
-    st.markdown("#### 📑 Registro Detalhado das Medições")
+    st.markdown("#### Registro Detalhado das Medições")
     if historico:
         # Exibe em ordem decrescente (mais recente primeiro)
         leituras_ordenadas = list(reversed(historico))
@@ -526,13 +526,13 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
             anomalias_detectadas = []
             if t > 85.0:
-                anomalias_detectadas.append("🔥 Temp Crítica")
+                anomalias_detectadas.append("Temp Crítica")
             if v > 8.0:
-                anomalias_detectadas.append("⚠️ Vibração Alta")
+                anomalias_detectadas.append("Vibração Alta")
             if c > 500.0:
-                anomalias_detectadas.append("⚡ Consumo Alto")
+                anomalias_detectadas.append("Consumo Alto")
 
-            status_item = "🟢 Normal" if not anomalias_detectadas else f"🚨 {', '.join(anomalias_detectadas)}"
+            status_item = "Normal" if not anomalias_detectadas else f"Alerta ({', '.join(anomalias_detectadas)})"
 
             leituras_tabela.append({
                 "Nº": len(historico) - idx,
@@ -552,7 +552,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
 
         # Seção de Auditoria e Exportação de Relatórios
         st.markdown("---")
-        st.markdown("#### 📑 Auditoria Técnica & Exportação de Laudos")
+        st.markdown("#### Auditoria Técnica e Exportação de Laudos")
         with st.expander("Gerar e Baixar Relatórios Técnicos", expanded=False):
             exp_col1, exp_col2 = st.columns(2)
             with exp_col1:
@@ -568,7 +568,7 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
                         "consumo": r.get("consumo", 0.0)
                     })
                 st.download_button(
-                    label="📥 Baixar Telemetria (CSV)",
+                    label="Baixar Telemetria (CSV)",
                     data=csv_buffer.getvalue(),
                     file_name=f"metalsense_telemetria_maquina_{id_maq}.csv",
                     mime="text/csv",
@@ -579,13 +579,13 @@ def renderizar_detalhes_maquina(dados: dict, maquina: dict):
                 with open(caminho_html, "r", encoding="utf-8") as f_html:
                     html_data = f_html.read()
                 st.download_button(
-                    label="📄 Baixar Laudo de Auditoria (HTML)",
+                    label="Baixar Laudo de Auditoria (HTML)",
                     data=html_data,
                     file_name=f"laudo_metalsense_maquina_{id_maq}.html",
                     mime="text/html",
                     use_container_width=True
                 )
-            st.markdown("##### 🛠️ Ordem de Serviço de Manutenção Preditiva")
+            st.markdown("##### Ordem de Serviço de Manutenção Preditiva")
             st.code(gerar_ordem_servico_texto(maquina), language="text")
     else:
         st.info("Nenhuma leitura arquivada no histórico desta máquina.")
@@ -606,13 +606,13 @@ def main():
     # Barra Lateral (Sidebar)
     # -------------------------------------------------------------------------
     with st.sidebar:
-        st.markdown("### 🏭 MetalSense")
+        st.markdown("### MetalSense")
         st.caption("Controle Operacional TechForge")
         st.markdown("---")
 
         # Seleção de Máquina ou Visão Geral
-        st.markdown("#### 🎯 Seleção de Equipamento")
-        opcoes_navegacao = ["📊 Visão Geral de Todas as Máquinas"]
+        st.markdown("#### Seleção de Equipamento")
+        opcoes_navegacao = ["Visão Geral de Todas as Máquinas"]
         mapa_maquinas = {}
         for m in maquinas:
             label = f"[ID {m['id']}] {m['nome']}"
@@ -629,7 +629,7 @@ def main():
         st.markdown("---")
 
         # Cadastro de Nova Máquina
-        st.markdown("#### ➕ Nova Máquina")
+        st.markdown("#### Nova Máquina")
         with st.form("form_nova_maquina", clear_on_submit=True):
             nome_input = st.text_input("Nome / Identificador:", placeholder="Ex: Prensa Hidráulica 03")
             btn_adicionar = st.form_submit_button("Cadastrar Máquina", use_container_width=True)
@@ -651,7 +651,7 @@ def main():
         # Exclusão da Máquina Selecionada (se houver uma máquina específica em foco)
         maquina_selecionada = mapa_maquinas.get(escolha_navegacao)
         if maquina_selecionada:
-            st.markdown("#### 🗑️ Exclusão de Máquina")
+            st.markdown("#### Exclusão de Máquina")
             with st.expander("Gerenciar Exclusão", expanded=False):
                 st.warning(f"Atenção: removerá a máquina '{maquina_selecionada['nome']}' e todo seu histórico.")
                 confirmado = st.checkbox(
@@ -672,7 +672,7 @@ def main():
     # -------------------------------------------------------------------------
     # Área Principal de Conteúdo
     # -------------------------------------------------------------------------
-    if escolha_navegacao == "📊 Visão Geral de Todas as Máquinas" or not maquina_selecionada:
+    if escolha_navegacao == "Visão Geral de Todas as Máquinas" or not maquina_selecionada:
         renderizar_visao_geral(dados, maquinas)
     else:
         renderizar_detalhes_maquina(dados, maquina_selecionada)
