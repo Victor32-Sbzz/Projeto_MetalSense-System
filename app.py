@@ -29,19 +29,20 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Estilos Gerais - Cabeçalho TechForge Adaptativo */
+    /* Estilos Gerais - Cabeçalho TechForge Harmonizado com Tema Claro */
     .techforge-header {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid #e2e8f0;
-        border-left: 6px solid #2563eb;
-        border-radius: 12px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+        background-color: #ffffff !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        border: 1px solid #e2e8f0 !important;
+        border-left: 6px solid #2563eb !important;
+        border-radius: 12px !important;
+        padding: 24px 28px !important;
+        margin-bottom: 24px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03) !important;
         transition: all 0.2s ease-in-out;
     }
     .techforge-header:hover {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04) !important;
     }
     .techforge-header h1,
     .techforge-header [data-testid="stHeadingWithActionElements"] h1,
@@ -50,7 +51,7 @@ st.markdown(
         padding: 0 !important;
         font-size: 2.1rem !important;
         font-weight: 700 !important;
-        letter-spacing: -0.5px;
+        letter-spacing: -0.5px !important;
         color: #0f172a !important;
     }
     .techforge-header [data-testid="stHeaderActionElements"] a,
@@ -68,44 +69,22 @@ st.markdown(
         margin: 8px 0 0 0 !important;
         font-size: 1rem !important;
         color: #475569 !important;
-        line-height: 1.5;
+        line-height: 1.5 !important;
     }
     .techforge-badge-techforge {
-        background-color: #eff6ff;
-        color: #1d4ed8;
-        border: 1px solid #bfdbfe;
-        padding: 4px 12px;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        display: inline-block;
-        margin-bottom: 10px;
+        background-color: #eff6ff !important;
+        color: #1d4ed8 !important;
+        border: 1px solid #bfdbfe !important;
+        padding: 4px 12px !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        display: inline-block !important;
+        margin-bottom: 10px !important;
     }
 
-    /* Suporte a Dark Mode (caso o usuário/sistema alterne para tema escuro) */
-    @media (prefers-color-scheme: dark) {
-        .techforge-header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid #334155;
-            border-left: 6px solid #3b82f6;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        }
-        .techforge-header h1,
-        .techforge-header [data-testid="stHeadingWithActionElements"] h1,
-        .techforge-header [data-testid="stHeadingWithActionElements"] h1 span {
-            color: #f8fafc !important;
-        }
-        .techforge-header p {
-            color: #94a3b8 !important;
-        }
-        .techforge-badge-techforge {
-            background-color: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-        }
-    }
 
 
     /* Cards de Métricas e KPIs */
