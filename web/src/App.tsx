@@ -112,6 +112,7 @@ const MOCK_INICIAL: Maquina[] = [
 const I = {
   panelClose: (c="currentColor",s=15)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>`,
   panelOpen: (c="currentColor",s=15)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>`,
+  x: (c="currentColor",s=14)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
   plus: (c="currentColor",s=14)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
   chevronDown: (c="rgba(255,255,255,0.4)",s=14)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`,
   chevronRight:(c="rgba(255,255,255,0.35)",s=12)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`,
@@ -304,9 +305,9 @@ export default function App() {
                 {/* Logo M */}
                 <button
                   type="button"
-                  onClick={() => setIsCollapsed(false)}
+                  onClick={selecionarVisaoGeral}
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-white text-[15px] font-extrabold tracking-[-0.5px] text-black hover:bg-white/90 transition cursor-pointer"
-                  title="MetalSense • Clique para expandir"
+                  title="MetalSense • Visão Geral"
                 >
                   M
                 </button>
@@ -398,15 +399,6 @@ export default function App() {
                   TF
                   <span className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-[#10B981] ring-1 ring-[#121214]" />
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsCollapsed(false)}
-                  className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-white/[0.06] bg-white/[0.03] text-white/60 hover:bg-white/[0.08] hover:text-white transition cursor-pointer"
-                  title="Expandir barra lateral"
-                >
-                  <span dangerouslySetInnerHTML={{ __html: I.panelOpen("rgba(255,255,255,0.7)", 14) }} />
-                </button>
               </div>
             </div>
           ) : (
@@ -421,18 +413,12 @@ export default function App() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-                      setIsCollapsed(true)
-                    } else {
-                      setMobileOpen(false)
-                    }
-                  }}
-                  className="flex items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] p-1.5 text-white/50 transition hover:bg-white/[0.06] hover:text-white cursor-pointer"
-                  aria-label="Minimizar barra lateral"
-                  title="Minimizar barra lateral"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex lg:hidden items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] p-1.5 text-white/50 transition hover:bg-white/[0.06] hover:text-white cursor-pointer"
+                  aria-label="Fechar menu"
+                  title="Fechar menu"
                 >
-                  <span dangerouslySetInnerHTML={{__html: I.panelClose("rgba(255,255,255,0.6)",14)}} />
+                  <span dangerouslySetInnerHTML={{__html: I.x("rgba(255,255,255,0.6)", 14)}} />
                 </button>
               </div>
 
