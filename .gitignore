@@ -30,4 +30,9 @@ htmlcov/
 relatorio_*.html
 laudo_*.html
 relatorio_*.csv
-telemetria_*.csv
+telemetria_*.csv
+
+# Git Worktrees isolados
+.worktrees/
+worktrees/
+
