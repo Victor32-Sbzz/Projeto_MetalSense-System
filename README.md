@@ -1,114 +1,71 @@
-# MetalSense — Sistema Inteligente de Manutenção Preditiva & Monitoramento IoT
-
-[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![Tests](https://img.shields.io/badge/tests-38%2F38%20passing-brightgreen.svg)]()
-[![Team](https://img.shields.io/badge/team-TechForge-orange.svg)]()
-
-> Sistema de detecção antecipada de anomalias industriais, análise preditiva multivariada e ingestão de telemetria IoT para prevenção de paradas não planejadas (Indústria 4.0).
+# MetalSense – Sistema Inteligente de Manutenção Preditiva & Monitoramento IoT
 
 ---
 
 ## 📌 Sobre o Projeto
 
-O **MetalSense** foi concebido pelo grupo **TechForge** no curso Técnico em Desenvolvimento de Sistemas. O sistema transforma dados brutos de sensores de campo (temperatura, vibração mecânica e consumo elétrico) em **informações de saúde do ativo em tempo real** e **ordens de serviço preditivas**, evitando quebras catastróficas e paradas inesperadas na linha de produção.
+**MetalSense** é um protótipo desenvolvido pela equipe **TechForge** (curso técnico em Desenvolvimento de Sistemas) que monitoriza máquinas industriais em tempo real. O sistema captura indicadores operacionais (temperatura, corrente, vibração, tempo de operação) via simulação IoT, persiste os dados em SQLite e utiliza um algoritmo simples de detecção de anomalias (desvio percentual) para gerar alertas.
+
+A aplicação foi reestruturada para focar na **interface desktop em PyQt5** e em um **servidor TCP** que recebe as leituras dos sensores. Todos os componentes web/Streamlit, API REST, scripts de simulação avançada e arquivos de configuração Docker/Alembic foram removidos, pois não são utilizados pela lógica atual.
 
 ---
 
-## ⚡ Diferenciais Tecnológicos
-
-1. **Análise Multivariada Real:** Não se limita a limites fixos; avalia correlações físicas (ex: Vibração Alta + Temperatura Alta = Desgaste de Rolamento).
-2. **Health Score (0 a 100%):** Índice contínuo de integridade do ativo por máquina, avaliando volatilidade e velocidade de degradação térmica ($dT/dt$).
-3. **Gateway IoT com API REST:** Rota HTTP de alta performance (`/api/telemetria`) pronta para receber dados de microcontroladores (ESP32, Arduino, Raspberry Pi).
-4. **Simulador de Falhas Físicas:** Injeção programática de desbalanceamento mecânico, falha de arrefecimento e sobrecarga elétrica.
-5. **Auditoria e Laudos Automatizados:** Exportação instantânea de histórico em CSV e emissão de laudos técnicos em HTML e Ordens de Serviço (OS).
-6. **Múltiplas Interfaces:** Dashboard Web reativo em Streamlit e Console CLI com cores ANSI.
-
----
-
-## 🏗️ Arquitetura do Sistema
-
-```text
-[Sensores Industriais / ESP32 / Gateway]
-                 │
-                 ▼
-       ┌──────────────────┐
-       │   API REST IoT   │ <── Ingestão via HTTP (POST /api/telemetria)
-       └─────────┬────────┘
-                 ▼
-   ┌──────────────────────────┐
-   │  Persistência Resiliente │ <── Escrita atômica & backup contra corrupção
-   │       (dados.py)         │
-   └─────────────┬────────────┘
-                 ▼
-   ┌──────────────────────────┐
-   │    Motor de Analytics    │ <── Health Score, Tendências (dT/dt)
-   │      (analytics.py)      │     e Diagnóstico de Causa-Raiz
-   └─────────────┬────────────┘
-                 │
-       ┌─────────┴─────────┐
-       ▼                   ▼
-┌──────────────┐   ┌──────────────┐
-│  Streamlit   │   │ Terminal CLI │
-│   (app.py)   │   │  (main.py)   │
-└──────────────┘   └──────────────┘
+## 🏗️ Arquitetura Atual
 ```
+[Sensor Simulator] → TCP Socket → [Server] → SQLite DB → [Anomaly Detector]
+                                           │
+                                           ▼
+                                      PyQt5 UI (desktop)
+```
+- **Sensor Simulator** (`desktop/services/telemetry_service.py`) gera leituras a cada 5 s.
+- **Server** (`desktop/controllers/app_controller.py`) recebe os dados e grava em `metalsense.db`.
+- **Anomaly Detector** (`desktop/services/worker_service.py`) analisa a nova amostra e cria alertas.
+- **UI Desktop** (`desktop/views/main_window.py` e abas) exibe gráficos em tempo real, histórico e mensagens de alerta.
 
 ---
 
-## 📁 Estrutura de Módulos
-
-| Módulo | Responsabilidade |
-|---|---|
-| `analytics.py` | Motor preditivo: Health Score (0-100%), tendências temporais e hipóteses de falha mecânica. |
-| `maquinas.py` | Lógica de negócio de máquinas, validações e detecção de anomalias por $2.5\sigma$ e limites críticos. |
-| `dados.py` | Camada de persistência segura, gravação atômica (`.tmp`) e recuperação contra corrupção. |
-| `simulador_iot.py`| Simulador de sensores físicos industriais com cenários de rolamento, aquecimento e sobrecarga. |
-| `relatorios.py` | Emissão de laudos de auditoria técnica (HTML), ordens de serviço (OS) e exportação CSV. |
-| `api.py` | API REST Flask para ingestão de telemetria externa e integração com sistemas SCADA/MES. |
-| `app.py` | Dashboard interativo Web (Streamlit) com KPIs, gráficos em tempo real e controles de simulação. |
-| `main.py` | Interface de terminal profissional com menu interativo, cores ANSI e diagnóstico instantâneo. |
-| `tests/` | Suíte de testes automatizados com 38 testes unitários (100% de cobertura de regras de negócio). |
+## 📁 Estrutura de Diretórios
+| Pasta / Arquivo | Responsabilidade |
+|-----------------|-------------------|
+| `desktop/` | Código da aplicação desktop (PyQt5). |
+| `desktop/models/` | Modelo `Machine` que representa uma máquina industrial. |
+| `desktop/services/` | Serviços de telemetria (simulador) e worker (detecção). |
+| `desktop/controllers/` | Controle da aplicação e comunicação com o servidor. |
+| `desktop/views/` | Componentes da interface (dashboards, abas, cards). |
+| `database.py` | Wrapper de acesso ao SQLite (CRUD). |
+| `dados.py` | Funções auxiliares de carregamento e manipulação de dados. |
+| `requirements.txt` | Dependências Python. |
+| `tests/` | Suite de testes automatizados. |
 
 ---
 
 ## 🚀 Como Executar
-
-### 1. Instalar Dependências
+### 1. Instalar dependências
 ```bash
 pip install -r requirements.txt
 ```
-
-### 2. Rodar a Suíte de Testes Automatizados (38 Testes)
+### 2. Rodar a aplicação desktop
 ```bash
-python -m unittest discover tests -v
-# ou
+python desktop/main.py
+```
+A janela do PyQt5 será aberta, iniciando o servidor interno, a captura simulada de sensores e a visualização dos dados.
+
+### 3. Executar a suite de testes (opcional)
+```bash
 pytest
+# ou
+python -m unittest discover tests -v
 ```
+---
 
-### 3. Iniciar o Dashboard Web (Streamlit)
-```bash
-streamlit run app.py
-```
-
-### 4. Iniciar a Interface em Terminal (CLI)
-```bash
-python main.py
-```
-
-### 5. Iniciar a API REST do Gateway IoT
-```bash
-python api.py
-```
-*Disponível em: `http://127.0.0.1:5000` (Endpoint de telemetria: `POST /api/telemetria`)*
-
-### 6. Executar o Simulador de Sensores IoT
-```bash
-python simulador_iot.py --id 1 --cenario rolamento --ciclos 5 --intervalo 1.0
-```
+## 👥 Equipe
+- **Carmelita Azevedo** – Líder de Projeto
+- **Ariane Pereira** – Designer UI (PyQt5)
+- **Victor Miguel** – Desenvolvedor (backend, lógica de captura)
+- **Miguel Freire** – Analista de Testes (QA)
+- **Matheus Santos** – Analista de Testes (QA)
 
 ---
 
-## 👥 Equipe & Desenvolvimento
-
-Projeto desenvolvido pelo grupo **TechForge** no curso Técnico em Desenvolvimento de Sistemas.
+## 📄 Licença
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo `LICENSE` para mais detalhes.

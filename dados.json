@@ -1,277 +1,6 @@
 {
     "maquinas": [
         {
-            "id": 1,
-            "nome": "maquina de corte 01",
-            "status": "normal",
-            "historico": [
-                {
-                    "timestamp": "2026-10-04 18:30:00",
-                    "temperatura": 69.53,
-                    "vibracao": 6.91,
-                    "consumo": 316.78
-                },
-                {
-                    "timestamp": "2026-10-04 18:35:00",
-                    "temperatura": 59.31,
-                    "vibracao": 5.35,
-                    "consumo": 357.75
-                },
-                {
-                    "timestamp": "2026-10-04 18:40:00",
-                    "temperatura": 52.19,
-                    "vibracao": 5.25,
-                    "consumo": 400.0
-                },
-                {
-                    "timestamp": "2026-10-04 18:45:00",
-                    "temperatura": 68.81,
-                    "vibracao": 9.55,
-                    "consumo": 141.32
-                },
-                {
-                    "timestamp": "2026-10-04 18:50:00",
-                    "temperatura": 53.89,
-                    "vibracao": 7.62,
-                    "consumo": 447.48
-                },
-                {
-                    "timestamp": "2026-10-04 20:07:24",
-                    "temperatura": 60.05,
-                    "vibracao": 4.27,
-                    "consumo": 256.79
-                },
-                {
-                    "timestamp": "2026-10-04 20:07:26",
-                    "temperatura": 113.66,
-                    "vibracao": 3.51,
-                    "consumo": 367.36
-                },
-                {
-                    "timestamp": "2026-10-04 20:07:33",
-                    "temperatura": 55.92,
-                    "vibracao": 3.14,
-                    "consumo": 587.88
-                },
-                {
-                    "timestamp": "2026-10-04 20:08:27",
-                    "temperatura": 97.19,
-                    "vibracao": 4.03,
-                    "consumo": 289.84
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:08",
-                    "temperatura": 61.84,
-                    "vibracao": 4.53,
-                    "consumo": 315.66
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:09",
-                    "temperatura": 61.84,
-                    "vibracao": 5.67,
-                    "consumo": 310.22
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:10",
-                    "temperatura": 64.12,
-                    "vibracao": 6.78,
-                    "consumo": 314.08
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:12",
-                    "temperatura": 64.09,
-                    "vibracao": 6.91,
-                    "consumo": 323.62
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:13",
-                    "temperatura": 64.91,
-                    "vibracao": 7.8,
-                    "consumo": 332.57
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:14",
-                    "temperatura": 64.31,
-                    "vibracao": 8.77,
-                    "consumo": 334.76
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:15",
-                    "temperatura": 65.55,
-                    "vibracao": 10.02,
-                    "consumo": 317.55
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:16",
-                    "temperatura": 65.56,
-                    "vibracao": 10.58,
-                    "consumo": 313.43
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:17",
-                    "temperatura": 65.01,
-                    "vibracao": 11.59,
-                    "consumo": 332.13
-                },
-                {
-                    "timestamp": "2026-10-13 15:06:18",
-                    "temperatura": 65.14,
-                    "vibracao": 12.37,
-                    "consumo": 319.23
-                },
-                {
-                    "temperatura": 61.5,
-                    "vibracao": 2.8,
-                    "consumo": 295.0,
-                    "timestamp": "2026-10-13 18:16:44"
-                },
-                {
-                    "temperatura": 62.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:16:45"
-                },
-                {
-                    "temperatura": 59.0,
-                    "vibracao": 2.9,
-                    "consumo": 290.0,
-                    "timestamp": "2026-10-13 18:16:45"
-                },
-                {
-                    "temperatura": 60.0,
-                    "vibracao": 3.0,
-                    "consumo": 300.0,
-                    "timestamp": "2026-10-13 18:16:45"
-                },
-                {
-                    "temperatura": 61.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:16:45"
-                },
-                {
-                    "temperatura": 61.5,
-                    "vibracao": 2.8,
-                    "consumo": 295.0,
-                    "timestamp": "2026-10-13 18:28:08"
-                },
-                {
-                    "temperatura": 62.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:28:08"
-                },
-                {
-                    "temperatura": 59.0,
-                    "vibracao": 2.9,
-                    "consumo": 290.0,
-                    "timestamp": "2026-10-13 18:28:08"
-                },
-                {
-                    "temperatura": 60.0,
-                    "vibracao": 3.0,
-                    "consumo": 300.0,
-                    "timestamp": "2026-10-13 18:28:08"
-                },
-                {
-                    "temperatura": 61.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:28:08"
-                },
-                {
-                    "temperatura": 61.5,
-                    "vibracao": 2.8,
-                    "consumo": 295.0,
-                    "timestamp": "2026-10-13 18:38:45"
-                },
-                {
-                    "temperatura": 62.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:38:45"
-                },
-                {
-                    "temperatura": 59.0,
-                    "vibracao": 2.9,
-                    "consumo": 290.0,
-                    "timestamp": "2026-10-13 18:38:45"
-                },
-                {
-                    "temperatura": 60.0,
-                    "vibracao": 3.0,
-                    "consumo": 300.0,
-                    "timestamp": "2026-10-13 18:38:45"
-                },
-                {
-                    "temperatura": 61.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:38:45"
-                },
-                {
-                    "temperatura": 61.5,
-                    "vibracao": 2.8,
-                    "consumo": 295.0,
-                    "timestamp": "2026-10-13 18:54:16"
-                },
-                {
-                    "temperatura": 62.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:54:16"
-                },
-                {
-                    "temperatura": 59.0,
-                    "vibracao": 2.9,
-                    "consumo": 290.0,
-                    "timestamp": "2026-10-13 18:54:16"
-                },
-                {
-                    "temperatura": 60.0,
-                    "vibracao": 3.0,
-                    "consumo": 300.0,
-                    "timestamp": "2026-10-13 18:54:16"
-                },
-                {
-                    "temperatura": 61.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:54:16"
-                },
-                {
-                    "temperatura": 61.5,
-                    "vibracao": 2.8,
-                    "consumo": 295.0,
-                    "timestamp": "2026-10-13 18:55:33"
-                },
-                {
-                    "temperatura": 62.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:55:33"
-                },
-                {
-                    "temperatura": 59.0,
-                    "vibracao": 2.9,
-                    "consumo": 290.0,
-                    "timestamp": "2026-10-13 18:55:33"
-                },
-                {
-                    "temperatura": 60.0,
-                    "vibracao": 3.0,
-                    "consumo": 300.0,
-                    "timestamp": "2026-10-13 18:55:33"
-                },
-                {
-                    "temperatura": 61.0,
-                    "vibracao": 3.1,
-                    "consumo": 310.0,
-                    "timestamp": "2026-10-13 18:55:33"
-                }
-            ]
-        },
-        {
             "id": 2,
             "nome": "maquina de corte ultraT",
             "status": "normal",
@@ -299,13 +28,67 @@
                     "temperatura": 55.54,
                     "vibracao": 3.44,
                     "consumo": 264.45
+                },
+                {
+                    "timestamp": "2026-10-13 16:23:44",
+                    "temperatura": 60.56,
+                    "vibracao": 4.0,
+                    "consumo": 360.69
+                },
+                {
+                    "timestamp": "2026-10-13 16:34:07",
+                    "temperatura": 75.56,
+                    "vibracao": 6.0,
+                    "consumo": 620.82
+                },
+                {
+                    "timestamp": "2026-10-13 16:34:28",
+                    "temperatura": 61.29,
+                    "vibracao": 2.31,
+                    "consumo": 366.39
+                },
+                {
+                    "timestamp": "2026-10-13 16:35:38",
+                    "temperatura": 56.77,
+                    "vibracao": 2.15,
+                    "consumo": 305.88
+                },
+                {
+                    "timestamp": "2026-10-13 16:35:43",
+                    "temperatura": 62.05,
+                    "vibracao": 10.6,
+                    "consumo": 250.99
+                },
+                {
+                    "timestamp": "2026-10-13 16:35:48",
+                    "temperatura": 60.74,
+                    "vibracao": 3.84,
+                    "consumo": 293.31
+                },
+                {
+                    "timestamp": "2026-10-13 16:35:55",
+                    "temperatura": 81.35,
+                    "vibracao": 3.3,
+                    "consumo": 368.65
+                },
+                {
+                    "timestamp": "2026-10-13 16:36:01",
+                    "temperatura": 82.62,
+                    "vibracao": 3.28,
+                    "consumo": 363.34
+                },
+                {
+                    "timestamp": "2026-10-17 12:34:21",
+                    "temperatura": 64.04,
+                    "vibracao": 3.77,
+                    "consumo": 370.77
                 }
             ]
         },
         {
             "id": 3,
             "nome": "Ultra-T",
-            "status": "anomalia",
+            "status": "normal",
             "historico": [
                 {
                     "timestamp": "2026-10-04 20:06:32",
@@ -480,6 +263,12 @@
                     "temperatura": 100.72,
                     "vibracao": 14.66,
                     "consumo": 595.11
+                },
+                {
+                    "timestamp": "2026-10-13 16:23:44",
+                    "temperatura": 58.79,
+                    "vibracao": 3.05,
+                    "consumo": 278.56
                 }
             ]
         }
