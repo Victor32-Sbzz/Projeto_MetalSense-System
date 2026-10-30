@@ -1,0 +1,115 @@
+/* ui_dark/theme.qss
+   Dark theme palette – tuned for an industrial monitoring UI.
+   Colors are chosen to give contrast while remaining easy on the eyes.
+*/
+
+/* ---- Core colors (define as CSS variables for easy reuse) ---- */
+/* Using Qt's pseudo‑variables – they are not native CSS, but we expose via string replacement in Python if needed */
+
+/* Backgrounds */
+QWidget {
+    background-color: #1e1e2f; /* deep dark‑blue */
+    color: #e0e0ff;           /* soft off‑white for text */
+    font-family: "Segoe UI", sans-serif;
+    font-size: 10pt;
+}
+
+/* Accent – used for highlighted elements, buttons, active tabs */
+/* We'll use a cyan‑blue hue */
+
+QPushButton {
+    background-color: #2c2c44;
+    border: 1px solid #3a3a5e;
+    border-radius: 5px;
+    padding: 6px 12px;
+    color: #e0e0ff;
+}
+QPushButton:hover {
+    background-color: #3a3a66;
+    border-color: #5a5a8c;
+}
+QPushButton:pressed {
+    background-color: #0d47a1; /* accent on press */
+}
+
+/* Sidebar items – use icons with a light tint */
+QToolButton {
+    background: transparent;
+    border: none;
+    color: #c0c0ff;
+    padding: 8px;
+    text-align: left;
+    font-size: 10pt;
+}
+QToolButton:hover {
+    background-color: #2c2c44;
+    border-radius: 4px;
+}
+QToolButton:selected {
+    background-color: #0d47a1;
+    color: #ffffff;
+}
+
+/* QLineEdit – input fields */
+QLineEdit {
+    background-color: #2c2c44;
+    border: 1px solid #3a3a5e;
+    border-radius: 4px;
+    padding: 4px;
+    color: #e0e0ff;
+}
+
+/* QHeaderView – table headers */
+QHeaderView::section {
+    background-color: #2c2c44;
+    color: #e0e0ff;
+    padding: 4px;
+    border: none;
+}
+
+/* QTableWidget – alternate rows */
+QTableWidget {
+    gridline-color: #3a3a5e;
+    alternate-background-color: #1a1a2b;
+}
+
+/* QTabBar – tabs */
+QTabBar::tab {
+    background: #2c2c44;
+    color: #e0e0ff;
+    padding: 6px 12px;
+    margin-right: 2px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+QTabBar::tab:selected {
+    background: #0d47a1;
+    color: #ffffff;
+}
+
+/* Scrollbars – thin, dark */
+QScrollBar:vertical {
+    background: #2c2c44;
+    width: 12px;
+    margin: 0px;
+    border: none;
+}
+QScrollBar::handle:vertical {
+    background: #3a3a5e;
+    min-height: 20px;
+    border-radius: 4px;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* Tooltips */
+QToolTip {
+    background-color: #3a3a5e;
+    color: #e0e0ff;
+    border: 1px solid #5a5a8c;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+/* Fade‑in/out animation helper – we’ll use a transparent overlay in Python */
